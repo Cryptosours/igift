@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://realdeal.deals/sitemap.xml
+
+# Block admin and API routes
+Disallow: /api/
+Disallow: /admin/
