@@ -1,0 +1,99 @@
+# RealDeal — Production Plan
+
+## Phase 0: Genesis (Current)
+> Goal: Scaffold, design system, core pages, governance, knowledge base.
+
+| # | Task | Status | Specialist | Priority |
+|---|------|--------|------------|----------|
+| 0.1 | Scaffold Turborepo + Next.js monorepo | DONE | Architect | Critical |
+| 0.2 | Define design system (tokens, colors, typography) | DONE | Designer | Critical |
+| 0.3 | Build layout (header, footer, navigation) | DONE | Builder | Critical |
+| 0.4 | Build home page with hero, deals, categories, trust section | DONE | Builder | Critical |
+| 0.5 | Build deals listing page with filters | DONE | Builder | Critical |
+| 0.6 | Build brands listing page | DONE | Builder | Critical |
+| 0.7 | Build categories page | DONE | Builder | Critical |
+| 0.8 | Build methodology page (scoring explanation) | DONE | Builder | Critical |
+| 0.9 | Build alerts page with form | DONE | Builder | Critical |
+| 0.10 | Build about page | DONE | Builder | Critical |
+| 0.11 | Create CLAUDE.md, PROJECT_RULES.md | DONE | Architect | Critical |
+| 0.12 | Create PRODUCTION_PLAN.md | DONE | Architect | Critical |
+| 0.13 | Create KB files (brief, vision, architecture) | DONE | Architect | Critical |
+| 0.14 | Set up Notion project hub | TODO | Operator | High |
+| 0.15 | Git init, first commit, push to GitHub | TODO | Operator | Critical |
+| 0.16 | Create legal pages (terms, privacy, disclosure) | TODO | Builder | High |
+| 0.17 | Add SEO foundation (robots.txt, sitemap, JSON-LD) | TODO | SEO | High |
+| 0.18 | Copy research docs into docs/research/ | TODO | Operator | Medium |
+
+### Genesis Quality Gates
+- [x] Project installs, builds, and runs without errors
+- [x] At least one build passes, linting clean
+- [x] Home page renders with real content
+- [x] Navigation exists with all planned routes
+- [x] Design system tokens defined
+- [x] CLAUDE.md complete enough for any agent to start working
+- [x] Production plan has full phase breakdown
+- [ ] KB initialized, session log started
+- [ ] Git repo created and pushed
+
+---
+
+## Phase 1: Data Foundation (V0.1 — Next)
+> Goal: Canonical data model, first source adapters, normalization pipeline, scoring engine v1.
+
+| # | Task | Status | Specialist | Priority |
+|---|------|--------|------------|----------|
+| 1.1 | Define canonical schemas (Source, Brand, Offer, PriceHistory, etc.) | TODO | Architect | Critical |
+| 1.2 | Set up PostgreSQL + Drizzle ORM | TODO | Builder | Critical |
+| 1.3 | Build source registry and onboarding workflow | TODO | Builder | Critical |
+| 1.4 | Implement first 3 API/feed source adapters | TODO | Builder | Critical |
+| 1.5 | Build normalization pipeline (FX, region, denomination) | TODO | Builder | Critical |
+| 1.6 | Build price-history storage and tracking | TODO | Builder | High |
+| 1.7 | Build ranking/scoring engine v1 (DealQuality + Confidence) | TODO | Builder | Critical |
+| 1.8 | Build hard suppression rules (red zone, region-incompatible) | TODO | Builder | Critical |
+| 1.9 | Wire real data to frontend pages | TODO | Builder | High |
+| 1.10 | Build admin moderation queue (basic) | TODO | Builder | High |
+| 1.11 | Implement 3 more source adapters (public pages) | TODO | Builder | Medium |
+| 1.12 | Add search (Meilisearch or OpenSearch) | TODO | Builder | Medium |
+
+---
+
+## Phase 2: Automation & Hardening (V0.2)
+> Goal: Parser health monitoring, automated revalidation, alerts system, LLM-assisted classification.
+
+| # | Task | Status | Specialist | Priority |
+|---|------|--------|------------|----------|
+| 2.1 | Parser health monitoring + freshness SLAs | TODO | Builder | Critical |
+| 2.2 | Automated offer revalidation and staleness detection | TODO | Builder | Critical |
+| 2.3 | Duplicate clustering engine | TODO | Builder | High |
+| 2.4 | Email/Telegram alert delivery system | TODO | Builder | Critical |
+| 2.5 | LLM-assisted multilingual title normalization | TODO | Builder | Medium |
+| 2.6 | LLM-assisted category mapping from messy text | TODO | Builder | Medium |
+| 2.7 | Merchant complaint workflow | TODO | Builder | Medium |
+| 2.8 | Source kill switches (per-source, per-category, global) | TODO | Builder | High |
+
+---
+
+## Phase 3: Monetization (V0.3)
+> Goal: Affiliate deep links, premium alerts, sponsored placements.
+
+| # | Task | Status | Specialist | Priority |
+|---|------|--------|------------|----------|
+| 3.1 | Affiliate deep link system with attribution | TODO | Builder | Critical |
+| 3.2 | Premium alerts tier (subscription) | TODO | Builder | High |
+| 3.3 | Sponsored placement system with strict labeling | TODO | Builder | Medium |
+| 3.4 | User accounts and watchlist persistence | TODO | Builder | High |
+| 3.5 | Pro dashboard for power users | TODO | Builder | Medium |
+
+---
+
+## Phase 4: Scale & Defensibility (V1.0+)
+> Goal: More sources, B2B API, deeper analytics, additional regions/languages.
+
+| # | Task | Status | Specialist | Priority |
+|---|------|--------|------------|----------|
+| 4.1 | B2B / API product (read-only deal data API) | TODO | Architect | High |
+| 4.2 | Partner feed expansion (10+ new sources) | TODO | Operator | High |
+| 4.3 | Historical analytics and trend pages | TODO | Builder | Medium |
+| 4.4 | Merchant/source scorecards | TODO | Builder | Medium |
+| 4.5 | Additional languages (de-DE) | TODO | Builder | Medium |
+| 4.6 | Additional regions (EU, UK, AU) | TODO | Builder | Medium |
