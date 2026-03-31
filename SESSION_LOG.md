@@ -40,8 +40,49 @@
 - Deployment: not started
 
 ### Next Session Priorities
-1. Initialize git, create GitHub repo, push
-2. Set up Notion project management hub
-3. Legal pages (terms, privacy, disclosure)
-4. SEO foundation (robots.txt, sitemap, JSON-LD)
+1. ~~Initialize git, create GitHub repo, push~~ DONE Session 2
+2. ~~Set up Notion project management hub~~ DONE Session 1
+3. ~~Legal pages (terms, privacy, disclosure)~~ DONE Session 2
+4. ~~SEO foundation (robots.txt, sitemap, JSON-LD)~~ DONE Session 2
 5. Begin Phase 1: canonical data schemas
+
+---
+
+## Session 2 — 2026-03-31 — Legal, SEO, Dynamic Pages, VPS Deploy
+
+### What Was Done
+- Created legal pages: Terms of Service, Privacy Policy, Affiliate Disclosure
+- SEO: robots.txt, dynamic sitemap.ts (auto-generates for all brands/categories), JSON-LD on brand pages
+- Built dynamic brand detail pages (/brands/[slug]) — 12 brands with descriptions, regions, avg discount, deals
+- Built dynamic category detail pages (/categories/[slug]) — 6 categories with deal grids
+- Created VPS user `realdeal` on REDACTED_IP with password and SSH key auth (docker group)
+- SSH key generated and stored at `${DEPLOY_SSH_KEY}`
+- Multi-stage Dockerfile: deps -> builder -> runner (standalone Next.js, ~102kB)
+- docker-compose.yml: container on localhost:3200, health check, auto-restart
+- Deploy script (scripts/deploy.sh): rsync + SSH Docker rebuild
+- Nginx reverse proxy: port 80 -> localhost:3200 on VPS
+- Deployed and verified: HTTP 200, 114KB response, 32 static pages
+- Updated all credentials in [CREDENTIALS_DIR]/ (CREDENTIAL_INDEX.md + all-credentials.local)
+- Pushed to GitHub (Cryptosours/RealDeal)
+- Updated Notion with 22 tasks, board/timeline/dashboard views
+
+### Decisions Made
+- Port 3200 (3100 was occupied by another project on VPS)
+- Standalone Next.js output for minimal Docker image
+- Nginx reverse proxy (not Caddy) — consistent with existing VPS setup
+
+### State
+- Build: passes (32 pages, 0 errors)
+- Pages: 13 routes (+ 12 brand slugs + 6 category slugs = ~31 total pages)
+- Deploy: live on VPS at http://REDACTED_IP (via Nginx)
+- GitHub: up to date (2 commits on main)
+- Notion: synced
+- Data: still sample/placeholder
+- Backend: not started (Phase 1)
+
+### Next Session Priorities
+1. Begin Phase 1: Define canonical schemas with Drizzle ORM
+2. Set up PostgreSQL on VPS
+3. Build first 3 source adapters (API/feed)
+4. Build normalization pipeline
+5. Wire real data to frontend

@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.2.0-deploy] — 2026-03-31
+
+### Added
+- Legal pages: Terms of Service, Privacy Policy, Affiliate Disclosure
+- SEO: robots.txt, dynamic sitemap.ts, JSON-LD structured data on brand pages
+- Dynamic brand detail pages (/brands/[slug]) with 12 brands
+- Dynamic category detail pages (/categories/[slug]) with 6 categories
+- Docker: multi-stage Dockerfile with standalone Next.js output
+- docker-compose.yml with health checks
+- Deploy script (scripts/deploy.sh) for rsync + Docker VPS deployment
+- VPS user 'realdeal' with SSH key auth and Docker access
+- Nginx reverse proxy on VPS (port 80 -> container 3200)
+
+### Changed
+- Next.js config: enabled standalone output for Docker deployment
+- Total pages: 31+ (13 static routes + 12 brand + 6 category)
+
+---
+
 ## [0.1.0-genesis] — 2026-03-31
 
 ### Added

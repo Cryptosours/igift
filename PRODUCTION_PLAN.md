@@ -18,11 +18,16 @@
 | 0.11 | Create CLAUDE.md, PROJECT_RULES.md | DONE | Architect | Critical |
 | 0.12 | Create PRODUCTION_PLAN.md | DONE | Architect | Critical |
 | 0.13 | Create KB files (brief, vision, architecture) | DONE | Architect | Critical |
-| 0.14 | Set up Notion project hub | TODO | Operator | High |
-| 0.15 | Git init, first commit, push to GitHub | TODO | Operator | Critical |
-| 0.16 | Create legal pages (terms, privacy, disclosure) | TODO | Builder | High |
-| 0.17 | Add SEO foundation (robots.txt, sitemap, JSON-LD) | TODO | SEO | High |
-| 0.18 | Copy research docs into docs/research/ | TODO | Operator | Medium |
+| 0.14 | Set up Notion project hub | DONE | Operator | High |
+| 0.15 | Git init, first commit, push to GitHub | DONE | Operator | Critical |
+| 0.16 | Create legal pages (terms, privacy, disclosure) | DONE | Builder | High |
+| 0.17 | Add SEO foundation (robots.txt, sitemap, JSON-LD) | DONE | SEO | High |
+| 0.18 | Copy research docs into docs/research/ | DONE | Operator | Medium |
+| 0.19 | Build dynamic brand detail pages (/brands/[slug]) | DONE | Builder | High |
+| 0.20 | Build dynamic category detail pages (/categories/[slug]) | DONE | Builder | High |
+| 0.21 | Docker build + deploy to VPS | DONE | Operator | High |
+| 0.22 | Create VPS user 'realdeal' with SSH key | DONE | Operator | High |
+| 0.23 | Configure Nginx reverse proxy | DONE | Operator | High |
 
 ### Genesis Quality Gates
 - [x] Project installs, builds, and runs without errors
@@ -32,8 +37,9 @@
 - [x] Design system tokens defined
 - [x] CLAUDE.md complete enough for any agent to start working
 - [x] Production plan has full phase breakdown
-- [ ] KB initialized, session log started
-- [ ] Git repo created and pushed
+- [x] KB initialized, session log started
+- [x] Git repo created and pushed
+- [x] Deployed to VPS and serving HTTP 200
 
 ---
 
