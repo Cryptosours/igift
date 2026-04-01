@@ -1,13 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { categories } from "@/lib/sample-data";
+import { getCategories } from "@/lib/data";
+import { categories as sampleCategories } from "@/lib/sample-data";
 
 export const metadata: Metadata = {
   title: "Categories",
   description: "Browse verified digital value deals by category — gaming, streaming, app stores, retail, food, and travel.",
 };
 
-export default function CategoriesPage() {
+export const dynamic = "force-dynamic";
+
+export default async function CategoriesPage() {
+  let categories = sampleCategories;
+  try {
+    const dbCategories = await getCategories();
+    if (dbCategories.length > 0) categories = dbCategories;
+  } catch {
+    // DB unavailable — use sample data
+  }
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <h1 className="text-2xl font-bold text-surface-900">Categories</h1>

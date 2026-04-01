@@ -10,9 +10,24 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { DealCard } from "@/components/deals/deal-card";
-import { sampleDeals, categories } from "@/lib/sample-data";
+import { getDeals, getCategories } from "@/lib/data";
+import { sampleDeals, categories as sampleCategories } from "@/lib/sample-data";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  let deals = sampleDeals;
+  let categories = sampleCategories;
+  try {
+    const [dbDeals, dbCategories] = await Promise.all([
+      getDeals({ limit: 6 }),
+      getCategories(),
+    ]);
+    if (dbDeals.length > 0) deals = dbDeals;
+    if (dbCategories.length > 0) categories = dbCategories;
+  } catch {
+    // DB unavailable — use sample data
+  }
   return (
     <>
       {/* ── Hero Section ── */}

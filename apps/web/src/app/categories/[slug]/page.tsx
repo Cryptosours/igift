@@ -2,17 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { DealCard } from "@/components/deals/deal-card";
-import { sampleDeals, categories } from "@/lib/sample-data";
+import { getDeals, getCategoryBySlug } from "@/lib/data";
+import { notFound } from "next/navigation";
+
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  return categories.map((cat) => ({ slug: cat.slug }));
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const cat = categories.find((c) => c.slug === slug);
+  const cat = getCategoryBySlug(slug);
   if (!cat) return { title: "Category Not Found" };
   return {
     title: `${cat.name} Gift Card Deals — Verified & Ranked`,
@@ -22,30 +21,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CategoryDetailPage({ params }: Props) {
   const { slug } = await params;
-  const cat = categories.find((c) => c.slug === slug);
+  const cat = getCategoryBySlug(slug);
 
   if (!cat) {
-    return (
-      <div className="mx-auto max-w-3xl px-4 py-20 text-center">
-        <h1 className="text-2xl font-bold text-surface-900">
-          Category not found
-        </h1>
-        <Link
-          href="/categories"
-          className="mt-4 inline-block text-sm text-brand-600 hover:text-brand-700"
-        >
-          Browse all categories
-        </Link>
-      </div>
-    );
+    notFound();
   }
 
-  // Placeholder: show all sample deals for any category
-  const displayDeals = sampleDeals;
+  let deals: Awaited<ReturnType<typeof getDeals>> = [];
+  try {
+    deals = await getDeals({ category: slug, limit: 50 });
+  } catch {
+    // DB unavailable
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      {/* Breadcrumb */}
       <Link
         href="/categories"
         className="inline-flex items-center gap-1 text-sm text-surface-500 hover:text-brand-600"
@@ -54,7 +44,6 @@ export default async function CategoryDetailPage({ params }: Props) {
         All Categories
       </Link>
 
-      {/* Category Header */}
       <div className="mt-4">
         <div className="flex items-center gap-3">
           <span className="text-4xl">{cat.icon}</span>
@@ -64,16 +53,25 @@ export default async function CategoryDetailPage({ params }: Props) {
           </div>
         </div>
         <p className="mt-2 price-display text-sm text-surface-400">
-          {cat.dealCount} verified deals across trusted sources
+          {deals.length} verified deals across trusted sources
         </p>
       </div>
 
-      {/* Deals */}
-      <div className="mt-6 grid gap-4 lg:grid-cols-2">
-        {displayDeals.map((deal) => (
-          <DealCard key={deal.id} deal={deal} />
-        ))}
-      </div>
+      {deals.length > 0 ? (
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
+          {deals.map((deal) => (
+            <DealCard key={deal.id} deal={deal} />
+          ))}
+        </div>
+      ) : (
+        <p className="mt-6 text-sm text-surface-500">
+          No active deals in this category right now. Check back soon or{" "}
+          <Link href="/alerts" className="text-brand-600 hover:text-brand-700">
+            set up an alert
+          </Link>
+          .
+        </p>
+      )}
     </div>
   );
 }

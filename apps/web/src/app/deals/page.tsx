@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SlidersHorizontal, ArrowUpDown } from "lucide-react";
 import { DealCard } from "@/components/deals/deal-card";
+import { getDeals } from "@/lib/data";
 import { sampleDeals } from "@/lib/sample-data";
 
 export const metadata: Metadata = {
@@ -9,7 +10,16 @@ export const metadata: Metadata = {
     "Browse all verified gift card and digital credit deals, ranked by our dual deal quality and confidence scoring system.",
 };
 
-export default function DealsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function DealsPage() {
+  let deals = sampleDeals;
+  try {
+    const dbDeals = await getDeals({ limit: 50 });
+    if (dbDeals.length > 0) deals = dbDeals;
+  } catch {
+    // DB unavailable — use sample data
+  }
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Page Header */}
@@ -19,7 +29,7 @@ export default function DealsPage() {
             All Verified Deals
           </h1>
           <p className="mt-1 text-sm text-surface-500">
-            {sampleDeals.length} deals from 15+ verified sources, updated
+            {deals.length} deals from 15+ verified sources, updated
             continuously.
           </p>
         </div>
@@ -60,7 +70,7 @@ export default function DealsPage() {
 
       {/* Deal Grid */}
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
-        {sampleDeals.map((deal) => (
+        {deals.map((deal) => (
           <DealCard key={deal.id} deal={deal} />
         ))}
       </div>

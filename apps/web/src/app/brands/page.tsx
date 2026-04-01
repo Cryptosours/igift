@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getBrands } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Brands",
   description: "Browse verified deals by brand. Find the best prices on gift cards from Apple, Steam, Netflix, Amazon, and more.",
 };
 
-const brands = [
+export const dynamic = "force-dynamic";
+
+const fallbackBrands = [
   { name: "Apple", slug: "apple", dealCount: 24, avgDiscount: 12, category: "App Stores" },
   { name: "Steam", slug: "steam", dealCount: 18, avgDiscount: 10, category: "Gaming" },
   { name: "Netflix", slug: "netflix", dealCount: 12, avgDiscount: 14, category: "Streaming" },
@@ -21,7 +24,22 @@ const brands = [
   { name: "Disney+", slug: "disney-plus", dealCount: 6, avgDiscount: 11, category: "Streaming" },
 ];
 
-export default function BrandsPage() {
+export default async function BrandsPage() {
+  let brands = fallbackBrands;
+  try {
+    const dbBrands = await getBrands();
+    if (dbBrands.length > 0) {
+      brands = dbBrands.map((b) => ({
+        name: b.name,
+        slug: b.slug,
+        dealCount: b.dealCount,
+        avgDiscount: b.avgDiscount,
+        category: b.category,
+      }));
+    }
+  } catch {
+    // DB unavailable — use fallback
+  }
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <h1 className="text-2xl font-bold text-surface-900">Brands</h1>
