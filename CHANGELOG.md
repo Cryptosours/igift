@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.0-data] — 2026-04-01
+
+### Added
+- Canonical data schemas: 7 PostgreSQL tables via Drizzle ORM (sources, brands, offers, price_history, user_alerts, source_requests, moderation_cases)
+- Scoring engine v1: dual Deal Quality Score + Confidence Score with hard suppression rules
+- API routes: GET /api/deals, GET /api/brands, GET /api/brands/[slug]
+- PostgreSQL 16 container in docker-compose with persistent volume
+- Seed script: 7 sources, 12 brands, 15 scored offers, 15 price history entries
+- Database connection module (drizzle-orm + postgres.js)
+
+### Changed
+- docker-compose.yml: added PostgreSQL service, web depends on db health
+- Web container now connects to database for API routes
+
+---
+
 ## [0.2.0-deploy] — 2026-03-31
 
 ### Added

@@ -81,8 +81,48 @@
 - Backend: not started (Phase 1)
 
 ### Next Session Priorities
-1. Begin Phase 1: Define canonical schemas with Drizzle ORM
-2. Set up PostgreSQL on VPS
+1. ~~Define canonical schemas with Drizzle ORM~~ DONE Session 3
+2. ~~Set up PostgreSQL on VPS~~ DONE Session 3
 3. Build first 3 source adapters (API/feed)
 4. Build normalization pipeline
-5. Wire real data to frontend
+5. Wire real data to frontend pages (replace sample data with API calls)
+
+---
+
+## Session 3 — 2026-04-01 — Phase 1 Data Foundation
+
+### What Was Done
+- Defined canonical schemas with Drizzle ORM: 7 tables (sources, brands, offers, price_history, user_alerts, source_requests, moderation_cases)
+- All monetary values as integers (cents), timestamps UTC, currency ISO 4217
+- Built scoring engine v1 implementing the dual-score system from research:
+  - Deal Quality Score: price edge, historical advantage, fee transparency, region fit, seller trust, buyer protection, freshness
+  - Confidence Score: reference price confidence, data freshness, source reliability, duplicate consistency, fraud risk
+  - Hard suppression: red zone excluded, region-incompatible capped at 30
+- Built API routes: GET /api/deals, GET /api/brands, GET /api/brands/[slug]
+- Added PostgreSQL 16 to docker-compose with persistent volume
+- Created seed script with 7 sources, 12 brands, 15 scored offers, 15 price history entries
+- Deployed to VPS: DB container running, schema pushed, data seeded, web rebuilt
+- API verified: /api/deals returns 15 scored offers, /api/brands returns 12 brands
+
+### Decisions Made
+- Port 5433 for PostgreSQL host mapping (5432 internal) to avoid conflicts
+- Seed data uses realistic sources (Costco, PayPal, Bitrefill, CardCash, GCX, dundle, eGifter)
+- Scoring engine produces sensible rankings: green-zone sources with real discounts rank highest (Disney+ $50 at 66.07, Apple $100 at 66.00)
+
+### Lessons
+- drizzle-kit push with --force is needed for empty databases
+- Docker compose host port mapping (5433:5432) means tools on host use 5433, containers use service name:5432
+
+### State
+- Build: passes (32+ static pages + 3 API routes)
+- DB: PostgreSQL 16 with 7 tables, 7 sources, 12 brands, 15 offers, 15 price history
+- API: serving real scored data
+- VPS: both containers running (db + web)
+- Frontend: still using sample data (needs API wiring)
+
+### Next Session Priorities
+1. Wire frontend pages to use API data instead of sample data
+2. Build first real source adapter (Bitrefill affiliate feed or similar)
+3. Build normalization pipeline
+4. Admin moderation queue
+5. Domain setup (Cloudflare DNS)
