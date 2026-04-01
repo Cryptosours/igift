@@ -56,7 +56,7 @@
 | 1.6 | Build price-history storage and tracking | DONE | Builder | High |
 | 1.7 | Build ranking/scoring engine v1 (DealQuality + Confidence) | DONE | Builder | Critical |
 | 1.8 | Build hard suppression rules (red zone, region-incompatible) | DONE | Builder | Critical |
-| 1.9 | Wire real data to frontend pages | TODO | Builder | High |
+| 1.9 | Wire real data to frontend pages | DONE | Builder | High |
 | 1.10 | Build admin moderation queue (basic) | TODO | Builder | High |
 | 1.11 | Implement 3 more source adapters (public pages) | TODO | Builder | Medium |
 | 1.12 | Add search (Meilisearch or OpenSearch) | TODO | Builder | Medium |

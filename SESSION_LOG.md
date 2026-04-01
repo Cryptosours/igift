@@ -121,8 +121,53 @@
 - Frontend: still using sample data (needs API wiring)
 
 ### Next Session Priorities
-1. Wire frontend pages to use API data instead of sample data
+1. ~~Wire frontend pages to use API data instead of sample data~~ DONE Session 4
 2. Build first real source adapter (Bitrefill affiliate feed or similar)
 3. Build normalization pipeline
 4. Admin moderation queue
 5. Domain setup (Cloudflare DNS)
+
+---
+
+## Session 4 — 2026-04-01 — Wire Frontend to Real Data
+
+### What Was Done
+- Created data access layer (`src/lib/data.ts`) with centralized DB query functions
+  - `getDeals()`: fetches active offers with brand/source joins, transforms cents→dollars into DealCardProps
+  - `getBrands()`: fetches brands with deal counts and avg discount from DB
+  - `getBrandBySlug()`: fetches single brand with all its offers
+  - `getCategories()`: aggregates categories from brands table with deal counts
+  - `getCategoryBySlug()`: maps URL slugs to category enum values and display metadata
+- Wired all 6 data-driven pages to use DB queries:
+  - Home page (`/`): top 6 deals + category counts from DB
+  - Deals listing (`/deals`): all active offers sorted by finalScore
+  - Brands listing (`/brands`): real deal counts and avg discounts
+  - Brand detail (`/brands/[slug]`): fully dynamic with `notFound()` for missing slugs
+  - Categories listing (`/categories`): real deal counts per category
+  - Category detail (`/categories/[slug]`): offers filtered by category
+- All pages fall back gracefully to sample data when DB is unavailable
+- Build passes cleanly, deployed to VPS, verified all pages render real data
+
+### Decisions Made
+- Direct DB queries in Server Components instead of fetching API routes (faster, no HTTP round-trip)
+- Keep sample data as fallback for local dev without DB
+- Switched data pages from static to `force-dynamic` rendering (data changes frequently)
+- Removed `generateStaticParams` from brand/category pages (DB may not be available at build time)
+
+### Lessons
+- TypeScript requires explicit type annotations for variables initialized in try/catch blocks
+- Category enum values (`app_stores`) differ from URL slugs (`app-stores`) — need a bidirectional mapping
+
+### State
+- Build: passes (10 static + 7 dynamic routes)
+- Frontend: all data pages render from PostgreSQL
+- API: still functional for external/client-side use
+- VPS: deployed and verified
+- Sample data: retained as fallback, no longer primary
+
+### Next Session Priorities
+1. Build first real source adapter (Bitrefill affiliate feed or similar) (task 1.4)
+2. Build normalization pipeline (FX, region, denomination) (task 1.5)
+3. Build source registry and onboarding workflow (task 1.3)
+4. Admin moderation queue (task 1.10)
+5. Domain purchase + Cloudflare DNS setup (human action)

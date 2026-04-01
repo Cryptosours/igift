@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.4.0-wired] — 2026-04-01
+
+### Added
+- Data access layer (`src/lib/data.ts`): centralized DB query functions with cents-to-dollars transformation
+- Category metadata mapping (enum values ↔ URL slugs ↔ display names/icons)
+
+### Changed
+- Home page: fetches top 6 deals and category counts from PostgreSQL
+- Deals page: fetches all active offers sorted by finalScore from DB
+- Brands page: fetches brands with real deal counts and avg discount from DB
+- Brand detail pages: fully dynamic, fetches brand + offers from DB, uses `notFound()` for missing slugs
+- Categories page: fetches categories with real deal counts from DB
+- Category detail page: fetches offers filtered by category from DB
+- All data pages switched from static (`○`) to dynamic (`ƒ`) rendering
+- Graceful fallback to sample data when DB is unavailable (local dev)
+
+---
+
 ## [0.3.0-data] — 2026-04-01
 
 ### Added
