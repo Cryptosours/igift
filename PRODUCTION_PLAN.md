@@ -50,9 +50,9 @@
 |---|------|--------|------------|----------|
 | 1.1 | Define canonical schemas (Source, Brand, Offer, PriceHistory, etc.) | DONE | Architect | Critical |
 | 1.2 | Set up PostgreSQL + Drizzle ORM | DONE | Builder | Critical |
-| 1.3 | Build source registry and onboarding workflow | TODO | Builder | Critical |
-| 1.4 | Implement first 3 API/feed source adapters | TODO | Builder | Critical |
-| 1.5 | Build normalization pipeline (FX, region, denomination) | TODO | Builder | Critical |
+| 1.3 | Build source registry and onboarding workflow | DONE | Builder | Critical |
+| 1.4 | Implement first 3 API/feed source adapters | DONE | Builder | Critical |
+| 1.5 | Build normalization pipeline (FX, region, denomination) | DONE | Builder | Critical |
 | 1.6 | Build price-history storage and tracking | DONE | Builder | High |
 | 1.7 | Build ranking/scoring engine v1 (DealQuality + Confidence) | DONE | Builder | Critical |
 | 1.8 | Build hard suppression rules (red zone, region-incompatible) | DONE | Builder | Critical |

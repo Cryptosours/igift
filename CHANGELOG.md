@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.5.0-ingest] — 2026-04-02
+
+### Added
+- Ingestion pipeline: complete fetch → normalize → score → upsert orchestrator
+- Source adapter system: SourceAdapter interface, RawOffer/AdapterResult types
+- Bitrefill adapter: live HTML parser for 12 products, TanStack Query dehydrated state extraction
+- dundle adapter: live HTML parser for 11 products, JSON-LD + regex fallback
+- Configured catalog adapter: manual entries for blocked sources (Costco, eGifter, CardCash, PayPal)
+- Normalization pipeline: brand alias resolution (50+ aliases), static FX (13 currencies), country normalization, denomination extraction, title normalization
+- Admin Source API: CRUD at /api/admin/sources with auth, validation, soft-delete
+- Ingest trigger API: POST /api/ingest with dry-run mode and source filtering
+- Price history recording on every upsert
+
+### Changed
+- Offers table now populated by live pipeline (180 offers from 7 sources)
+- Source metadata updated with lastFetchedAt/lastSuccessAt after pipeline runs
+
+---
+
 ## [0.4.0-wired] — 2026-04-01
 
 ### Added

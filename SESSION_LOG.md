@@ -166,8 +166,72 @@
 - Sample data: retained as fallback, no longer primary
 
 ### Next Session Priorities
-1. Build first real source adapter (Bitrefill affiliate feed or similar) (task 1.4)
-2. Build normalization pipeline (FX, region, denomination) (task 1.5)
-3. Build source registry and onboarding workflow (task 1.3)
+1. ~~Build first real source adapter (Bitrefill affiliate feed or similar) (task 1.4)~~ DONE Session 5
+2. ~~Build normalization pipeline (FX, region, denomination) (task 1.5)~~ DONE Session 5
+3. ~~Build source registry and onboarding workflow (task 1.3)~~ DONE Session 5
 4. Admin moderation queue (task 1.10)
 5. Domain purchase + Cloudflare DNS setup (human action)
+
+---
+
+## Session 5 — 2026-04-02 — Ingestion Pipeline (Tasks 1.3, 1.4, 1.5)
+
+### What Was Done
+- Built complete ingestion pipeline: adapters → normalization → scoring → upsert
+- **Source Adapter System** (`src/lib/ingest/`):
+  - `types.ts`: RawOffer, AdapterConfig, AdapterResult, SourceAdapter interfaces
+  - `normalize.ts`: Brand alias resolution (50+ aliases → 12 brands), static FX conversion (13 currencies → USD), country normalization (ISO 3166-1), denomination extraction from titles, title normalization
+  - `adapters/bitrefill.ts`: Live HTML parser for 12 Bitrefill product pages — extracts denominations and USD prices from TanStack Query dehydrated state, sequential fetching with 500ms rate-limit delay
+  - `adapters/dundle.ts`: Live HTML parser for 11 dundle products — JSON-LD extraction with regex fallback, face-value reference pricing (green zone)
+  - `adapters/catalog.ts`: Configured catalog adapter for sources that block automated access (Costco, eGifter, CardCash, PayPal) — 11 manually curated entries with provenance: "manual", documented migration path to live APIs
+  - `adapters/index.ts`: Barrel export for all adapters
+- **Ingestion Orchestrator** (`src/lib/ingest/orchestrator.ts`):
+  - Loads source + brand maps from DB for slug resolution
+  - Iterates adapters → fetch → normalize → score → upsert pipeline
+  - Idempotent upserts via (sourceId, externalId) composite key
+  - Records price history for every offer
+  - Updates source metadata (lastFetchedAt, lastSuccessAt) on success
+  - Supports single-source filtering and dry-run mode
+- **Admin Source API** (`/api/admin/sources`):
+  - GET: List all sources with offer counts
+  - POST: Register new source with validation (name, slug, url, sourceType, trustZone required)
+  - PATCH `/api/admin/sources/[slug]`: Update allowed fields with trust-zone validation
+  - DELETE `/api/admin/sources/[slug]`: Soft-delete (sets isActive: false)
+  - Auth via ADMIN_API_KEY Bearer token
+- **Ingest Trigger API** (`/api/ingest`):
+  - POST: Triggers full pipeline with auth, returns structured results per source
+  - GET: Returns pipeline documentation
+  - Supports `?source=slug` filter and `?dryRun=true`
+- Deployed to VPS, ran full pipeline: **165 offers upserted across 6 sources in 26 seconds**
+  - Bitrefill: 42 offers (7/12 products succeeded)
+  - dundle: 112 offers (7/11 products succeeded)
+  - Catalog: 11 manual entries (Costco 3, eGifter 4, CardCash 2, PayPal 2)
+  - Total in DB: 180 offers across 7 sources
+
+### Decisions Made
+- Three-tier adapter strategy: live HTML parsing (Bitrefill, dundle), configured catalog (blocked sources), future API feeds (affiliate partnerships)
+- Static FX rates in V1 (13 currencies hardcoded) — will move to live rates in Phase 2
+- Catalog adapter uses `provenance: "manual"` which penalizes confidence score (correctly signals lower data freshness)
+- Sequential fetching with delays for live adapters (respect rate limits)
+- Admin API uses allowlist for updatable fields (security by default)
+
+### Lessons
+- Most gift card retailers (CardCash, eGifter, Raise) return 403/404 to automated requests — live parsing is unreliable for most sources, making the catalog adapter essential
+- Bitrefill embeds pricing in TanStack Query dehydrated state, not JSON-LD — required custom regex parser
+- dundle sells at face value (no discount) but is valuable as green-zone reference pricing for scoring comparisons
+- Idempotent upserts prevent duplicate offers on re-runs while keeping data fresh
+
+### State
+- Build: passes
+- DB: 180 offers, 7 sources, 12 brands, 180+ price history entries
+- Pipeline: operational (POST /api/ingest triggers full fetch → normalize → score → upsert)
+- Admin API: functional (CRUD for sources)
+- VPS: deployed and verified
+- Frontend: rendering real ingested data
+
+### Next Session Priorities
+1. Build admin moderation queue (task 1.10)
+2. Implement 3 more source adapters (task 1.11) — research additional green/yellow zone sources
+3. Add search (task 1.12)
+4. Domain purchase + Cloudflare DNS setup (human action)
+5. Fix 404 adapter URLs (Bitrefill PlayStation/Disney+, dundle Apple/Xbox/PlayStation/Nintendo)
