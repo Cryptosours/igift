@@ -10,21 +10,15 @@ import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { sources } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { checkAdminAuth } from "../../auth";
 
 export const dynamic = "force-dynamic";
-
-const ADMIN_KEY = process.env.ADMIN_API_KEY ?? "dev-admin-key";
-
-function checkAuth(request: Request): boolean {
-  const authHeader = request.headers.get("authorization");
-  return authHeader?.replace("Bearer ", "") === ADMIN_KEY;
-}
 
 type Props = { params: Promise<{ slug: string }> };
 
 /** GET /api/admin/sources/[slug] */
 export async function GET(request: Request, { params }: Props) {
-  if (!checkAuth(request)) {
+  if (!checkAdminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -45,7 +39,7 @@ export async function GET(request: Request, { params }: Props) {
 
 /** PATCH /api/admin/sources/[slug] — Update source fields */
 export async function PATCH(request: Request, { params }: Props) {
-  if (!checkAuth(request)) {
+  if (!checkAdminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -102,7 +96,7 @@ export async function PATCH(request: Request, { params }: Props) {
 
 /** DELETE /api/admin/sources/[slug] — Soft-delete (deactivate) */
 export async function DELETE(request: Request, { params }: Props) {
-  if (!checkAuth(request)) {
+  if (!checkAdminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

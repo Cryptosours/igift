@@ -12,11 +12,12 @@
  */
 
 import { db } from "@/db";
-import { offers, brands, sources, priceHistory } from "@/db/schema";
+import { offers, brands, sources, priceHistory, moderationCases } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { scoreOffer } from "@/lib/scoring";
 import type { SourceAdapter, AdapterResult } from "./types";
 import { normalizeOffer, type NormalizedOffer } from "./normalize";
+import { flagOffer, type FlagContext } from "./flagging";
 
 // ── Adapter Registry ──
 
@@ -42,6 +43,7 @@ export interface IngestionResult {
   sources: SourceIngestionResult[];
   totalOffersProcessed: number;
   totalOffersUpserted: number;
+  totalFlagged: number;
   totalErrors: number;
 }
 
@@ -52,6 +54,7 @@ interface SourceIngestionResult {
   rawOfferCount: number;
   normalizedCount: number;
   upsertedCount: number;
+  flaggedCount: number;
   skippedCount: number;
   warnings: string[];
   failed: boolean;
@@ -66,6 +69,7 @@ interface SourceRecord {
   sourceType: string;
   hasBuyerProtection: boolean;
   hasRefundPolicy: boolean;
+  lastSuccessAt: Date | null;
 }
 
 interface BrandRecord {
@@ -83,6 +87,7 @@ async function loadSourceMap(): Promise<Map<string, SourceRecord>> {
       sourceType: sources.sourceType,
       hasBuyerProtection: sources.hasBuyerProtection,
       hasRefundPolicy: sources.hasRefundPolicy,
+      lastSuccessAt: sources.lastSuccessAt,
     })
     .from(sources)
     .where(eq(sources.isActive, true));
@@ -120,11 +125,16 @@ function mapSourceTypeToDataSource(
 
 // ── Upsert Logic ──
 
+interface UpsertResult {
+  offerId: number;
+  confidenceScore: number | null;
+}
+
 async function upsertOffer(
   normalized: NormalizedOffer,
   source: SourceRecord,
   brand: BrandRecord,
-): Promise<boolean> {
+): Promise<UpsertResult> {
   const effectivePriceCents = normalized.effectivePriceCents;
   const discountPct = normalized.effectiveDiscountPct;
   const provenance = (normalized.rawSnapshot as Record<string, unknown>).provenance === "manual"
@@ -197,13 +207,16 @@ async function upsertOffer(
     updatedAt: new Date(),
   };
 
+  let offerId: number;
   if (existing.length > 0) {
     await db
       .update(offers)
       .set(offerData)
       .where(eq(offers.id, existing[0].id));
+    offerId = existing[0].id;
   } else {
-    await db.insert(offers).values(offerData);
+    const [inserted] = await db.insert(offers).values(offerData).returning({ id: offers.id });
+    offerId = inserted.id;
   }
 
   // Record price history
@@ -218,7 +231,7 @@ async function upsertOffer(
     effectiveDiscountPct: discountPct,
   });
 
-  return true;
+  return { offerId, confidenceScore: scoring.confidenceScore };
 }
 
 // ── Main Pipeline ──
@@ -231,6 +244,7 @@ export async function runIngestion(options?: {
   const results: SourceIngestionResult[] = [];
   let totalOffersProcessed = 0;
   let totalOffersUpserted = 0;
+  let totalFlagged = 0;
   let totalErrors = 0;
 
   // Load lookup maps
@@ -253,6 +267,7 @@ export async function runIngestion(options?: {
         rawOfferCount: 0,
         normalizedCount: 0,
         upsertedCount: 0,
+        flaggedCount: 0,
         skippedCount: 0,
         warnings: [`Source '${adapter.sourceSlug}' not found in database — skipping`],
         failed: true,
@@ -275,6 +290,7 @@ export async function runIngestion(options?: {
         rawOfferCount: 0,
         normalizedCount: 0,
         upsertedCount: 0,
+        flaggedCount: 0,
         skippedCount: 0,
         warnings: [`Fetch threw: ${msg}`],
         failed: true,
@@ -287,8 +303,13 @@ export async function runIngestion(options?: {
     totalOffersProcessed += fetchResult.offers.length;
     let normalizedCount = 0;
     let upsertedCount = 0;
+    let flaggedCount = 0;
     let skippedCount = 0;
     const warnings = [...fetchResult.warnings];
+
+    // Determine if this is the first ingestion run for this source
+    const isFirstRun = source.lastSuccessAt === null;
+    let firstRunFlagSampled = false; // Only flag one sample per new source
 
     // Step 2: Normalize + Score + Upsert each offer
     for (const rawOffer of fetchResult.offers) {
@@ -317,8 +338,44 @@ export async function runIngestion(options?: {
         }
 
         // Step 3: Upsert
-        await upsertOffer(normalized, source, brand);
+        const upsertResult = await upsertOffer(normalized, source, brand);
         upsertedCount++;
+
+        // Step 4: Auto-flag suspicious offers
+        const flagContext: FlagContext = {
+          trustZone: source.trustZone,
+          confidenceScore: upsertResult.confidenceScore,
+          isFirstRunForSource: isFirstRun && !firstRunFlagSampled,
+          sourceSlug: adapter.sourceSlug,
+        };
+
+        const flags = flagOffer(normalized, flagContext);
+        if (flags.length > 0) {
+          if (isFirstRun) firstRunFlagSampled = true;
+
+          // Create moderation cases for each flag
+          for (const flag of flags) {
+            await db.insert(moderationCases).values({
+              offerId: upsertResult.offerId,
+              sourceId: source.id,
+              caseType: flag.caseType,
+              description: flag.description,
+              status: "open",
+            });
+          }
+
+          // Set offer to pending_review
+          await db
+            .update(offers)
+            .set({
+              status: "pending_review",
+              suppressionReason: `Auto-flagged: ${flags.map((f) => f.caseType).join(", ")}`,
+              updatedAt: new Date(),
+            })
+            .where(eq(offers.id, upsertResult.offerId));
+
+          flaggedCount++;
+        }
       } catch (error) {
         const msg = error instanceof Error ? error.message : String(error);
         warnings.push(`Offer ${rawOffer.externalId}: ${msg}`);
@@ -327,6 +384,7 @@ export async function runIngestion(options?: {
     }
 
     totalOffersUpserted += upsertedCount;
+    totalFlagged += flaggedCount;
 
     // Step 4: Update source metadata
     if (!options?.dryRun && !fetchResult.failed) {
@@ -351,6 +409,7 @@ export async function runIngestion(options?: {
       rawOfferCount: fetchResult.offers.length,
       normalizedCount,
       upsertedCount,
+      flaggedCount,
       skippedCount,
       warnings,
       failed: fetchResult.failed,
@@ -367,6 +426,7 @@ export async function runIngestion(options?: {
     sources: results,
     totalOffersProcessed,
     totalOffersUpserted,
+    totalFlagged,
     totalErrors,
   };
 }

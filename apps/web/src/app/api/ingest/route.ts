@@ -43,6 +43,7 @@ export async function POST(request: Request) {
       summary: {
         totalOffersProcessed: result.totalOffersProcessed,
         totalOffersUpserted: result.totalOffersUpserted,
+        totalFlagged: result.totalFlagged,
         totalErrors: result.totalErrors,
         sourcesProcessed: result.sources.length,
       },
@@ -53,6 +54,7 @@ export async function POST(request: Request) {
         rawOffers: s.rawOfferCount,
         normalized: s.normalizedCount,
         upserted: s.upsertedCount,
+        flagged: s.flaggedCount,
         skipped: s.skippedCount,
         failed: s.failed,
         warnings: s.warnings.length > 0 ? s.warnings : undefined,

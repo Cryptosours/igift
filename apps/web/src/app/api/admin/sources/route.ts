@@ -11,19 +11,13 @@ import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { sources, offers } from "@/db/schema";
 import { eq, count } from "drizzle-orm";
+import { checkAdminAuth } from "../auth";
 
 export const dynamic = "force-dynamic";
 
-const ADMIN_KEY = process.env.ADMIN_API_KEY ?? "dev-admin-key";
-
-function checkAuth(request: Request): boolean {
-  const authHeader = request.headers.get("authorization");
-  return authHeader?.replace("Bearer ", "") === ADMIN_KEY;
-}
-
 /** GET /api/admin/sources — List all sources with stats */
 export async function GET(request: Request) {
-  if (!checkAuth(request)) {
+  if (!checkAdminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -65,7 +59,7 @@ export async function GET(request: Request) {
 
 /** POST /api/admin/sources — Register a new source */
 export async function POST(request: Request) {
-  if (!checkAuth(request)) {
+  if (!checkAdminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
