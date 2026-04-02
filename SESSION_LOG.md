@@ -273,3 +273,63 @@
 - DB: 180 offers, 7 sources, 0 moderation cases (clean queue)
 - VPS: deployed and verified
 - GitHub: pushed (commits edbc6ee + upcoming docs commit)
+
+---
+
+## Session 6 — 2026-04-03 — Security Hardening (igift.app)
+
+### What Was Done
+- **Cloudflare Security** (zone: `1c06fe3b38ba965ca399c44fde188b34`):
+  - SSL: Full (Strict) with Origin CA certificate (expires 2041)
+  - HSTS: 6 months max-age, includeSubDomains, preload, nosniff
+  - TLS 1.3 with 0-RTT enabled, minimum TLS 1.2
+  - Always HTTPS, automatic HTTPS rewrites, opportunistic encryption
+  - Security level: High, browser integrity check, email obfuscation
+  - Server-side excludes enabled
+  - Challenge TTL: 30 minutes
+  - WAF custom ruleset (3 rules):
+    1. Block /admin, /api/admin, /api/ingest from public IPs
+    2. Challenge POST requests to public API endpoints
+    3. Block common scanner paths (.env, .git, wp-admin, phpmyadmin, xmlrpc)
+  - Cache purged after config changes
+- **VPS Security** (REDACTED_IP):
+  - UFW firewall: default deny incoming, SSH open, HTTP/HTTPS restricted to Cloudflare IPv4+IPv6 ranges only (15 IPv4 + 7 IPv6 subnets)
+  - SSH hardened: PermitRootLogin no, MaxAuthTries 3, MaxSessions 5, LoginGraceTime 30s, X11Forwarding off, AllowTcpForwarding off
+  - fail2ban installed: SSH (7200s ban), nginx-http-auth, nginx-botsearch (86400s ban), nginx-badbots (86400s ban)
+  - Nginx hardened: igift.app config with Origin CA SSL, TLS 1.2/1.3 only, strong cipher suite, security headers, rate limiting (10r/s with burst 20), blocked sensitive paths, server tokens off, 10MB request limit
+  - Nginx default_server removed (was conflicting with freexstudio.com config)
+  - Origin CA certificate installed at /etc/nginx/ssl/igift.app/
+- **Application Security** (Next.js):
+  - Security headers via next.config.ts: CSP, HSTS, X-Frame-Options SAMEORIGIN, X-Content-Type-Options nosniff, X-XSS-Protection, Referrer-Policy, Permissions-Policy, X-DNS-Prefetch-Control
+  - CSP: default-src 'self', frame-ancestors 'none', form-action 'self'
+  - poweredByHeader: false (hides X-Powered-By: Next.js)
+  - Admin API keys replaced: 64-char hex keys deployed to /opt/igift/.env
+  - docker-compose.yml updated to read keys from .env file
+- **Credentials updated**: zone ID, API keys, Origin CA cert location added to all-credentials.local
+
+### Decisions Made
+- Full (Strict) SSL over Flexible: end-to-end encryption between CF and origin, prevents MITM
+- WAF rules block admin paths at the edge before traffic reaches origin
+- UFW restricts HTTP/HTTPS to Cloudflare IPs only — direct IP access blocked
+- Next.js handles app-level security headers (CSP, Permissions-Policy), nginx adds transport-level headers
+- 64-char hex API keys (256-bit entropy) replace default "dev-admin-key"/"dev-ingest-key"
+
+### Lessons
+- Heredoc-within-heredoc over SSH mangles content — SCP config files instead
+- Nginx configs with `default_server` conflict when multiple sites exist — only one config should be default
+- Cloudflare page rules API requires zone-scoped permissions, not account-level tokens
+- Bot Fight Mode requires paid Cloudflare plan (free tier gets basic bot protection)
+
+### State
+- Build: passes
+- Security: 3-layer hardening live (Cloudflare → nginx → Next.js)
+- Site: https://igift.app returns HTTP 200 with all security headers
+- VPS: firewall active, SSH hardened, fail2ban running
+- Phase 1: 12/14 tasks complete (1.11 and 1.12 remaining)
+
+### Next Session Priorities
+1. Set up Monday.com project board
+2. Sync Notion with latest progress
+3. Task 1.11: Implement 3 more source adapters
+4. Task 1.12: Add search
+5. Fix 404 adapter URLs (Bitrefill/dundle)

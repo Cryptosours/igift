@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.7.0-security] — 2026-04-03
+
+### Added
+- Cloudflare security hardening: HSTS, TLS 1.3+0-RTT, WAF custom rules (admin path blocking, scanner blocking, API challenge), browser integrity check, email obfuscation, Always HTTPS
+- Origin CA certificate for igift.app (Full Strict SSL, expires 2041)
+- Nginx hardened config: SSL with Origin CA, strong ciphers, rate limiting (10r/s), blocked sensitive paths, security headers
+- UFW firewall: HTTP/HTTPS restricted to Cloudflare IPs only (22 subnets)
+- SSH hardening: PermitRootLogin no, MaxAuthTries 3, no forwarding
+- fail2ban: SSH, nginx-http-auth, nginx-botsearch, nginx-badbots jails
+- Next.js security headers: CSP (frame-ancestors none, form-action self), HSTS, X-Frame-Options, X-Content-Type-Options, X-XSS-Protection, Referrer-Policy, Permissions-Policy, X-DNS-Prefetch-Control
+- Strong admin API keys (256-bit entropy) deployed to production .env
+
+### Changed
+- next.config.ts: added security headers and disabled poweredByHeader
+- docker-compose.yml: ADMIN_API_KEY and INGEST_API_KEY read from .env file
+- Nginx: igift.app config with SSL (was HTTP-only to realdeal.deals)
+
+### Security
+- 3-layer defense: Cloudflare edge → nginx origin → Next.js application
+- Admin paths blocked at both Cloudflare WAF and nginx level
+- Direct IP access blocked by UFW (only Cloudflare subnets allowed)
+- Default admin keys replaced with cryptographically strong secrets
+
+---
+
 ## [0.6.0-moderation] — 2026-04-02
 
 ### Added

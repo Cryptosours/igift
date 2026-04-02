@@ -28,6 +28,10 @@
 | 0.21 | Docker build + deploy to VPS | DONE | Operator | High |
 | 0.22 | Create VPS user 'realdeal' with SSH key | DONE | Operator | High |
 | 0.23 | Configure Nginx reverse proxy | DONE | Operator | High |
+| 0.24 | Domain setup (igift.app) + Cloudflare DNS | DONE | Operator | Critical |
+| 0.25 | Security hardening: Cloudflare WAF, Origin CA, SSL Full Strict | DONE | Operator | Critical |
+| 0.26 | Security hardening: VPS firewall (UFW), SSH, fail2ban | DONE | Operator | Critical |
+| 0.27 | Security hardening: Next.js security headers, CSP, strong API keys | DONE | Operator | Critical |
 
 ### Genesis Quality Gates
 - [x] Project installs, builds, and runs without errors

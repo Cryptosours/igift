@@ -28,6 +28,8 @@ services:
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgres://realdeal:realdeal@db:5432/realdeal
+      - ADMIN_API_KEY=${ADMIN_API_KEY}
+      - INGEST_API_KEY=${INGEST_API_KEY}
     depends_on:
       db:
         condition: service_healthy
