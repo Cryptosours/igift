@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.6.0-moderation] — 2026-04-02
+
+### Added
+- Admin moderation queue: case management API at /api/admin/moderation
+- Individual case resolution at /api/admin/moderation/[id] (approve/suppress/dismiss/reopen)
+- Direct offer actions at /api/admin/moderation/offers/[id]
+- Auto-flagging system in ingestion pipeline (suspicious discount, missing region, low confidence, new source sampling)
+- Admin UI at /admin with server-rendered moderation dashboard
+- Admin layout with dark nav bar, noindex/nofollow meta
+- Shared admin auth module
+
+### Changed
+- Orchestrator now runs flagging after upsert, creates moderation cases and sets offers to pending_review
+- Ingestion API response includes totalFlagged and per-source flaggedCount
+
+---
+
 ## [0.5.0-ingest] — 2026-04-02
 
 ### Added

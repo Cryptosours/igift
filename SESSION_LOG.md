@@ -230,8 +230,46 @@
 - Frontend: rendering real ingested data
 
 ### Next Session Priorities
-1. Build admin moderation queue (task 1.10)
+1. ~~Build admin moderation queue (task 1.10)~~ DONE Session 5 (continued)
 2. Implement 3 more source adapters (task 1.11) — research additional green/yellow zone sources
 3. Add search (task 1.12)
 4. Domain purchase + Cloudflare DNS setup (human action)
 5. Fix 404 adapter URLs (Bitrefill PlayStation/Disney+, dundle Apple/Xbox/PlayStation/Nintendo)
+
+---
+
+## Session 5b — 2026-04-02 — Admin Moderation Queue (Task 1.10)
+
+### What Was Done
+- Built complete admin moderation system:
+  - **Moderation API** (`/api/admin/moderation`): List/create/resolve cases with filtering (status, type), pagination, status summary counts
+  - **Case management** (`/api/admin/moderation/[id]`): Resolve with actions (approve → active, suppress → suppressed, dismiss → active, reopen)
+  - **Offer actions** (`/api/admin/moderation/offers/[id]`): Direct offer status changes with auto-resolution of linked open cases
+  - **Shared auth** (`/api/admin/auth.ts`): Extracted Bearer token auth from source routes, reused across all admin endpoints
+- **Auto-flagging system** (`src/lib/ingest/flagging.ts`):
+  - Suspicious discount: >35% for all sources, >25% for non-green zone
+  - Missing region data: flags offers with no countryRedeemable (rule #6 violation)
+  - Low confidence: confidence score <40 triggers review
+  - New source sampling: first-run sources get one sample offer flagged for verification
+  - Integrated into orchestrator: flags create moderation cases and set offers to pending_review
+- **Admin UI** (`/admin`): Server-rendered moderation dashboard with:
+  - Status summary cards (open, flagged, resolved, total)
+  - Open cases table with type badges, offer details, discount, trust zone, age
+  - Flagged offers table (pending_review status)
+  - Recently resolved cases log
+  - API reference section
+  - Own layout (dark nav bar, no public header/footer, noindex/nofollow)
+- Deployed to VPS, pipeline tested with flagging (0 flagged = correct, no anomalies in current data)
+
+### Decisions Made
+- Flagging thresholds: 35% general, 25% for non-green (gift cards rarely exceed these legitimately)
+- First-run flag is sampled (1 offer per source per run) to avoid flooding the queue
+- Auto-resolve linked cases when offer is approved/suppressed via direct action
+- Admin UI is read-only for now — actions require API calls (Client Components for action buttons will come in Phase 2)
+
+### State
+- Build: passes (21 routes total — 10 static + 11 dynamic)
+- Phase 1: 12/14 tasks complete (1.11 and 1.12 remaining)
+- DB: 180 offers, 7 sources, 0 moderation cases (clean queue)
+- VPS: deployed and verified
+- GitHub: pushed (commits edbc6ee + upcoming docs commit)
