@@ -1,6 +1,6 @@
 # RealDeal — Session Log
 
-## Session 7 — 2026-04-03 — New Source Adapters + Skills Audit
+## Session 7 — 2026-04-03 — New Source Adapters + BuySellVouchers
 
 ### What Was Done
 - Initialized persistent memory system for cross-session context
@@ -10,9 +10,14 @@
   - **Raise/GCX adapter** (`raise.ts`): marketplace parser, JSON-LD + regex fallback, yellow zone, 12 tracked products
   - **Gift Card Granny adapter** (`giftcardgranny.ts`): aggregator parser, 3-strategy extraction (JSON-LD, price pairs, discount synthesis), green zone, 12 tracked products
   - **Gameflip adapter** (`gameflip.ts`): gaming marketplace parser, JSON-LD ItemList + Product + listing fallback, yellow zone, 10 tracked products
-- Registered all 3 adapters in orchestrator and adapter index
-- Added 2 new sources to seed data (Gift Card Granny, Gameflip)
-- Added 14 new brand name aliases in normalize.ts for marketplace listing variations
+- Built **BuySellVouchers adapter** (Task 1.11b, user-requested):
+  - **BSV adapter** (`buysellvouchers.ts`): P2P marketplace parser, 3-strategy extraction (listing pattern, price-discount, simple fallback), seller rating tier mapping (Beginner→Legend), 0.5% buyer fee, yellow zone, 12 tracked products
+  - Added BSV source to seed data (yellow, marketplace_resale)
+  - Added eBay brand to seed data (new brand tracked by BSV)
+  - Added eBay brand aliases to normalize.ts
+- Registered all 4 new adapters in orchestrator and adapter index
+- Added 2+1 new sources to seed data (Gift Card Granny, Gameflip, BuySellVouchers)
+- Added 14+3 brand name aliases in normalize.ts
 - Build passes cleanly
 
 ### Key Decisions
@@ -20,25 +25,29 @@
   - GCX was already seeded in DB but had no adapter
   - GCG is a green-zone aggregator providing cross-source price comparison data
   - Gameflip fills the gaming niche with marketplace discounts
+- BuySellVouchers added per user request — P2P marketplace with 10+ year history, 650K+ monthly tx
+  - BSV is Next.js-based with __next_f payloads (no JSON-LD), required custom regex strategies
+  - Classified as yellow zone with buyer protection
 - All adapters follow the same pattern: TRACKED_PRODUCTS → sequential fetch → HTML parse → RawOffer[]
 - Each adapter has multiple parsing strategies (JSON-LD first, regex fallback)
-- Polite delays between requests (500-800ms) to respect rate limits
+- Polite delays between requests (500-1000ms) to respect rate limits
 
 ### Files Changed
 - `apps/web/src/lib/ingest/adapters/raise.ts` — NEW
 - `apps/web/src/lib/ingest/adapters/giftcardgranny.ts` — NEW
 - `apps/web/src/lib/ingest/adapters/gameflip.ts` — NEW
-- `apps/web/src/lib/ingest/adapters/index.ts` — added 3 new exports
-- `apps/web/src/lib/ingest/orchestrator.ts` — registered 3 new adapters
-- `apps/web/src/lib/ingest/normalize.ts` — added 14 brand aliases
-- `apps/web/src/db/seed.ts` — added Gift Card Granny and Gameflip sources
-- `PRODUCTION_PLAN.md` — marked 1.11 as DONE
-- `CHANGELOG.md` — added v0.8.0-adapters entry
+- `apps/web/src/lib/ingest/adapters/buysellvouchers.ts` — NEW
+- `apps/web/src/lib/ingest/adapters/index.ts` — added 4 new exports
+- `apps/web/src/lib/ingest/orchestrator.ts` — registered 4 new adapters
+- `apps/web/src/lib/ingest/normalize.ts` — added 17 brand aliases (14 + 3 eBay)
+- `apps/web/src/db/seed.ts` — added Gift Card Granny, Gameflip, BuySellVouchers sources + eBay brand
+- `PRODUCTION_PLAN.md` — marked 1.11 DONE, added 1.11b DONE
+- `CHANGELOG.md` — updated v0.8.0-adapters entry
 - `SESSION_LOG.md` — this entry
 
 ### Production Plan Status
 - Phase 0: 27/27 DONE ✅
-- Phase 1: 13/14 DONE (only 1.12 Search remains)
+- Phase 1: 14/15 DONE (only 1.12 Search remains)
 - Phase 2: 0/8
 - Phase 3: 0/5
 

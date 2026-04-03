@@ -9,6 +9,7 @@ export { dundleAdapter } from "./dundle";
 export { raiseAdapter } from "./raise";
 export { giftCardGrannyAdapter } from "./giftcardgranny";
 export { gameflipAdapter } from "./gameflip";
+export { buySellVouchersAdapter } from "./buysellvouchers";
 export {
   costcoCatalogAdapter,
   egifterCatalogAdapter,

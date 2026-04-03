@@ -13,7 +13,7 @@ async function seed() {
   console.log("Seeding RealDeal database...");
 
   // ── Sources ──
-  const [costco, paypalGifts, bitrefill, cardcash, gcx, dundle, eGifter] =
+  const [costco, paypalGifts, bitrefill, cardcash, gcx, dundle, eGifter, , , ] =
     await db
       .insert(sources)
       .values([
@@ -115,10 +115,21 @@ async function seed() {
           refreshIntervalMinutes: 60,
           contractNotes: "Gaming-focused marketplace. Buyer protection program.",
         },
+        {
+          name: "BuySellVouchers",
+          slug: "buysellvouchers",
+          url: "https://www.buysellvouchers.com",
+          sourceType: "marketplace_resale",
+          trustZone: "yellow",
+          hasBuyerProtection: true,
+          hasRefundPolicy: false,
+          refreshIntervalMinutes: 60,
+          contractNotes: "P2P gift card marketplace. 10+ year history, 650K+ monthly tx. 0.5% buyer fee.",
+        },
       ])
       .returning();
 
-  console.log(`  Seeded ${9} sources`);
+  console.log(`  Seeded ${10} sources`);
 
   // ── Brands ──
   const brandRows = await db
@@ -136,6 +147,7 @@ async function seed() {
       { name: "Uber", slug: "uber", category: "travel", description: "Uber & Uber Eats gift cards", regionsSupported: ["US", "UK", "AU"] },
       { name: "DoorDash", slug: "doordash", category: "food_dining", description: "DoorDash gift cards", regionsSupported: ["US", "CA"] },
       { name: "Disney+", slug: "disney-plus", category: "streaming", description: "Disney+ subscription gift cards", regionsSupported: ["US", "EU", "UK", "AU", "Global"] },
+      { name: "eBay", slug: "ebay", category: "retail", description: "eBay gift cards", regionsSupported: ["US"] },
     ])
     .returning();
 

@@ -88,6 +88,10 @@ const BRAND_ALIASES: Record<string, string> = {
   "spotify premium gift card": "spotify",
   "netflix gift card code": "netflix",
   "doordash gift card code": "doordash",
+  // eBay
+  ebay: "ebay",
+  "ebay gift card": "ebay",
+  "ebay.com": "ebay",
 };
 
 /** Resolve a messy brand name to a canonical slug. Returns null if unknown. */

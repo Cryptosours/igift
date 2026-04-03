@@ -26,6 +26,7 @@ import { dundleAdapter } from "./adapters/dundle";
 import { raiseAdapter } from "./adapters/raise";
 import { giftCardGrannyAdapter } from "./adapters/giftcardgranny";
 import { gameflipAdapter } from "./adapters/gameflip";
+import { buySellVouchersAdapter } from "./adapters/buysellvouchers";
 import { getAllCatalogAdapters } from "./adapters/catalog";
 
 /** All registered adapters. Add new ones here. */
@@ -36,6 +37,7 @@ function getRegisteredAdapters(): SourceAdapter[] {
     raiseAdapter,
     giftCardGrannyAdapter,
     gameflipAdapter,
+    buySellVouchersAdapter,
     ...getAllCatalogAdapters(),
   ];
 }

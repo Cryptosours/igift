@@ -6,13 +6,15 @@
 - Raise/GCX adapter: public page parser for gift card marketplace listings (yellow zone)
 - Gift Card Granny adapter: aggregator/comparison site parser with multi-strategy extraction (green zone)
 - Gameflip adapter: gaming-focused marketplace parser with JSON-LD and listing fallback (yellow zone)
-- 2 new sources in seed data: Gift Card Granny (green), Gameflip (yellow)
-- 14 additional brand name aliases for marketplace listing variations
+- BuySellVouchers adapter: P2P marketplace parser with seller rating tiers, 3-strategy extraction (yellow zone)
+- eBay brand added to seed data and normalize aliases
+- 3 new sources in seed data: Gift Card Granny (green), Gameflip (yellow), BuySellVouchers (yellow)
+- 17 additional brand name aliases for marketplace listing variations
 
 ### Changed
-- Adapter registry now exports 8 adapters (was 6): bitrefill, dundle, raise, giftcardgranny, gameflip, + 4 catalog
-- Orchestrator registers all 9 adapters (3 live + 3 new live + 4 catalog)
-- Total tracked products across all live adapters: ~46 (12+11+12+12+10 minus overlaps)
+- Adapter registry now exports 9 adapters (was 6): bitrefill, dundle, raise, giftcardgranny, gameflip, buysellvouchers + 4 catalog
+- Orchestrator registers all 10 adapters (7 live + 4 catalog)
+- Total tracked products across all live adapters: ~58 (12+11+12+12+10+12 minus overlaps)
 
 ---
 
