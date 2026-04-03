@@ -1,6 +1,6 @@
 # RealDeal — Session Log
 
-## Session 9 — 2026-04-03 — Offer Revalidation & Staleness Detection (Task 2.2)
+## Session 9 — 2026-04-03 — Revalidation + Alert System (Tasks 2.2 & 2.4)
 
 ### What Was Done
 - **Task 2.2: Automated offer revalidation and staleness detection**
@@ -8,13 +8,22 @@
   - Built `/api/admin/revalidation` — GET for lifecycle report, POST to trigger revalidation cycle
   - Added Offer Lifecycle dashboard section to admin page — status counts, per-source staleness breakdown table
   - Integrated revalidation into orchestrator as step 6 (runs after each ingestion cycle)
-  - Updated ingestion API response to include revalidation stats
+
+- **Task 2.4: Email alert delivery system**
+  - Built `lib/alerts/matcher.ts` — matches user alerts against eligible offers (brand, category, discount, region filters)
+  - Built `lib/alerts/email.ts` — Resend REST API delivery with HTML+text templates, dev console fallback
+  - Built `lib/alerts/index.ts` — orchestrates matching → delivery → mark-sent flow
+  - Built `/api/alerts` — CRUD endpoint (POST create, GET list, DELETE deactivate)
+  - Created interactive `AlertForm` client component (replaces static form on /alerts page)
+  - Integrated alert processing into orchestrator as step 7 (scoped to upserted offer IDs)
 
 ### Key Decisions
-- **3x SLA multiplier for per-offer staleness** — more generous than source-level (2x) because individual offers may rotate through listings
-- **7-day expiry threshold** — stale offers not seen for a week are likely removed from source
-- **Raw SQL for complex queries** — used Postgres `FILTER (WHERE)` and `UPDATE ... FROM` via `db.execute(sql\`...\`)` where Drizzle builder lacks support
-- **Best-effort revalidation** — non-fatal in pipeline; if revalidation fails, ingestion still succeeds
+- **Resend over nodemailer** — zero-dependency HTTP transport, no bundling issues in Next.js
+- **24-hour alert cooldown** — prevents alert spam; one notification per alert per day max
+- **One match per alert per cycle** — best matching offer wins, avoids email flood
+- **Dev console fallback** — when RESEND_API_KEY not set, emails log to console for local testing
+- **3x SLA multiplier for per-offer staleness** — more generous than source-level (2x)
+- **Raw SQL for complex queries** — Postgres FILTER (WHERE) and UPDATE...FROM where Drizzle lacks support
 
 ### Files Changed
 - `apps/web/src/lib/revalidation.ts` — NEW (offer lifecycle management)

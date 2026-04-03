@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bell, Zap, Shield, Mail } from "lucide-react";
+import { AlertForm } from "@/components/alerts/alert-form";
 
 export const metadata: Metadata = {
   title: "Price Alerts",
@@ -50,61 +51,8 @@ export default function AlertsPage() {
       </div>
 
       {/* Alert Form */}
-      <div className="mt-10 rounded-xl border border-surface-200 bg-white p-6">
-        <h2 className="text-lg font-semibold text-surface-900">
-          Create a new alert
-        </h2>
-        <div className="mt-4 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-surface-700">
-              Brand or product
-            </label>
-            <input
-              type="text"
-              placeholder="e.g., Steam $50, Apple Gift Card, Netflix"
-              className="mt-1 w-full rounded-lg border border-surface-300 px-3 py-2 text-sm placeholder:text-surface-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
-            />
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label className="block text-sm font-medium text-surface-700">
-                Target discount
-              </label>
-              <select className="mt-1 w-full rounded-lg border border-surface-300 px-3 py-2 text-sm text-surface-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20">
-                <option>Any discount</option>
-                <option>5% or more</option>
-                <option>10% or more</option>
-                <option>15% or more</option>
-                <option>20% or more</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-surface-700">
-                Region
-              </label>
-              <select className="mt-1 w-full rounded-lg border border-surface-300 px-3 py-2 text-sm text-surface-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20">
-                <option>Any region</option>
-                <option>US</option>
-                <option>EU</option>
-                <option>UK</option>
-                <option>Global</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-surface-700">
-              Email
-            </label>
-            <input
-              type="email"
-              placeholder="your@email.com"
-              className="mt-1 w-full rounded-lg border border-surface-300 px-3 py-2 text-sm placeholder:text-surface-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
-            />
-          </div>
-          <button className="w-full rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700">
-            Create Alert
-          </button>
-        </div>
+      <div className="mt-10">
+        <AlertForm />
       </div>
     </div>
   );

@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.2.0-alerts] — 2026-04-03
+
+### Added
+- Alert matching engine (`lib/alerts/matcher.ts`) — matches user alerts to eligible offers by brand, category, discount, region
+- Email delivery service (`lib/alerts/email.ts`) — Resend REST API transport with HTML+text templates, dev console fallback
+- Alert orchestrator (`lib/alerts/index.ts`) — coordinates matching, delivery, and sent-marking after ingestion
+- `/api/alerts` endpoint — POST to create alert, GET to list by email, DELETE to deactivate
+- Interactive AlertForm client component — replaces static form on /alerts page with API-connected form
+- 24-hour cooldown per alert to prevent spam
+- Email templates with deal card, trust zone indicator, unsubscribe link
+- Alert processing integrated into ingestion pipeline (step 7: match + deliver after upsert)
+
+### Changed
+- Alerts page now uses interactive `AlertForm` client component (was static)
+- Orchestrator runs alert processing after revalidation, scoped to upserted offer IDs
+- Ingestion API response includes `alerts` stats (matched, delivered, failed)
+- Task 2.4 marked DONE
+
+---
+
 ## [1.1.0-phase2] — 2026-04-03
 
 ### Added

@@ -21,6 +21,7 @@ import { normalizeOffer, type NormalizedOffer } from "./normalize";
 import { flagOffer, type FlagContext } from "./flagging";
 import { markStaleOffers } from "@/lib/health";
 import { runRevalidation } from "@/lib/revalidation";
+import { processAlerts, type AlertsResult } from "@/lib/alerts";
 
 // ── Adapter Registry ──
 
@@ -61,6 +62,11 @@ export interface IngestionResult {
     staleMarked: number;
     expiredMarked: number;
     activeOffers: number;
+  } | null;
+  alerts: {
+    matched: number;
+    delivered: number;
+    failed: number;
   } | null;
 }
 
@@ -270,6 +276,9 @@ export async function runIngestion(options?: {
   const sourceMap = await loadSourceMap();
   const brandMap = await loadBrandMap();
 
+  // Track upserted offer IDs for alert matching
+  const upsertedOfferIds: number[] = [];
+
   // Get adapters (optionally filter to one source)
   let adapters = getRegisteredAdapters();
   if (options?.sourceSlug) {
@@ -358,6 +367,7 @@ export async function runIngestion(options?: {
 
         // Step 3: Upsert
         const upsertResult = await upsertOffer(normalized, source, brand);
+        upsertedOfferIds.push(upsertResult.offerId);
         upsertedCount++;
 
         // Step 4: Auto-flag suspicious offers
@@ -468,6 +478,21 @@ export async function runIngestion(options?: {
     }
   }
 
+  // Step 7: Process alerts for newly upserted offers
+  let alerts: IngestionResult["alerts"] = null;
+  if (!options?.dryRun && upsertedOfferIds.length > 0) {
+    try {
+      const ar = await processAlerts(upsertedOfferIds);
+      alerts = {
+        matched: ar.matched,
+        delivered: ar.delivered,
+        failed: ar.failed,
+      };
+    } catch {
+      // Non-fatal — alert delivery is best-effort
+    }
+  }
+
   const completedAt = new Date();
 
   return {
@@ -481,5 +506,6 @@ export async function runIngestion(options?: {
     totalErrors,
     staleMarked,
     revalidation,
+    alerts,
   };
 }

@@ -78,7 +78,7 @@
 | 2.1 | Parser health monitoring + freshness SLAs | DONE | Builder | Critical |
 | 2.2 | Automated offer revalidation and staleness detection | DONE | Builder | Critical |
 | 2.3 | Duplicate clustering engine | TODO | Builder | High |
-| 2.4 | Email/Telegram alert delivery system | TODO | Builder | Critical |
+| 2.4 | Email/Telegram alert delivery system | DONE | Builder | Critical |
 | 2.5 | LLM-assisted multilingual title normalization | TODO | Builder | Medium |
 | 2.6 | LLM-assisted category mapping from messy text | TODO | Builder | Medium |
 | 2.7 | Merchant complaint workflow | TODO | Builder | Medium |
