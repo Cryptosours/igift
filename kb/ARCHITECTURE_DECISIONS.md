@@ -59,3 +59,9 @@
 **Alternatives:** Show listing price with fees noted separately.
 **Why:** Core differentiator. "15% off" means nothing if there's a 10% platform fee. Effective price = listing + platform fees + payment surcharges + membership cost allocation, converted to user currency. This is what the user actually pays.
 **Revisit when:** N/A — this is the product thesis.
+
+## ADR-011: PostgreSQL ILIKE Search over Meilisearch for V1
+**Decision:** Use Postgres ILIKE with multi-field matching for V1 search, not a dedicated search engine.
+**Alternatives:** Meilisearch (Docker), OpenSearch, Fuse.js (client-side), Algolia (SaaS).
+**Why:** At current scale (<1000 offers), Meilisearch adds infrastructure complexity (Docker service, sync pipeline, memory on VPS) for marginal UX benefit. Postgres ILIKE is zero-infrastructure, always consistent, and fast enough. The search UI is fully built — only the backend engine is simple. Upgrade to Meilisearch when volume exceeds 100K+ offers or typo tolerance becomes critical.
+**Revisit when:** Offer count > 100K, or user feedback requests fuzzy/typo-tolerant search.

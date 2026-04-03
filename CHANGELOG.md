@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.9.0-search] — 2026-04-03
+
+### Added
+- Full-text search across deals, brands, sources, and categories
+- `/api/search` endpoint with query, region, and trustZone filters
+- SearchBar component (compact + expanded variants) with 300ms debounced search
+- HeroSearch on home page — search directly from hero section
+- DealSearch component on deals page with inline results, empty state, URL param support
+- Header search icon now toggles an expandable search bar
+
+### Changed
+- Deals page now uses `DealSearch` wrapper for search-aware grid
+- Home page hero now features a search bar above CTA buttons
+- Task 1.12 marked DONE — Phase 1 complete (15/15 tasks)
+
+---
+
 ## [0.8.0-adapters] — 2026-04-03
 
 ### Added

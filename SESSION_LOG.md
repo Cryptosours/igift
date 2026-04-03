@@ -1,5 +1,46 @@
 # RealDeal — Session Log
 
+## Session 8 — 2026-04-03 — Search Feature (Task 1.12) + Phase 1 Complete
+
+### What Was Done
+- Evaluated search solutions: Meilisearch vs Postgres FTS vs client-side
+  - Chose Postgres ILIKE search for V1 — zero infrastructure, instant consistency
+  - Clear upgrade path to Meilisearch when volume demands it (100K+ offers)
+- Built `searchDeals()` function in data layer with multi-field ILIKE matching (title, brand, source, category)
+- Built `/api/search` API route with query param, fallback to sample data search
+- Built `SearchBar` component — dual variant (compact for header, expanded for page), 300ms debounce, inline results
+- Built `DealSearch` client component — wraps deals grid with live search, empty state, result count
+- Built `HeroSearch` component — search bar in home page hero, navigates to `/deals?q=...`
+- Wired header search icon to toggle expandable search bar
+- Updated deals page to use `DealSearch` with `?q=` URL param support
+- Build passes cleanly; deals page bundle: 3.98 kB First Load JS (was 169 B)
+
+### Key Decisions
+- **Postgres over Meilisearch**: At current scale (<1000 offers), adding a Docker service for search is over-engineering. ILIKE across indexed columns is fast enough. Meilisearch upgrade path documented in ADR.
+- **Application-layer search**: Since dev mode uses sample data fallback (no running Postgres), search also falls back to client-side filtering of sample data. This makes the feature testable without Docker.
+- **URL-shareable search**: `/deals?q=steam` is bookmarkable/shareable. SearchBar reads from URL params on mount and syncs state bidirectionally.
+
+### Files Changed
+- `apps/web/src/lib/data.ts` — added `searchDeals()` function, imported `or`/`ilike`
+- `apps/web/src/app/api/search/route.ts` — NEW search API
+- `apps/web/src/components/ui/search-bar.tsx` — NEW dual-variant search bar
+- `apps/web/src/components/ui/hero-search.tsx` — NEW home page search
+- `apps/web/src/components/deals/deal-search.tsx` — NEW search-aware deal grid
+- `apps/web/src/app/deals/page.tsx` — integrated DealSearch component
+- `apps/web/src/app/page.tsx` — added HeroSearch to hero section
+- `apps/web/src/components/layout/header.tsx` — search icon toggles expandable search bar
+- `PRODUCTION_PLAN.md` — marked 1.12 as DONE
+- `CHANGELOG.md` — added search entry
+- `SESSION_LOG.md` — this entry
+
+### Production Plan Status
+- Phase 0: 27/27 DONE
+- Phase 1: 15/15 DONE — PHASE COMPLETE
+- Phase 2: 0/8
+- Phase 3: 0/5
+
+---
+
 ## Session 7 — 2026-04-03 — New Source Adapters + BuySellVouchers
 
 ### What Was Done

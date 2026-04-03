@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { SlidersHorizontal, ArrowUpDown } from "lucide-react";
-import { DealCard } from "@/components/deals/deal-card";
 import { getDeals } from "@/lib/data";
 import { sampleDeals } from "@/lib/sample-data";
+import { DealSearch } from "@/components/deals/deal-search";
 
 export const metadata: Metadata = {
   title: "All Verified Deals",
@@ -68,12 +68,8 @@ export default async function DealsPage() {
         )}
       </div>
 
-      {/* Deal Grid */}
-      <div className="mt-6 grid gap-4 lg:grid-cols-2">
-        {deals.map((deal) => (
-          <DealCard key={deal.id} deal={deal} />
-        ))}
-      </div>
+      {/* Search + Deal Grid */}
+      <DealSearch initialDeals={deals} />
     </div>
   );
 }

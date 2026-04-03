@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { offers, brands, sources } from "@/db/schema";
-import { eq, desc, and, count, avg, sql } from "drizzle-orm";
+import { eq, desc, and, or, ilike, count, avg, sql } from "drizzle-orm";
 import type { DealCardProps } from "@/components/deals/deal-card";
 
 // ── Helpers ──
@@ -101,6 +101,91 @@ export async function getDeals(options?: {
   if (options?.category) {
     const enumVal = slugToCategory[options.category] ?? options.category;
     filtered = filtered.filter((r) => r.brandCategory === enumVal);
+  }
+
+  return filtered.map((r) => ({
+    id: String(r.id),
+    brand: r.brandName,
+    brandSlug: r.brandSlug,
+    title: r.title ?? r.originalTitle,
+    faceValue: centsToDollars(r.faceValueCents),
+    effectivePrice: centsToDollars(r.effectivePriceCents),
+    currency: r.currency === "USD" ? "$" : r.currency,
+    effectiveDiscount: r.effectiveDiscountPct,
+    dealScore: r.dealQualityScore ?? 0,
+    confidenceScore: r.confidenceScore ?? 0,
+    trustZone: r.trustZone,
+    sourceName: r.sourceName,
+    sourceUrl: r.externalUrl,
+    region: (r.countryRedeemable as string[] | null)?.join(", ") ?? "Unknown",
+    lastVerified: timeAgo(r.lastSeenAt),
+    historicalLow: r.isHistoricalLow,
+  }));
+}
+
+/** Search offers by query string across brand, title, source, and category.
+ *  Uses Postgres ILIKE for case-insensitive matching across multiple fields.
+ *  Results ranked by finalScore desc. Falls back to sample data if DB unavailable. */
+export async function searchDeals(
+  query: string,
+  options?: { limit?: number; region?: string; trustZone?: "green" | "yellow" },
+): Promise<DealCardProps[]> {
+  const limit = options?.limit ?? 50;
+  const q = `%${query.trim()}%`;
+
+  if (!query.trim()) return getDeals({ limit });
+
+  const conditions = [
+    eq(offers.status, "active"),
+    or(
+      ilike(offers.normalizedTitle, q),
+      ilike(offers.originalTitle, q),
+      ilike(brands.name, q),
+      ilike(brands.slug, q),
+      ilike(sources.name, q),
+      ilike(brands.category, q),
+    ),
+  ];
+
+  if (options?.trustZone) {
+    conditions.push(eq(offers.trustZone, options.trustZone));
+  }
+
+  const results = await db
+    .select({
+      id: offers.id,
+      title: offers.normalizedTitle,
+      originalTitle: offers.originalTitle,
+      externalUrl: offers.externalUrl,
+      faceValueCents: offers.faceValueCents,
+      effectivePriceCents: offers.effectivePriceCents,
+      currency: offers.currency,
+      effectiveDiscountPct: offers.effectiveDiscountPct,
+      dealQualityScore: offers.dealQualityScore,
+      confidenceScore: offers.confidenceScore,
+      finalScore: offers.finalScore,
+      trustZone: offers.trustZone,
+      countryRedeemable: offers.countryRedeemable,
+      isHistoricalLow: offers.isHistoricalLow,
+      lastSeenAt: offers.lastSeenAt,
+      brandName: brands.name,
+      brandSlug: brands.slug,
+      brandCategory: brands.category,
+      sourceName: sources.name,
+    })
+    .from(offers)
+    .innerJoin(brands, eq(offers.brandId, brands.id))
+    .innerJoin(sources, eq(offers.sourceId, sources.id))
+    .where(and(...conditions))
+    .orderBy(desc(offers.finalScore))
+    .limit(limit);
+
+  let filtered = results;
+  if (options?.region) {
+    filtered = filtered.filter((r) => {
+      const countries = r.countryRedeemable as string[] | null;
+      return countries?.includes(options.region!) || countries?.includes("Global");
+    });
   }
 
   return filtered.map((r) => ({

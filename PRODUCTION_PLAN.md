@@ -64,7 +64,7 @@
 | 1.10 | Build admin moderation queue (basic) | DONE | Builder | High |
 | 1.11 | Implement 3 more source adapters (public pages) | DONE | Builder | Medium |
 | 1.11b | Add BuySellVouchers adapter (user-requested) | DONE | Builder | Medium |
-| 1.12 | Add search (Meilisearch or OpenSearch) | TODO | Builder | Medium |
+| 1.12 | Add search (Postgres FTS + search UI) | DONE | Builder | Medium |
 | 1.13 | Build API routes (deals, brands, brands/[slug]) | DONE | Builder | Critical |
 | 1.14 | Seed database with realistic scored data | DONE | Builder | High |
 

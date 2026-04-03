@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import {
   Search,
   Bell,
@@ -13,6 +13,7 @@ import {
   Store,
   BookOpen,
 } from "lucide-react";
+import { SearchBar } from "@/components/ui/search-bar";
 
 const navigation = [
   { name: "Deals", href: "/deals", icon: TrendingUp },
@@ -23,6 +24,7 @@ const navigation = [
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-surface-200 bg-white/80 backdrop-blur-xl">
@@ -57,8 +59,9 @@ export function Header() {
             <button
               className="rounded-lg p-2 text-surface-500 transition-colors hover:bg-surface-100 hover:text-surface-700"
               aria-label="Search deals"
+              onClick={() => setSearchOpen(!searchOpen)}
             >
-              <Search className="h-5 w-5" />
+              {searchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
             </button>
             <Link
               href="/alerts"
@@ -89,6 +92,15 @@ export function Header() {
             </button>
           </div>
         </div>
+
+        {/* Search Bar (expandable) */}
+        {searchOpen && (
+          <div className="border-t border-surface-200 py-3">
+            <Suspense>
+              <SearchBar variant="compact" autoFocus placeholder="Search brands, deals, stores..." />
+            </Suspense>
+          </div>
+        )}
 
         {/* Mobile Nav */}
         {mobileOpen && (

@@ -12,6 +12,7 @@ import {
 import { DealCard } from "@/components/deals/deal-card";
 import { getDeals, getCategories } from "@/lib/data";
 import { sampleDeals, categories as sampleCategories } from "@/lib/sample-data";
+import { HeroSearch } from "@/components/ui/hero-search";
 
 export const dynamic = "force-dynamic";
 
@@ -49,13 +50,17 @@ export default async function HomePage() {
               credits, and vouchers — so you know exactly what you&apos;re getting,
               where it works, and whether it&apos;s worth it.
             </p>
-            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            {/* Hero Search */}
+            <div className="mx-auto mt-8 max-w-lg">
+              <HeroSearch />
+            </div>
+            <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
               <Link
                 href="/deals"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-semibold text-brand-900 shadow-lg transition-all hover:bg-brand-50 sm:w-auto"
               >
                 <Search className="h-4 w-4" />
-                Browse Verified Deals
+                Browse All Deals
               </Link>
               <Link
                 href="/alerts"
