@@ -1,6 +1,6 @@
 # RealDeal — Session Log
 
-## Session 8 — 2026-04-03 — Search Feature (Task 1.12) + Phase 1 Complete
+## Session 8 — 2026-04-03 — Search + Health Monitoring (Phase 1 Complete → Phase 2 Start)
 
 ### What Was Done
 - Evaluated search solutions: Meilisearch vs Postgres FTS vs client-side
@@ -33,10 +33,31 @@
 - `CHANGELOG.md` — added search entry
 - `SESSION_LOG.md` — this entry
 
+### Task 2.1 — Parser Health Monitoring + Freshness SLAs
+- Built `lib/health.ts` — health computation module:
+  - Derives health status per source from existing DB fields (no new tables)
+  - 4 statuses: healthy / degraded / unhealthy / unknown
+  - SLA based on `refreshIntervalMinutes` with 1.5x degraded / 2x stale multipliers
+  - Success rate thresholds: <80% degraded, <50% unhealthy
+  - `markStaleOffers()` — auto-marks active offers from stale sources
+- Built `/api/admin/health` API (GET: report, POST: mark stale)
+- Added Source Health dashboard to admin page — table with status badges, freshness, SLA, success rate bars, offer counts
+- Updated orchestrator:
+  - Computes rolling success rate (exponential moving average, α=0.2) after each run
+  - Auto-marks stale offers at end of pipeline
+  - Reports `staleMarked` count in ingestion results
+
+### Files Changed (Task 2.1)
+- `apps/web/src/lib/health.ts` — NEW health computation module
+- `apps/web/src/app/api/admin/health/route.ts` — NEW health API endpoint
+- `apps/web/src/app/admin/page.tsx` — added Source Health dashboard section
+- `apps/web/src/lib/ingest/orchestrator.ts` — rolling success rate, auto-stale marking
+- `apps/web/src/app/api/ingest/route.ts` — added staleMarked to response
+
 ### Production Plan Status
 - Phase 0: 27/27 DONE
 - Phase 1: 15/15 DONE — PHASE COMPLETE
-- Phase 2: 0/8
+- Phase 2: 1/8 DONE (2.1 health monitoring)
 - Phase 3: 0/5
 
 ---

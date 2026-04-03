@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.0-phase2] — 2026-04-03
+
+### Added
+- Parser health monitoring module (`lib/health.ts`) with freshness SLAs and success rate thresholds
+- `/api/admin/health` endpoint — GET for health report, POST to mark stale offers
+- Source Health dashboard on admin page — status badges, freshness indicators, SLA tracking, success rate bars
+- Rolling success rate computation in orchestrator (exponential moving average, α=0.2)
+- Auto-stale marking: pipeline marks offers from unhealthy sources after each run
+
+### Changed
+- Orchestrator now updates `fetchSuccessRate` after each adapter run
+- Ingestion API response includes `staleMarked` count
+- Task 2.1 marked DONE — Phase 2 begun
+
+---
+
 ## [0.9.0-search] — 2026-04-03
 
 ### Added

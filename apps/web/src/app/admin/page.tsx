@@ -13,6 +13,7 @@ import {
   brands,
 } from "@/db/schema";
 import { eq, desc, and, count, sql } from "drizzle-orm";
+import { getHealthReport, type SourceHealth, type HealthStatus } from "@/lib/health";
 
 export const dynamic = "force-dynamic";
 
@@ -125,6 +126,15 @@ const trustZoneColors: Record<string, string> = {
   red: "text-red-600",
 };
 
+function healthStatusStyle(status: HealthStatus): string {
+  switch (status) {
+    case "healthy": return "bg-green-100 text-green-800";
+    case "degraded": return "bg-yellow-100 text-yellow-800";
+    case "unhealthy": return "bg-red-100 text-red-800";
+    case "unknown": return "bg-gray-100 text-gray-600";
+  }
+}
+
 // ── Page Component ──
 
 export default async function AdminModerationPage() {
@@ -132,13 +142,15 @@ export default async function AdminModerationPage() {
   let openCases: Awaited<ReturnType<typeof getOpenCases>> = [];
   let flaggedOffers: Awaited<ReturnType<typeof getFlaggedOffers>> = [];
   let recentResolved: Awaited<ReturnType<typeof getRecentResolved>> = [];
+  let healthReport: Awaited<ReturnType<typeof getHealthReport>> | null = null;
 
   try {
-    [summary, openCases, flaggedOffers, recentResolved] = await Promise.all([
+    [summary, openCases, flaggedOffers, recentResolved, healthReport] = await Promise.all([
       getStatusSummary(),
       getOpenCases(),
       getFlaggedOffers(),
       getRecentResolved(),
+      getHealthReport(),
     ]);
   } catch {
     return (
@@ -162,7 +174,84 @@ export default async function AdminModerationPage() {
         </p>
       </div>
 
-      {/* Status Summary */}
+      {/* Source Health Dashboard */}
+      {healthReport && (
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-surface-800">
+              Source Health
+              <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-medium ${healthStatusStyle(healthReport.overall)}`}>
+                {healthReport.overall.toUpperCase()}
+              </span>
+            </h2>
+            <div className="flex gap-2 text-xs text-surface-400">
+              <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-green-500" /> {healthReport.summary.healthy} healthy</span>
+              <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-yellow-500" /> {healthReport.summary.degraded} degraded</span>
+              <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-red-500" /> {healthReport.summary.unhealthy} unhealthy</span>
+              <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-gray-400" /> {healthReport.summary.unknown} unknown</span>
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-surface-50 text-surface-600 uppercase text-xs">
+                <tr>
+                  <th className="px-4 py-3 text-left">Source</th>
+                  <th className="px-4 py-3 text-left">Status</th>
+                  <th className="px-4 py-3 text-left">Trust</th>
+                  <th className="px-4 py-3 text-left">Freshness</th>
+                  <th className="px-4 py-3 text-left">SLA</th>
+                  <th className="px-4 py-3 text-left">Success Rate</th>
+                  <th className="px-4 py-3 text-left">Offers</th>
+                  <th className="px-4 py-3 text-left">Message</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-surface-100">
+                {healthReport.sources.map((s) => (
+                  <tr key={s.slug} className={`hover:bg-surface-50 ${s.isStale ? "bg-red-50/30" : ""}`}>
+                    <td className="px-4 py-3">
+                      <div className="font-medium text-surface-800">{s.name}</div>
+                      <div className="text-xs text-surface-400 font-mono">{s.slug}</div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${healthStatusStyle(s.status)}`}>
+                        {s.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`font-medium ${trustZoneColors[s.trustZone] ?? ""}`}>
+                        {s.trustZone}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 font-mono text-xs">
+                      {s.minutesSinceSuccess !== null ? `${s.minutesSinceSuccess}m ago` : "never"}
+                    </td>
+                    <td className="px-4 py-3 font-mono text-xs">
+                      {s.slaMinutes}m
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-16 h-2 bg-surface-200 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${s.successRate >= 0.8 ? "bg-green-500" : s.successRate >= 0.5 ? "bg-yellow-500" : "bg-red-500"}`}
+                            style={{ width: `${Math.round(s.successRate * 100)}%` }}
+                          />
+                        </div>
+                        <span className="text-xs font-mono">{(s.successRate * 100).toFixed(0)}%</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 font-mono text-xs">{s.activeOfferCount}</td>
+                    <td className="px-4 py-3 text-xs text-surface-500 max-w-[250px] truncate">
+                      {s.message}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      {/* Moderation Status Summary */}
       <div className="grid grid-cols-4 gap-4">
         <SummaryCard label="Open Cases" value={totalOpen} color="text-red-600" />
         <SummaryCard label="Flagged Offers" value={flaggedOffers.length} color="text-yellow-600" />
@@ -346,6 +435,10 @@ export default async function AdminModerationPage() {
       <section className="bg-surface-50 rounded-lg p-6 text-sm text-surface-600">
         <h3 className="font-semibold text-surface-800 mb-2">API Reference</h3>
         <div className="grid grid-cols-2 gap-2 font-mono text-xs">
+          <div>GET /api/admin/health</div>
+          <div className="text-surface-400">Source health report (SLAs, freshness, success rates)</div>
+          <div>POST /api/admin/health</div>
+          <div className="text-surface-400">Mark offers from stale sources as stale</div>
           <div>GET /api/admin/moderation?status=open</div>
           <div className="text-surface-400">List cases (filter by status, type)</div>
           <div>POST /api/admin/moderation</div>

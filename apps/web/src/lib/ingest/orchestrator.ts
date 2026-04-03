@@ -18,6 +18,7 @@ import { scoreOffer } from "@/lib/scoring";
 import type { SourceAdapter, AdapterResult } from "./types";
 import { normalizeOffer, type NormalizedOffer } from "./normalize";
 import { flagOffer, type FlagContext } from "./flagging";
+import { markStaleOffers } from "@/lib/health";
 
 // ── Adapter Registry ──
 
@@ -53,6 +54,7 @@ export interface IngestionResult {
   totalOffersUpserted: number;
   totalFlagged: number;
   totalErrors: number;
+  staleMarked: number;
 }
 
 interface SourceIngestionResult {
@@ -78,6 +80,7 @@ interface SourceRecord {
   hasBuyerProtection: boolean;
   hasRefundPolicy: boolean;
   lastSuccessAt: Date | null;
+  fetchSuccessRate: number | null;
 }
 
 interface BrandRecord {
@@ -96,6 +99,7 @@ async function loadSourceMap(): Promise<Map<string, SourceRecord>> {
       hasBuyerProtection: sources.hasBuyerProtection,
       hasRefundPolicy: sources.hasRefundPolicy,
       lastSuccessAt: sources.lastSuccessAt,
+      fetchSuccessRate: sources.fetchSuccessRate,
     })
     .from(sources)
     .where(eq(sources.isActive, true));
@@ -394,14 +398,21 @@ export async function runIngestion(options?: {
     totalOffersUpserted += upsertedCount;
     totalFlagged += flaggedCount;
 
-    // Step 4: Update source metadata
-    if (!options?.dryRun && !fetchResult.failed) {
+    // Step 4: Update source metadata + success rate
+    if (!options?.dryRun) {
       try {
+        // Compute rolling success rate (exponential moving average, α=0.2)
+        const alpha = 0.2;
+        const currentRate = source.fetchSuccessRate ?? 1.0;
+        const thisRun = fetchResult.failed ? 0 : 1;
+        const newRate = alpha * thisRun + (1 - alpha) * currentRate;
+
         await db
           .update(sources)
           .set({
             lastFetchedAt: fetchResult.fetchedAt,
             lastSuccessAt: fetchResult.failed ? undefined : fetchResult.fetchedAt,
+            fetchSuccessRate: Math.round(newRate * 1000) / 1000,
             updatedAt: new Date(),
           })
           .where(eq(sources.id, source.id));
@@ -425,6 +436,16 @@ export async function runIngestion(options?: {
     });
   }
 
+  // Step 5: Mark stale offers from unhealthy sources
+  let staleMarked = 0;
+  if (!options?.dryRun) {
+    try {
+      staleMarked = await markStaleOffers();
+    } catch {
+      // Non-fatal — staleness marking is best-effort
+    }
+  }
+
   const completedAt = new Date();
 
   return {
@@ -436,5 +457,6 @@ export async function runIngestion(options?: {
     totalOffersUpserted,
     totalFlagged,
     totalErrors,
+    staleMarked,
   };
 }
