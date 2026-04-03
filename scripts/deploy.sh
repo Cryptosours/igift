@@ -22,6 +22,7 @@ rsync -avz --delete \
   --exclude='.git' \
   --exclude='.remember' \
   --exclude='.DS_Store' \
+  --exclude='.env' \
   --exclude='docs/research' \
   ./ "${VPS_USER}@${VPS_IP}:${VPS_PATH}/"
 
@@ -29,6 +30,7 @@ rsync -avz --delete \
 echo "--- Building and starting containers ---"
 ssh -i "${SSH_KEY}" "${VPS_USER}@${VPS_IP}" "
   cd ${VPS_PATH}
+  set -a && source .env && set +a
   docker compose down --remove-orphans 2>/dev/null || true
   docker compose build --no-cache
   docker compose up -d
