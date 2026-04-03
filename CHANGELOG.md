@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.3.0-clustering] — 2026-04-03
+
+### Added
+- Duplicate clustering engine (`lib/clustering.ts`) — groups same product from different sources
+- Cluster key: `brandSlug:denomination:currency` — identifies duplicate offers across sources
+- Confidence boost: +5 per agreeing source (max +15) when prices within 5% threshold
+- `getClusterForOffer()` — frontend API to get all sources for a specific product
+- Clustering integrated into orchestrator as step 7 (runs after revalidation)
+
+### Changed
+- Ingestion pipeline now has 8 steps: fetch → normalize → score → upsert → stale-mark → revalidate → cluster → alert
+- Ingestion API response includes `clustering` stats (clustersFound, offersUpdated, confidenceBoosts)
+- Task 2.3 marked DONE
+
+---
+
 ## [1.2.0-alerts] — 2026-04-03
 
 ### Added

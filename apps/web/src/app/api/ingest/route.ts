@@ -47,6 +47,7 @@ export async function POST(request: Request) {
         totalErrors: result.totalErrors,
         staleMarked: result.staleMarked,
         revalidation: result.revalidation,
+        clustering: result.clustering,
         alerts: result.alerts,
         sourcesProcessed: result.sources.length,
       },

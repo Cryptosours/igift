@@ -22,6 +22,7 @@ import { flagOffer, type FlagContext } from "./flagging";
 import { markStaleOffers } from "@/lib/health";
 import { runRevalidation } from "@/lib/revalidation";
 import { processAlerts, type AlertsResult } from "@/lib/alerts";
+import { runClustering, type ClusterResult } from "@/lib/clustering";
 
 // ── Adapter Registry ──
 
@@ -67,6 +68,11 @@ export interface IngestionResult {
     matched: number;
     delivered: number;
     failed: number;
+  } | null;
+  clustering: {
+    clustersFound: number;
+    offersUpdated: number;
+    confidenceBoosts: number;
   } | null;
 }
 
@@ -478,7 +484,22 @@ export async function runIngestion(options?: {
     }
   }
 
-  // Step 7: Process alerts for newly upserted offers
+  // Step 7: Run duplicate clustering (groups same product from different sources)
+  let clustering: IngestionResult["clustering"] = null;
+  if (!options?.dryRun) {
+    try {
+      const cr = await runClustering();
+      clustering = {
+        clustersFound: cr.clustersFound,
+        offersUpdated: cr.offersUpdated,
+        confidenceBoosts: cr.confidenceBoosts,
+      };
+    } catch {
+      // Non-fatal — clustering is best-effort
+    }
+  }
+
+  // Step 8: Process alerts for newly upserted offers
   let alerts: IngestionResult["alerts"] = null;
   if (!options?.dryRun && upsertedOfferIds.length > 0) {
     try {
@@ -506,6 +527,7 @@ export async function runIngestion(options?: {
     totalErrors,
     staleMarked,
     revalidation,
+    clustering,
     alerts,
   };
 }

@@ -9,6 +9,12 @@
   - Added Offer Lifecycle dashboard section to admin page — status counts, per-source staleness breakdown table
   - Integrated revalidation into orchestrator as step 6 (runs after each ingestion cycle)
 
+- **Task 2.3: Duplicate clustering engine**
+  - Built `lib/clustering.ts` — groups offers by brand+denomination+currency cluster key
+  - Confidence boost: +5 per agreeing source within 5% price threshold (max +15)
+  - `getClusterForOffer()` for frontend source comparison
+  - Integrated into orchestrator as step 7
+
 - **Task 2.4: Email alert delivery system**
   - Built `lib/alerts/matcher.ts` — matches user alerts against eligible offers (brand, category, discount, region filters)
   - Built `lib/alerts/email.ts` — Resend REST API delivery with HTML+text templates, dev console fallback
