@@ -1,5 +1,49 @@
 # RealDeal — Session Log
 
+## Session 7 — 2026-04-03 — New Source Adapters + Skills Audit
+
+### What Was Done
+- Initialized persistent memory system for cross-session context
+- Audited ~250+ installed skills — identified key categories for RealDeal (security, devops, frontend, SEO, planning)
+- Confirmed Monday.com MCP is NOT connected (only Notion and Linear available)
+- Built 3 new source adapters (Task 1.11):
+  - **Raise/GCX adapter** (`raise.ts`): marketplace parser, JSON-LD + regex fallback, yellow zone, 12 tracked products
+  - **Gift Card Granny adapter** (`giftcardgranny.ts`): aggregator parser, 3-strategy extraction (JSON-LD, price pairs, discount synthesis), green zone, 12 tracked products
+  - **Gameflip adapter** (`gameflip.ts`): gaming marketplace parser, JSON-LD ItemList + Product + listing fallback, yellow zone, 10 tracked products
+- Registered all 3 adapters in orchestrator and adapter index
+- Added 2 new sources to seed data (Gift Card Granny, Gameflip)
+- Added 14 new brand name aliases in normalize.ts for marketplace listing variations
+- Build passes cleanly
+
+### Key Decisions
+- Chose Raise/GCX, Gift Card Granny, Gameflip as the 3 new sources because:
+  - GCX was already seeded in DB but had no adapter
+  - GCG is a green-zone aggregator providing cross-source price comparison data
+  - Gameflip fills the gaming niche with marketplace discounts
+- All adapters follow the same pattern: TRACKED_PRODUCTS → sequential fetch → HTML parse → RawOffer[]
+- Each adapter has multiple parsing strategies (JSON-LD first, regex fallback)
+- Polite delays between requests (500-800ms) to respect rate limits
+
+### Files Changed
+- `apps/web/src/lib/ingest/adapters/raise.ts` — NEW
+- `apps/web/src/lib/ingest/adapters/giftcardgranny.ts` — NEW
+- `apps/web/src/lib/ingest/adapters/gameflip.ts` — NEW
+- `apps/web/src/lib/ingest/adapters/index.ts` — added 3 new exports
+- `apps/web/src/lib/ingest/orchestrator.ts` — registered 3 new adapters
+- `apps/web/src/lib/ingest/normalize.ts` — added 14 brand aliases
+- `apps/web/src/db/seed.ts` — added Gift Card Granny and Gameflip sources
+- `PRODUCTION_PLAN.md` — marked 1.11 as DONE
+- `CHANGELOG.md` — added v0.8.0-adapters entry
+- `SESSION_LOG.md` — this entry
+
+### Production Plan Status
+- Phase 0: 27/27 DONE ✅
+- Phase 1: 13/14 DONE (only 1.12 Search remains)
+- Phase 2: 0/8
+- Phase 3: 0/5
+
+---
+
 ## Session 1 — 2026-03-31 — Genesis
 
 ### What Was Done

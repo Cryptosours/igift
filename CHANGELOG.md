@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.8.0-adapters] — 2026-04-03
+
+### Added
+- Raise/GCX adapter: public page parser for gift card marketplace listings (yellow zone)
+- Gift Card Granny adapter: aggregator/comparison site parser with multi-strategy extraction (green zone)
+- Gameflip adapter: gaming-focused marketplace parser with JSON-LD and listing fallback (yellow zone)
+- 2 new sources in seed data: Gift Card Granny (green), Gameflip (yellow)
+- 14 additional brand name aliases for marketplace listing variations
+
+### Changed
+- Adapter registry now exports 8 adapters (was 6): bitrefill, dundle, raise, giftcardgranny, gameflip, + 4 catalog
+- Orchestrator registers all 9 adapters (3 live + 3 new live + 4 catalog)
+- Total tracked products across all live adapters: ~46 (12+11+12+12+10 minus overlaps)
+
+---
+
 ## [0.7.0-security] — 2026-04-03
 
 ### Added

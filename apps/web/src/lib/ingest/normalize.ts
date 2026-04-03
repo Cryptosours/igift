@@ -73,6 +73,21 @@ const BRAND_ALIASES: Record<string, string> = {
   "disney plus": "disney-plus",
   disney: "disney-plus",
   "disney+ gift card": "disney-plus",
+  // Additional variations from marketplace listings
+  "xbox game pass ultimate": "xbox",
+  "psn card": "playstation",
+  "playstation network": "playstation",
+  "eshop": "nintendo",
+  "nintendo eshop card": "nintendo",
+  "google play card": "google-play",
+  "apple itunes": "apple",
+  "itunes & app store": "apple",
+  "steam wallet code": "steam",
+  "steam wallet gift card": "steam",
+  "uber eats gift card": "uber",
+  "spotify premium gift card": "spotify",
+  "netflix gift card code": "netflix",
+  "doordash gift card code": "doordash",
 };
 
 /** Resolve a messy brand name to a canonical slug. Returns null if unknown. */

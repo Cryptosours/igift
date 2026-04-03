@@ -6,6 +6,9 @@
 
 export { bitrefillAdapter } from "./bitrefill";
 export { dundleAdapter } from "./dundle";
+export { raiseAdapter } from "./raise";
+export { giftCardGrannyAdapter } from "./giftcardgranny";
+export { gameflipAdapter } from "./gameflip";
 export {
   costcoCatalogAdapter,
   egifterCatalogAdapter,

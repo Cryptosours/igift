@@ -23,6 +23,9 @@ import { flagOffer, type FlagContext } from "./flagging";
 
 import { bitrefillAdapter } from "./adapters/bitrefill";
 import { dundleAdapter } from "./adapters/dundle";
+import { raiseAdapter } from "./adapters/raise";
+import { giftCardGrannyAdapter } from "./adapters/giftcardgranny";
+import { gameflipAdapter } from "./adapters/gameflip";
 import { getAllCatalogAdapters } from "./adapters/catalog";
 
 /** All registered adapters. Add new ones here. */
@@ -30,6 +33,9 @@ function getRegisteredAdapters(): SourceAdapter[] {
   return [
     bitrefillAdapter,
     dundleAdapter,
+    raiseAdapter,
+    giftCardGrannyAdapter,
+    gameflipAdapter,
     ...getAllCatalogAdapters(),
   ];
 }

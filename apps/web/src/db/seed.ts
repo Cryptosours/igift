@@ -93,10 +93,32 @@ async function seed() {
           refreshIntervalMinutes: 120,
           contractNotes: "Official retailer. Flash sales available.",
         },
+        {
+          name: "Gift Card Granny",
+          slug: "giftcardgranny",
+          url: "https://www.giftcardgranny.com",
+          sourceType: "authorized_reseller",
+          trustZone: "green",
+          hasBuyerProtection: true,
+          hasRefundPolicy: true,
+          refreshIntervalMinutes: 120,
+          contractNotes: "Aggregator/comparison site. Links to trusted retailers.",
+        },
+        {
+          name: "Gameflip",
+          slug: "gameflip",
+          url: "https://gameflip.com",
+          sourceType: "marketplace_resale",
+          trustZone: "yellow",
+          hasBuyerProtection: true,
+          hasRefundPolicy: true,
+          refreshIntervalMinutes: 60,
+          contractNotes: "Gaming-focused marketplace. Buyer protection program.",
+        },
       ])
       .returning();
 
-  console.log(`  Seeded ${7} sources`);
+  console.log(`  Seeded ${9} sources`);
 
   // ── Brands ──
   const brandRows = await db
