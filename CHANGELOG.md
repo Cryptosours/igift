@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.0.0] — 2026-04-04
+
+### Changed
+- **Full rebrand**: RealDeal → iGift across entire codebase (package names, configs, UI, docs, KB)
+- Deploy script: hardcoded VPS credentials → env vars with fail-closed `${VAR:?}` syntax
+- Docker Compose: credentials use env var interpolation from .env
+- Deploy script preserves .env on rsync and sources it before docker compose
+
+### Added
+- Custom SVG logo (gift box on 24×24 grid)
+- CSS-only scroll reveal animations (IntersectionObserver + keyframes)
+- Open source files: LICENSE (MIT), README.md, SECURITY.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md, .env.example
+
+### Security
+- Git history scrubbed of all sensitive data (VPS IP, SSH key path, credential paths)
+- API keys and database password rotated
+- GitHub repo renamed and made public (Cryptosours/igift)
+
+---
+
 ## [1.4.0-killswitch] — 2026-04-03
 
 ### Added
