@@ -4,7 +4,7 @@ import { ExternalLink } from "lucide-react";
 export const metadata: Metadata = {
   title: "Affiliate Disclosure",
   description:
-    "How RealDeal earns revenue through affiliate partnerships and how this does (and does not) affect our deal rankings.",
+    "How iGift earns revenue through affiliate partnerships and how this does (and does not) affect our deal rankings.",
 };
 
 export default function DisclosurePage() {
@@ -23,7 +23,7 @@ export default function DisclosurePage() {
             The Short Version
           </h2>
           <p className="mt-2 text-brand-800">
-            RealDeal earns money when you click through to a seller and buy
+            iGift earns money when you click through to a seller and buy
             something. This never affects how deals are scored or ranked.
             Sponsored placements are always labeled.
           </p>
@@ -34,7 +34,7 @@ export default function DisclosurePage() {
             How We Earn Revenue
           </h2>
           <p className="mt-2">
-            RealDeal is a free deal discovery platform. We earn revenue through:
+            iGift is a free deal discovery platform. We earn revenue through:
           </p>
           <ul className="mt-2 list-disc pl-5 space-y-1">
             <li>
@@ -87,11 +87,11 @@ export default function DisclosurePage() {
             How to Identify Affiliate Links
           </h2>
           <p className="mt-2">
-            Every outbound link on RealDeal that leads to a third-party seller
+            Every outbound link on iGift that leads to a third-party seller
             may be an affiliate link. These links are marked with the{" "}
             <ExternalLink className="inline h-3 w-3" /> icon and open in a new
             tab. The link URL may contain tracking parameters that identify
-            RealDeal as the referral source.
+            iGift as the referral source.
           </p>
         </section>
 
@@ -105,7 +105,7 @@ export default function DisclosurePage() {
             scoring ever fails to match reality, it undermines our entire
             value proposition — not just our credibility but our revenue. Our
             commercial incentive is alignment: the better our recommendations,
-            the more you trust and use RealDeal, the more affiliate revenue we
+            the more you trust and use iGift, the more affiliate revenue we
             earn. We have no incentive to mislead.
           </p>
         </section>
@@ -117,7 +117,7 @@ export default function DisclosurePage() {
           <p className="mt-2">
             Contact{" "}
             <span className="font-medium text-brand-600">
-              hello@realdeal.deals
+              hello@igift.app
             </span>{" "}
             with any questions about our affiliate relationships or scoring
             methodology.

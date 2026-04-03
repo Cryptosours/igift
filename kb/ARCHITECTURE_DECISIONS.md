@@ -1,4 +1,4 @@
-# RealDeal — Architecture Decisions
+# iGift — Architecture Decisions
 
 ## ADR-001: Monorepo with Turborepo
 **Decision:** Use Turborepo for monorepo management.

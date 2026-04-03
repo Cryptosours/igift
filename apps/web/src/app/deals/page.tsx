@@ -21,36 +21,36 @@ export default async function DealsPage() {
     // DB unavailable — use sample data
   }
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-surface-900">
-            All Verified Deals
+          <span className="data-label text-brand-600">Deals</span>
+          <h1 className="mt-1 heading-display text-3xl text-surface-900">
+            All verified deals
           </h1>
-          <p className="mt-1 text-sm text-surface-500">
-            {deals.length} deals from 15+ verified sources, updated
-            continuously.
+          <p className="mt-2 text-sm text-surface-500">
+            {deals.length} deals from 15+ verified sources, updated continuously.
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <button className="inline-flex items-center gap-1.5 rounded-lg border border-surface-300 bg-white px-3 py-2 text-sm font-medium text-surface-700 transition hover:bg-surface-50">
+          <button className="inline-flex items-center gap-1.5 rounded-xl border border-surface-200 bg-white px-3.5 py-2 text-sm font-medium text-surface-600 transition-all hover:border-surface-300 hover:bg-surface-50 hover:shadow-sm">
             <SlidersHorizontal className="h-4 w-4" />
             Filters
           </button>
-          <button className="inline-flex items-center gap-1.5 rounded-lg border border-surface-300 bg-white px-3 py-2 text-sm font-medium text-surface-700 transition hover:bg-surface-50">
+          <button className="inline-flex items-center gap-1.5 rounded-xl border border-surface-200 bg-white px-3.5 py-2 text-sm font-medium text-surface-600 transition-all hover:border-surface-300 hover:bg-surface-50 hover:shadow-sm">
             <ArrowUpDown className="h-4 w-4" />
             Sort by Score
           </button>
         </div>
       </div>
 
-      {/* Filter Pills (placeholder) */}
-      <div className="mt-4 flex flex-wrap gap-2">
+      {/* Filter Pills */}
+      <div className="mt-5 flex flex-wrap gap-2">
         {["All Regions", "US", "EU", "Global"].map((filter) => (
           <button
             key={filter}
-            className="rounded-full border border-surface-200 px-3 py-1 text-xs font-medium text-surface-600 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
+            className="rounded-full border border-surface-200 bg-white px-3.5 py-1 text-xs font-medium text-surface-500 transition-all hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
           >
             {filter}
           </button>
@@ -60,7 +60,7 @@ export default async function DealsPage() {
           (filter) => (
             <button
               key={filter}
-              className="rounded-full border border-surface-200 px-3 py-1 text-xs font-medium text-surface-600 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
+              className="rounded-full border border-surface-200 bg-white px-3.5 py-1 text-xs font-medium text-surface-500 transition-all hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
             >
               {filter}
             </button>

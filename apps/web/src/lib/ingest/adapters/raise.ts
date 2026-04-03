@@ -33,7 +33,7 @@ const TRACKED_PRODUCTS: RaiseProduct[] = [
 ];
 
 const BASE_URL = "https://www.raise.com/buy";
-const USER_AGENT = "RealDeal/1.0 (deal-intelligence-platform; +https://igift.app)";
+const USER_AGENT = "iGift/1.0 (deal-intelligence-platform; +https://igift.app)";
 
 /**
  * Parse gift card listings from Raise product pages.

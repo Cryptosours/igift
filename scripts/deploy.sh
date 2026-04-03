@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# RealDeal — Deploy to VPS via rsync + Docker
+# iGift — Deploy to VPS via rsync + Docker
 # Usage: ./scripts/deploy.sh
 
 set -euo pipefail
 
 VPS_USER="${DEPLOY_USER:-igift}"
-VPS_IP="REDACTED_IP"
-VPS_PATH="/opt/igift"
-SSH_KEY="${DEPLOY_SSH_KEY}"
+VPS_IP="${DEPLOY_HOST:?Set DEPLOY_HOST}"
+VPS_PATH="${DEPLOY_PATH:-/opt/igift}"
+SSH_KEY="${DEPLOY_SSH_KEY:?Set DEPLOY_SSH_KEY}"
 
-echo "=== RealDeal Deploy ==="
+echo "=== iGift Deploy ==="
 echo "Target: ${VPS_USER}@${VPS_IP}:${VPS_PATH}"
 
 # Sync project files (exclude unnecessary files)
@@ -37,4 +37,4 @@ ssh -i "${SSH_KEY}" "${VPS_USER}@${VPS_IP}" "
 "
 
 echo "=== Deploy complete ==="
-echo "App running at http://${VPS_IP}:3100"
+echo "App running at https://igift.app"

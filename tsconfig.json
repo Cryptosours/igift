@@ -14,9 +14,9 @@
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
-      "@realdeal/ui/*": ["./packages/ui/src/*"],
-      "@realdeal/schemas/*": ["./packages/schemas/src/*"],
-      "@realdeal/utils/*": ["./packages/utils/src/*"]
+      "@igift/ui/*": ["./packages/ui/src/*"],
+      "@igift/schemas/*": ["./packages/schemas/src/*"],
+      "@igift/utils/*": ["./packages/utils/src/*"]
     }
   },
   "exclude": ["node_modules"]

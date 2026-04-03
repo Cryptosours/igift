@@ -1,4 +1,4 @@
-# RealDeal — Production Plan
+# iGift — Production Plan
 
 ## Phase 0: Genesis (Current)
 > Goal: Scaffold, design system, core pages, governance, knowledge base.
@@ -26,7 +26,7 @@
 | 0.19 | Build dynamic brand detail pages (/brands/[slug]) | DONE | Builder | High |
 | 0.20 | Build dynamic category detail pages (/categories/[slug]) | DONE | Builder | High |
 | 0.21 | Docker build + deploy to VPS | DONE | Operator | High |
-| 0.22 | Create VPS user 'realdeal' with SSH key | DONE | Operator | High |
+| 0.22 | Create deploy user with SSH key | DONE | Operator | High |
 | 0.23 | Configure Nginx reverse proxy | DONE | Operator | High |
 | 0.24 | Domain setup (igift.app) + Cloudflare DNS | DONE | Operator | Critical |
 | 0.25 | Security hardening: Cloudflare WAF, Origin CA, SSL Full Strict | DONE | Operator | Critical |

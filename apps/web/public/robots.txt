@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://realdeal.deals/sitemap.xml
+Sitemap: https://igift.app/sitemap.xml
 
 # Block admin and API routes
 Disallow: /api/

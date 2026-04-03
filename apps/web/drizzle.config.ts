@@ -7,6 +7,6 @@ export default defineConfig({
   dbCredentials: {
     url:
       process.env.DATABASE_URL ??
-      "postgres://realdeal:realdeal@localhost:5432/realdeal",
+      "postgres://igift:igift@localhost:5432/igift",
   },
 });

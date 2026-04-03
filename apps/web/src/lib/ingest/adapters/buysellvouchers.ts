@@ -36,7 +36,7 @@ const TRACKED_PRODUCTS: BsvProduct[] = [
 ];
 
 const BASE_URL = "https://www.buysellvouchers.com/en/products/list";
-const USER_AGENT = "RealDeal/1.0 (deal-intelligence-platform; +https://igift.app)";
+const USER_AGENT = "iGift/1.0 (deal-intelligence-platform; +https://igift.app)";
 
 /**
  * Map BSV seller rating tier names to a 0-1 scale for confidence scoring.

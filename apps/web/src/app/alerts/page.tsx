@@ -9,43 +9,48 @@ export const metadata: Metadata = {
 
 export default function AlertsPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 lg:px-8">
       <div className="text-center">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-100">
-          <Bell className="h-7 w-7 text-brand-600" />
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 shadow-lg shadow-brand-600/20">
+          <Bell className="h-7 w-7 text-white" />
         </div>
-        <h1 className="mt-4 text-2xl font-bold text-surface-900">
+        <h1 className="mt-5 heading-display text-3xl text-surface-900">
           Price Alerts
         </h1>
-        <p className="mt-2 text-sm text-surface-500">
+        <p className="mx-auto mt-3 max-w-md text-sm text-surface-500 leading-relaxed">
           Get notified when verified deals drop to your target price.
-          We only alert on deals that pass our trust and verification checks.
+          Only deals that pass our trust and verification checks.
         </p>
       </div>
 
       {/* Features */}
-      <div className="mt-10 grid gap-6 sm:grid-cols-3">
+      <div className="mt-12 grid gap-4 sm:grid-cols-3">
         {[
           {
             icon: Zap,
             title: "Instant Alerts",
-            body: "Email or Telegram notification within minutes of a verified price drop.",
+            body: "Email notification within minutes of a verified price drop.",
+            accent: "from-alert-500 to-alert-600",
           },
           {
             icon: Shield,
             title: "Trust-Filtered",
-            body: "Only Green and Yellow zone deals. We never alert on unverified sources.",
+            body: "Only Green and Yellow zone deals. No unverified sources.",
+            accent: "from-deal-500 to-deal-600",
           },
           {
             icon: Mail,
             title: "No Spam",
-            body: "We send alerts only when your criteria are met. Unsubscribe anytime.",
+            body: "Alerts only when your criteria are met. Unsubscribe anytime.",
+            accent: "from-brand-500 to-brand-600",
           },
         ].map((f) => (
-          <div key={f.title} className="text-center">
-            <f.icon className="mx-auto h-6 w-6 text-brand-600" />
-            <h3 className="mt-2 text-sm font-semibold text-surface-900">{f.title}</h3>
-            <p className="mt-1 text-xs text-surface-500">{f.body}</p>
+          <div key={f.title} className="rounded-xl border border-surface-200 bg-white p-5 text-center card-hover">
+            <div className={`mx-auto inline-flex rounded-xl bg-gradient-to-br ${f.accent} p-2.5 shadow-sm`}>
+              <f.icon className="h-5 w-5 text-white" />
+            </div>
+            <h3 className="mt-3 text-sm font-semibold text-surface-900">{f.title}</h3>
+            <p className="mt-1 text-xs text-surface-500 leading-relaxed">{f.body}</p>
           </div>
         ))}
       </div>

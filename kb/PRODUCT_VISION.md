@@ -1,7 +1,7 @@
-# RealDeal — Product Vision
+# iGift — Product Vision
 
 ## Brand Feel
-**Trustworthy. Intelligent. Clean.** RealDeal should feel like a financial-grade data product dressed in consumer-friendly UX — not a coupon site, not a flashy deal aggregator, not a marketplace.
+**Trustworthy. Intelligent. Clean.** iGift should feel like a financial-grade data product dressed in consumer-friendly UX — not a coupon site, not a flashy deal aggregator, not a marketplace.
 
 The closest analog in feel: a Bloomberg terminal crossed with Wirecutter — rigorous data, clear opinions, transparent methodology.
 

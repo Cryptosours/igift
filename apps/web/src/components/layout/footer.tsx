@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShieldCheck } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 
 const footerLinks = {
   Product: [
@@ -24,31 +24,26 @@ const footerLinks = {
 export function Footer() {
   return (
     <footer className="border-t border-surface-200 bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600">
-                <ShieldCheck className="h-4 w-4 text-white" strokeWidth={2.5} />
-              </div>
-              <span className="text-lg font-bold text-surface-900">
-                Real<span className="text-brand-600">Deal</span>
-              </span>
+            <Link href="/" className="group">
+              <Logo size="sm" showSubtitle={false} />
             </Link>
-            <p className="mt-3 text-sm leading-relaxed text-surface-500">
+            <p className="mt-4 text-sm leading-relaxed text-surface-500">
               Trust-scored deal intelligence for digital gift cards, credits,
-              and vouchers. We verify so you don&apos;t have to guess.
+              and vouchers.
             </p>
           </div>
 
           {/* Link Columns */}
           {Object.entries(footerLinks).map(([heading, links]) => (
             <div key={heading}>
-              <h3 className="text-sm font-semibold text-surface-900">
+              <h3 className="data-label text-surface-400">
                 {heading}
               </h3>
-              <ul className="mt-3 space-y-2">
+              <ul className="mt-4 space-y-2.5">
                 {links.map((link) => (
                   <li key={link.name}>
                     <Link
@@ -64,13 +59,12 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-10 border-t border-surface-200 pt-6">
-          <p className="text-center text-xs text-surface-400">
-            &copy; {new Date().getFullYear()} RealDeal. We are a deal
-            discovery and verification platform. We do not sell gift cards,
-            hold funds, or process payments. Prices shown are sourced from
+        <div className="mt-12 border-t border-surface-100 pt-6">
+          <p className="text-center text-xs text-surface-400 leading-relaxed">
+            &copy; {new Date().getFullYear()} iGift. Deal discovery and verification platform.
+            We do not sell gift cards, hold funds, or process payments. Prices sourced from
             third-party sellers and may change.{" "}
-            <Link href="/disclosure" className="underline hover:text-brand-600">
+            <Link href="/disclosure" className="underline underline-offset-2 hover:text-brand-600">
               Affiliate disclosure
             </Link>
             .

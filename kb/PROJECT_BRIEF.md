@@ -1,4 +1,4 @@
-# RealDeal — Project Brief
+# iGift — Project Brief
 
 ## One-Liner
 Trust-scored deal intelligence for digital gift cards, credits, and vouchers.

@@ -1,4 +1,4 @@
-# RealDeal — Agent Entry Point
+# iGift — Agent Entry Point
 
 > **What:** Trust-scored deal intelligence platform for digital gift cards, credits, and vouchers.
 > **Model:** Publisher/referral + premium alerts. NOT a marketplace, broker, or payment processor.
@@ -9,7 +9,7 @@
 ## Quick Start
 
 ```bash
-cd ~/Desktop/dev/Projects/RealDeal
+cd ~/Desktop/dev/Projects/iGift
 npm install
 npx turbo dev         # starts web app on localhost:3000
 npx turbo build       # production build
@@ -19,7 +19,7 @@ npx turbo lint        # lint all packages
 ## Project Structure
 
 ```
-RealDeal/
+iGift/
 ├── apps/
 │   ├── web/                  # Next.js 15 public site (App Router)
 │   └── admin/                # Internal ops UI (planned)

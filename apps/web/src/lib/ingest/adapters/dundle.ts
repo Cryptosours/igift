@@ -32,7 +32,7 @@ const TRACKED_PRODUCTS: DundleProduct[] = [
 ];
 
 const BASE_URL = "https://www.dundle.com/us";
-const USER_AGENT = "RealDeal/1.0 (deal-intelligence-platform; +https://realdeal.com)";
+const USER_AGENT = "iGift/1.0 (deal-intelligence-platform; +https://igift.app)";
 
 /** Parse JSON-LD schema data from the HTML */
 function parseProductPage(html: string, product: DundleProduct): RawOffer[] {

@@ -33,7 +33,7 @@ const TRACKED_PRODUCTS: GcgProduct[] = [
 ];
 
 const BASE_URL = "https://www.giftcardgranny.com/buy-gift-cards";
-const USER_AGENT = "RealDeal/1.0 (deal-intelligence-platform; +https://igift.app)";
+const USER_AGENT = "iGift/1.0 (deal-intelligence-platform; +https://igift.app)";
 
 /**
  * Parse deal data from Gift Card Granny comparison pages.

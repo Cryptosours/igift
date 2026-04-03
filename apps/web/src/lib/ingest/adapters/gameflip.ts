@@ -32,7 +32,7 @@ const TRACKED_PRODUCTS: GameflipProduct[] = [
 ];
 
 const BASE_URL = "https://gameflip.com/browse/gift-cards";
-const USER_AGENT = "RealDeal/1.0 (deal-intelligence-platform; +https://igift.app)";
+const USER_AGENT = "iGift/1.0 (deal-intelligence-platform; +https://igift.app)";
 
 /**
  * Parse gift card listing data from Gameflip pages.

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "RealDeal privacy policy. How we collect, use, and protect your data.",
+    "iGift privacy policy. How we collect, use, and protect your data.",
 };
 
 export default function PrivacyPage() {
@@ -89,7 +89,7 @@ export default function PrivacyPage() {
             5. Third-Party Links
           </h2>
           <p className="mt-2">
-            RealDeal contains affiliate links to third-party sellers. When you
+            iGift contains affiliate links to third-party sellers. When you
             click these links, you are subject to the privacy policies of those
             third-party sites. We are not responsible for their data practices.
           </p>
@@ -122,7 +122,7 @@ export default function PrivacyPage() {
           <p className="mt-2">
             Contact{" "}
             <span className="font-medium text-brand-600">
-              privacy@realdeal.deals
+              privacy@igift.app
             </span>{" "}
             for any data requests.
           </p>

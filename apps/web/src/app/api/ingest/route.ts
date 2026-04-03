@@ -77,7 +77,7 @@ export async function POST(request: Request) {
 /** GET /api/ingest — Returns pipeline info (no auth required) */
 export async function GET() {
   return NextResponse.json({
-    description: "RealDeal Ingestion Pipeline",
+    description: "iGift Ingestion Pipeline",
     method: "POST to trigger ingestion",
     auth: "Bearer token via INGEST_API_KEY",
     params: {

@@ -4,13 +4,13 @@ import { sources, brands, offers, priceHistory } from "./schema";
 import { scoreOffer } from "../lib/scoring";
 
 const connectionString =
-  process.env.DATABASE_URL ?? "postgres://realdeal:realdeal@localhost:5432/realdeal";
+  process.env.DATABASE_URL ?? "postgres://igift:igift@localhost:5432/igift";
 
 async function seed() {
   const client = postgres(connectionString, { max: 1 });
   const db = drizzle(client);
 
-  console.log("Seeding RealDeal database...");
+  console.log("Seeding iGift database...");
 
   // ── Sources ──
   const [costco, paypalGifts, bitrefill, cardcash, gcx, dundle, eGifter, , , ] =

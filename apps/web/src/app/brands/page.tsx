@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { getBrands } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -41,31 +42,39 @@ export default async function BrandsPage() {
     // DB unavailable — use fallback
   }
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-bold text-surface-900">Brands</h1>
-      <p className="mt-1 text-sm text-surface-500">
-        Browse all brands with verified deals across sources and regions.
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <span className="data-label text-brand-600">Brands</span>
+      <h1 className="mt-1 heading-display text-3xl text-surface-900">
+        Browse by brand
+      </h1>
+      <p className="mt-2 text-sm text-surface-500">
+        All brands with verified deals across sources and regions.
       </p>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {brands.map((brand) => (
           <Link
             key={brand.slug}
             href={`/brands/${brand.slug}`}
-            className="rounded-xl border border-surface-200 bg-white p-4 transition-all hover:border-brand-300 hover:shadow-sm"
+            className="group rounded-2xl border border-surface-200 bg-white p-5 card-hover hover:border-brand-200"
           >
-            <div className="flex items-center justify-between">
-              <h2 className="text-base font-semibold text-surface-900">
-                {brand.name}
-              </h2>
-              <span className="rounded-md bg-deal-50 px-1.5 py-0.5 text-xs font-bold text-deal-700">
-                ~{brand.avgDiscount}% off
+            <div className="flex items-start justify-between">
+              <div>
+                <h2 className="text-base font-semibold text-surface-900 group-hover:text-brand-700 transition-colors">
+                  {brand.name}
+                </h2>
+                <p className="mt-0.5 text-xs text-surface-400">{brand.category}</p>
+              </div>
+              <span className="inline-flex items-center rounded-lg bg-deal-50 border border-deal-100 px-2 py-0.5 text-xs font-bold text-deal-700">
+                ~{brand.avgDiscount}%
               </span>
             </div>
-            <p className="mt-1 text-xs text-surface-500">{brand.category}</p>
-            <p className="mt-2 price-display text-xs text-surface-400">
-              {brand.dealCount} active deals
-            </p>
+            <div className="mt-4 flex items-center justify-between">
+              <span className="price-display text-xs text-surface-400">
+                {brand.dealCount} active deals
+              </span>
+              <ArrowRight className="h-3.5 w-3.5 text-surface-300 transition-all group-hover:translate-x-1 group-hover:text-brand-500" />
+            </div>
           </Link>
         ))}
       </div>

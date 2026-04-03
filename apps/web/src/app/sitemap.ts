@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const BASE_URL = "https://realdeal.deals";
+const BASE_URL = "https://igift.app";
 
 // Sample brands and categories — will be dynamic from DB later
 const brands = [

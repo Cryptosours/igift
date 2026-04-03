@@ -1,5 +1,5 @@
 /**
- * RealDeal Dual Scoring Engine
+ * iGift Dual Scoring Engine
  *
  * Two scores, always shown separately:
  * 1. Deal Quality Score (0-100): How good is this deal?

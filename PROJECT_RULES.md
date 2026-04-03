@@ -1,4 +1,4 @@
-# RealDeal — Engineering & Compliance Rules
+# iGift — Engineering & Compliance Rules
 
 ## Compliance Boundaries (Non-Negotiable)
 

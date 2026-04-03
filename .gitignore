@@ -32,6 +32,22 @@ yarn-error.log*
 # vercel
 .vercel
 
-# credentials
+# credentials & secrets
 *.key
 *.cert
+*.p12
+*.pfx
+*.jks
+credentials.json
+service-account*.json
+
+# agent / session state (internal, not for public)
+.claude/
+.remember/
+SESSION_LOG.md
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

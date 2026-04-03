@@ -5,37 +5,39 @@ type TrustZone = "green" | "yellow" | "red";
 
 const zoneConfig: Record<
   TrustZone,
-  { label: string; icon: typeof ShieldCheck; className: string }
+  { label: string; icon: typeof ShieldCheck; className: string; dotColor: string }
 > = {
   green: {
-    label: "Verified Source",
+    label: "Verified",
     icon: ShieldCheck,
-    className: "bg-deal-50 text-deal-700 border-deal-200",
+    className: "bg-deal-50 text-deal-700 border-deal-200/60",
+    dotColor: "bg-deal-500",
   },
   yellow: {
     label: "Marketplace",
     icon: ShieldAlert,
-    className: "bg-alert-50 text-alert-700 border-alert-200",
+    className: "bg-alert-50 text-alert-700 border-alert-200/60",
+    dotColor: "bg-alert-500",
   },
   red: {
-    label: "High Risk",
+    label: "Caution",
     icon: ShieldX,
-    className: "bg-red-50 text-red-700 border-red-200",
+    className: "bg-red-50 text-red-700 border-red-200/60",
+    dotColor: "bg-red-500",
   },
 };
 
 export function TrustBadge({ zone }: { zone: TrustZone }) {
   const config = zoneConfig[zone];
-  const Icon = config.icon;
 
   return (
     <span
       className={clsx(
-        "inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium",
+        "inline-flex items-center gap-1.5 rounded-lg border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider",
         config.className,
       )}
     >
-      <Icon className="h-3 w-3" />
+      <span className={clsx("h-1.5 w-1.5 rounded-full", config.dotColor)} />
       {config.label}
     </span>
   );

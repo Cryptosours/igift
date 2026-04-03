@@ -33,7 +33,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   output: "standalone",
-  transpilePackages: ["@realdeal/ui", "@realdeal/schemas", "@realdeal/utils"],
+  transpilePackages: ["@igift/ui", "@igift/schemas", "@igift/utils"],
   poweredByHeader: false,
   async headers() {
     return [

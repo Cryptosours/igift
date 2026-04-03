@@ -136,7 +136,7 @@
 ### Changed
 - next.config.ts: added security headers and disabled poweredByHeader
 - docker-compose.yml: ADMIN_API_KEY and INGEST_API_KEY read from .env file
-- Nginx: igift.app config with SSL (was HTTP-only to realdeal.deals)
+- Nginx: igift.app config with SSL
 
 ### Security
 - 3-layer defense: Cloudflare edge → nginx origin → Next.js application
@@ -225,9 +225,8 @@
 - Dynamic category detail pages (/categories/[slug]) with 6 categories
 - Docker: multi-stage Dockerfile with standalone Next.js output
 - docker-compose.yml with health checks
-- Deploy script (scripts/deploy.sh) for rsync + Docker VPS deployment
-- VPS user 'realdeal' with SSH key auth and Docker access
-- Nginx reverse proxy on VPS (port 80 -> container 3200)
+- Deploy script (scripts/deploy.sh) for rsync + Docker deployment
+- Nginx reverse proxy with SSL termination
 
 ### Changed
 - Next.js config: enabled standalone output for Docker deployment

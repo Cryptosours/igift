@@ -3,7 +3,7 @@ import { ShieldCheck, ShieldAlert, ShieldX } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Methodology",
-  description: "How RealDeal verifies, scores, and ranks digital value deals. Our dual-score system, trust zones, and verification process explained.",
+  description: "How iGift verifies, scores, and ranks digital value deals. Our dual-score system, trust zones, and verification process explained.",
 };
 
 export default function MethodologyPage() {
@@ -13,7 +13,7 @@ export default function MethodologyPage() {
         How We Score Deals
       </h1>
       <p className="mt-3 text-base leading-relaxed text-surface-600">
-        RealDeal uses a transparent, two-score verification system. We don&apos;t
+        iGift uses a transparent, two-score verification system. We don&apos;t
         just show discounts — we verify them against reference prices, check
         region compatibility, account for fees, and assess source
         trustworthiness.
@@ -97,7 +97,7 @@ export default function MethodologyPage() {
               <h3 className="font-semibold text-red-800">Red — Not Listed</h3>
               <p className="mt-1 text-sm text-red-700">
                 Account resale, credential-linked products, and sources without
-                meaningful buyer protection are excluded from RealDeal entirely.
+                meaningful buyer protection are excluded from iGift entirely.
                 We do not list them.
               </p>
             </div>
@@ -128,7 +128,7 @@ export default function MethodologyPage() {
           Affiliate Disclosure
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-surface-600">
-          RealDeal earns affiliate commissions when you click through to a
+          iGift earns affiliate commissions when you click through to a
           seller and make a purchase. This does not affect our scoring or
           ranking — deals are ranked purely by their computed deal quality and
           confidence scores. Sponsored placements, if any, are always clearly
