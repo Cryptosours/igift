@@ -82,7 +82,7 @@
 | 2.5 | LLM-assisted multilingual title normalization | TODO | Builder | Medium |
 | 2.6 | LLM-assisted category mapping from messy text | TODO | Builder | Medium |
 | 2.7 | Merchant complaint workflow | TODO | Builder | Medium |
-| 2.8 | Source kill switches (per-source, per-category, global) | TODO | Builder | High |
+| 2.8 | Source kill switches (per-source, per-category, global) | DONE | Builder | High |
 
 ---
 

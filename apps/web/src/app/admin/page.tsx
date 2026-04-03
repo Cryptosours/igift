@@ -514,6 +514,10 @@ export default async function AdminModerationPage() {
           <div className="text-surface-400">Offer lifecycle report (staleness, expiry, at-risk)</div>
           <div>POST /api/admin/revalidation</div>
           <div className="text-surface-400">Run revalidation cycle (stale + expire offers)</div>
+          <div>GET /api/admin/killswitch</div>
+          <div className="text-surface-400">Kill switch state (global, per-source, per-category)</div>
+          <div>POST /api/admin/killswitch</div>
+          <div className="text-surface-400">Execute kill switch (type, action, target, reason)</div>
           <div>GET /api/admin/moderation?status=open</div>
           <div className="text-surface-400">List cases (filter by status, type)</div>
           <div>POST /api/admin/moderation</div>

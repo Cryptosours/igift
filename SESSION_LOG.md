@@ -15,6 +15,13 @@
   - `getClusterForOffer()` for frontend source comparison
   - Integrated into orchestrator as step 7
 
+- **Task 2.8: Source kill switches**
+  - Built `lib/killswitch.ts` — 3-level controls: per-source (DB), per-category (runtime), global (runtime)
+  - Per-source: sets isActive=false + suppresses all active offers from that source
+  - Per-category: suppresses all offers in category via raw SQL UPDATE...FROM
+  - Global: orchestrator checks `isGlobalKillActive()` and aborts if true
+  - Built `/api/admin/killswitch` — GET state, POST execute actions
+
 - **Task 2.4: Email alert delivery system**
   - Built `lib/alerts/matcher.ts` — matches user alerts against eligible offers (brand, category, discount, region filters)
   - Built `lib/alerts/email.ts` — Resend REST API delivery with HTML+text templates, dev console fallback

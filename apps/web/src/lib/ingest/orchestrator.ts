@@ -23,6 +23,7 @@ import { markStaleOffers } from "@/lib/health";
 import { runRevalidation } from "@/lib/revalidation";
 import { processAlerts, type AlertsResult } from "@/lib/alerts";
 import { runClustering, type ClusterResult } from "@/lib/clustering";
+import { isGlobalKillActive, isCategorySuppressed } from "@/lib/killswitch";
 
 // ── Adapter Registry ──
 
@@ -272,6 +273,25 @@ export async function runIngestion(options?: {
   dryRun?: boolean;
 }): Promise<IngestionResult> {
   const startedAt = new Date();
+
+  // Kill switch check: abort if global kill is active
+  if (isGlobalKillActive()) {
+    return {
+      startedAt,
+      completedAt: new Date(),
+      durationMs: 0,
+      sources: [],
+      totalOffersProcessed: 0,
+      totalOffersUpserted: 0,
+      totalFlagged: 0,
+      totalErrors: 0,
+      staleMarked: 0,
+      revalidation: null,
+      clustering: null,
+      alerts: null,
+    };
+  }
+
   const results: SourceIngestionResult[] = [];
   let totalOffersProcessed = 0;
   let totalOffersUpserted = 0;

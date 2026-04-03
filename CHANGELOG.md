@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.4.0-killswitch] — 2026-04-03
+
+### Added
+- Source kill switch system (`lib/killswitch.ts`) — 3-level operational safety controls
+- Per-source kill switch: disables source + suppresses all active offers
+- Per-category kill switch: suppresses all active offers in a category (runtime state)
+- Global kill switch: halts entire ingestion pipeline (runtime state)
+- `/api/admin/killswitch` endpoint — GET for state, POST to execute actions
+- Orchestrator checks global kill switch before running
+
+### Changed
+- Admin API Reference updated with kill switch endpoints
+- Task 2.8 marked DONE
+
+---
+
 ## [1.3.0-clustering] — 2026-04-03
 
 ### Added
