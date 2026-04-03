@@ -76,7 +76,7 @@
 | # | Task | Status | Specialist | Priority |
 |---|------|--------|------------|----------|
 | 2.1 | Parser health monitoring + freshness SLAs | DONE | Builder | Critical |
-| 2.2 | Automated offer revalidation and staleness detection | TODO | Builder | Critical |
+| 2.2 | Automated offer revalidation and staleness detection | DONE | Builder | Critical |
 | 2.3 | Duplicate clustering engine | TODO | Builder | High |
 | 2.4 | Email/Telegram alert delivery system | TODO | Builder | Critical |
 | 2.5 | LLM-assisted multilingual title normalization | TODO | Builder | Medium |

@@ -7,6 +7,7 @@
  * 3. Score each normalized offer (Deal Quality + Confidence)
  * 4. Upsert to database (offers table + price history)
  * 5. Update source metadata (lastFetchedAt, fetchSuccessRate)
+ * 6. Revalidate: mark stale/expired offers not refreshed this cycle
  *
  * Can be triggered via API route or scheduled cron.
  */
@@ -19,6 +20,7 @@ import type { SourceAdapter, AdapterResult } from "./types";
 import { normalizeOffer, type NormalizedOffer } from "./normalize";
 import { flagOffer, type FlagContext } from "./flagging";
 import { markStaleOffers } from "@/lib/health";
+import { runRevalidation } from "@/lib/revalidation";
 
 // ── Adapter Registry ──
 
@@ -55,6 +57,11 @@ export interface IngestionResult {
   totalFlagged: number;
   totalErrors: number;
   staleMarked: number;
+  revalidation: {
+    staleMarked: number;
+    expiredMarked: number;
+    activeOffers: number;
+  } | null;
 }
 
 interface SourceIngestionResult {
@@ -446,6 +453,21 @@ export async function runIngestion(options?: {
     }
   }
 
+  // Step 6: Run offer-level revalidation (stale + expiry detection)
+  let revalidation: IngestionResult["revalidation"] = null;
+  if (!options?.dryRun) {
+    try {
+      const rv = await runRevalidation();
+      revalidation = {
+        staleMarked: rv.staleMarked,
+        expiredMarked: rv.expiredMarked,
+        activeOffers: rv.activeOffers,
+      };
+    } catch {
+      // Non-fatal — revalidation is best-effort
+    }
+  }
+
   const completedAt = new Date();
 
   return {
@@ -458,5 +480,6 @@ export async function runIngestion(options?: {
     totalFlagged,
     totalErrors,
     staleMarked,
+    revalidation,
   };
 }

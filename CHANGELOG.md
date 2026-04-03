@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.1.0-phase2] — 2026-04-03
+
+### Added
+- Offer revalidation module (`lib/revalidation.ts`) — per-offer staleness detection and expiry lifecycle
+- `/api/admin/revalidation` endpoint — GET for lifecycle report, POST to trigger revalidation cycle
+- Offer Lifecycle dashboard on admin page — active/stale/expired/at-risk/cleanup counts, per-source breakdown
+- Automatic offer staleness: offers not seen within 3x source refresh interval marked stale
+- Automatic offer expiry: stale offers unseen for 7+ days marked expired
+- At-risk detection: offers past 50% of their SLA window flagged in dashboard
+- Cleanup candidate tracking: offers unseen for 30+ days identified for future removal
+
+### Changed
+- Orchestrator now runs revalidation after each ingestion cycle (step 6)
+- Ingestion API response includes `revalidation` stats (staleMarked, expiredMarked, activeOffers)
+- Task 2.2 marked DONE
+
+---
+
 ## [1.0.0-phase2] — 2026-04-03
 
 ### Added

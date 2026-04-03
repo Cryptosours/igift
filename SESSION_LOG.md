@@ -1,5 +1,33 @@
 # RealDeal — Session Log
 
+## Session 9 — 2026-04-03 — Offer Revalidation & Staleness Detection (Task 2.2)
+
+### What Was Done
+- **Task 2.2: Automated offer revalidation and staleness detection**
+  - Built `lib/revalidation.ts` — per-offer staleness detection (3x source SLA), 7-day expiry, at-risk detection, cleanup tracking
+  - Built `/api/admin/revalidation` — GET for lifecycle report, POST to trigger revalidation cycle
+  - Added Offer Lifecycle dashboard section to admin page — status counts, per-source staleness breakdown table
+  - Integrated revalidation into orchestrator as step 6 (runs after each ingestion cycle)
+  - Updated ingestion API response to include revalidation stats
+
+### Key Decisions
+- **3x SLA multiplier for per-offer staleness** — more generous than source-level (2x) because individual offers may rotate through listings
+- **7-day expiry threshold** — stale offers not seen for a week are likely removed from source
+- **Raw SQL for complex queries** — used Postgres `FILTER (WHERE)` and `UPDATE ... FROM` via `db.execute(sql\`...\`)` where Drizzle builder lacks support
+- **Best-effort revalidation** — non-fatal in pipeline; if revalidation fails, ingestion still succeeds
+
+### Files Changed
+- `apps/web/src/lib/revalidation.ts` — NEW (offer lifecycle management)
+- `apps/web/src/app/api/admin/revalidation/route.ts` — NEW (admin API)
+- `apps/web/src/app/admin/page.tsx` — MODIFIED (lifecycle dashboard + API reference)
+- `apps/web/src/lib/ingest/orchestrator.ts` — MODIFIED (revalidation step 6)
+- `apps/web/src/app/api/ingest/route.ts` — MODIFIED (revalidation in response)
+- `PRODUCTION_PLAN.md` — Task 2.2 marked DONE
+- `CHANGELOG.md` — v1.1.0-phase2 entry
+- `SESSION_LOG.md` — Session 9 entry
+
+---
+
 ## Session 8 — 2026-04-03 — Search + Health Monitoring (Phase 1 Complete → Phase 2 Start)
 
 ### What Was Done

@@ -14,6 +14,7 @@ import {
 } from "@/db/schema";
 import { eq, desc, and, count, sql } from "drizzle-orm";
 import { getHealthReport, type SourceHealth, type HealthStatus } from "@/lib/health";
+import { getRevalidationReport, type RevalidationReport } from "@/lib/revalidation";
 
 export const dynamic = "force-dynamic";
 
@@ -143,14 +144,16 @@ export default async function AdminModerationPage() {
   let flaggedOffers: Awaited<ReturnType<typeof getFlaggedOffers>> = [];
   let recentResolved: Awaited<ReturnType<typeof getRecentResolved>> = [];
   let healthReport: Awaited<ReturnType<typeof getHealthReport>> | null = null;
+  let revalidationReport: RevalidationReport | null = null;
 
   try {
-    [summary, openCases, flaggedOffers, recentResolved, healthReport] = await Promise.all([
+    [summary, openCases, flaggedOffers, recentResolved, healthReport, revalidationReport] = await Promise.all([
       getStatusSummary(),
       getOpenCases(),
       getFlaggedOffers(),
       getRecentResolved(),
       getHealthReport(),
+      getRevalidationReport(),
     ]);
   } catch {
     return (
@@ -242,6 +245,74 @@ export default async function AdminModerationPage() {
                     <td className="px-4 py-3 font-mono text-xs">{s.activeOfferCount}</td>
                     <td className="px-4 py-3 text-xs text-surface-500 max-w-[250px] truncate">
                       {s.message}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      {/* Offer Lifecycle / Revalidation */}
+      {revalidationReport && (
+        <section>
+          <h2 className="text-lg font-semibold text-surface-800 mb-4">Offer Lifecycle</h2>
+          <div className="grid grid-cols-5 gap-4 mb-4">
+            <div className="bg-white rounded-lg shadow p-4">
+              <div className="text-surface-500 text-xs uppercase tracking-wider">Active</div>
+              <div className="text-3xl font-bold mt-1 text-green-600">{revalidationReport.statusCounts.active}</div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-4">
+              <div className="text-surface-500 text-xs uppercase tracking-wider">Stale</div>
+              <div className="text-3xl font-bold mt-1 text-yellow-600">{revalidationReport.statusCounts.stale}</div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-4">
+              <div className="text-surface-500 text-xs uppercase tracking-wider">Expired</div>
+              <div className="text-3xl font-bold mt-1 text-red-600">{revalidationReport.statusCounts.expired}</div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-4">
+              <div className="text-surface-500 text-xs uppercase tracking-wider">At Risk</div>
+              <div className="text-3xl font-bold mt-1 text-orange-600">{revalidationReport.atRiskCount}</div>
+              <div className="text-xs text-surface-400 mt-1">&gt;50% through SLA</div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-4">
+              <div className="text-surface-500 text-xs uppercase tracking-wider">Cleanup</div>
+              <div className="text-3xl font-bold mt-1 text-surface-400">{revalidationReport.cleanupCandidates}</div>
+              <div className="text-xs text-surface-400 mt-1">30+ days unseen</div>
+            </div>
+          </div>
+
+          {/* Per-source staleness breakdown */}
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-surface-50 text-surface-600 uppercase text-xs">
+                <tr>
+                  <th className="px-4 py-3 text-left">Source</th>
+                  <th className="px-4 py-3 text-right">Active</th>
+                  <th className="px-4 py-3 text-right">Stale</th>
+                  <th className="px-4 py-3 text-right">Expired</th>
+                  <th className="px-4 py-3 text-right">Oldest Unseen</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-surface-100">
+                {revalidationReport.sourceStaleness.map((s) => (
+                  <tr key={s.sourceSlug} className="hover:bg-surface-50">
+                    <td className="px-4 py-3">
+                      <div className="font-medium text-surface-800">{s.sourceName}</div>
+                      <div className="text-xs text-surface-400 font-mono">{s.sourceSlug}</div>
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono text-green-600">{s.activeOffers}</td>
+                    <td className="px-4 py-3 text-right font-mono text-yellow-600">{s.staleOffers}</td>
+                    <td className="px-4 py-3 text-right font-mono text-red-600">{s.expiredOffers}</td>
+                    <td className="px-4 py-3 text-right font-mono text-xs text-surface-500">
+                      {s.oldestLastSeenMinutes != null
+                        ? s.oldestLastSeenMinutes < 60
+                          ? `${s.oldestLastSeenMinutes}m`
+                          : s.oldestLastSeenMinutes < 1440
+                            ? `${Math.round(s.oldestLastSeenMinutes / 60)}h`
+                            : `${Math.round(s.oldestLastSeenMinutes / 1440)}d`
+                        : "—"}
                     </td>
                   </tr>
                 ))}
@@ -439,6 +510,10 @@ export default async function AdminModerationPage() {
           <div className="text-surface-400">Source health report (SLAs, freshness, success rates)</div>
           <div>POST /api/admin/health</div>
           <div className="text-surface-400">Mark offers from stale sources as stale</div>
+          <div>GET /api/admin/revalidation</div>
+          <div className="text-surface-400">Offer lifecycle report (staleness, expiry, at-risk)</div>
+          <div>POST /api/admin/revalidation</div>
+          <div className="text-surface-400">Run revalidation cycle (stale + expire offers)</div>
           <div>GET /api/admin/moderation?status=open</div>
           <div className="text-surface-400">List cases (filter by status, type)</div>
           <div>POST /api/admin/moderation</div>

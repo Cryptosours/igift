@@ -46,6 +46,7 @@ export async function POST(request: Request) {
         totalFlagged: result.totalFlagged,
         totalErrors: result.totalErrors,
         staleMarked: result.staleMarked,
+        revalidation: result.revalidation,
         sourcesProcessed: result.sources.length,
       },
       sources: result.sources.map((s) => ({
