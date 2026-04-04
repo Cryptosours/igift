@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.3.0] — 2026-04-04
+
+### Added
+- Premium alerts tier — management, free-tier cap, unsubscribe flow (task 3.2)
+  - Free tier cap: 5 active alerts per email enforced server-side; 402 `ALERT_LIMIT_REACHED` with user-facing message
+  - `AlertManager` component: email-based alert lookup, active alert list with delete buttons, `useTransition` non-blocking deletes, "Fired" indicator when `lastSentAt` is set
+  - `AlertForm` now accepts `initialBrand` prop — pre-fills brand input when `?brand=<slug>` is in URL
+  - `/alerts` page rewritten as server component: reads `?unsubscribe=<id>` and deactivates alert without JS; reads `?brand=` and passes to `AlertForm`
+  - Watchlist page wires alert CTAs: brand-level Bell icon → `/alerts?brand=<slug>`, empty-deal fallback → `/alerts?brand=<slug>`
+  - Free tier note: "Free tier includes up to 5 active alerts · 24-hour delivery cooldown"
+
+---
+
 ## [2.2.0] — 2026-04-04
 
 ### Added
