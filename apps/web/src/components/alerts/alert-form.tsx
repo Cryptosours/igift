@@ -4,8 +4,12 @@ import { useState } from "react";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
-export function AlertForm() {
-  const [brand, setBrand] = useState("");
+interface AlertFormProps {
+  initialBrand?: string;
+}
+
+export function AlertForm({ initialBrand = "" }: AlertFormProps) {
+  const [brand, setBrand] = useState(initialBrand);
   const [targetDiscount, setTargetDiscount] = useState("any");
   const [region, setRegion] = useState("");
   const [email, setEmail] = useState("");
@@ -34,7 +38,11 @@ export function AlertForm() {
 
       if (!res.ok) {
         setState("error");
-        setMessage(data.error ?? "Something went wrong. Please try again.");
+        setMessage(
+          data.code === "ALERT_LIMIT_REACHED"
+            ? `You've reached the ${data.limit}-alert free tier limit. Delete an existing alert below to create a new one.`
+            : (data.error ?? "Something went wrong. Please try again."),
+        );
         return;
       }
 

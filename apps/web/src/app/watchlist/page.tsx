@@ -82,12 +82,21 @@ export default async function WatchlistPage() {
                   {name}
                 </Link>
               </div>
-              <Link
-                href={`/brands/${slug}`}
-                className="text-xs text-surface-400 hover:text-brand-600 transition-colors"
-              >
-                All {name} deals →
-              </Link>
+              <div className="flex items-center gap-3">
+                <Link
+                  href={`/alerts?brand=${slug}`}
+                  className="text-xs text-surface-400 hover:text-brand-600 transition-colors"
+                  title={`Set alert for ${name}`}
+                >
+                  <Bell className="h-3.5 w-3.5" />
+                </Link>
+                <Link
+                  href={`/brands/${slug}`}
+                  className="text-xs text-surface-400 hover:text-brand-600 transition-colors"
+                >
+                  All {name} deals →
+                </Link>
+              </div>
             </div>
 
             {/* Best deal */}
@@ -96,7 +105,7 @@ export default async function WatchlistPage() {
             ) : (
               <div className="rounded-2xl border border-dashed border-surface-200 bg-surface-50 p-6 text-center">
                 <p className="text-sm text-surface-400">No active deals for {name} right now.</p>
-                <Link href="/alerts" className="mt-2 text-xs text-brand-600 hover:underline">
+                <Link href={`/alerts?brand=${slug}`} className="mt-2 text-xs text-brand-600 hover:underline">
                   Set an alert to be notified when a deal appears →
                 </Link>
               </div>

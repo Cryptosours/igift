@@ -9,7 +9,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { userAlerts, brands } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +25,9 @@ const DISCOUNT_OPTIONS: Record<string, number | null> = {
   "15": 0.15,
   "20": 0.20,
 };
+
+/** Free tier: max active alerts per email address */
+const FREE_TIER_ALERT_LIMIT = 5;
 
 /** POST — Create a new alert */
 export async function POST(request: Request) {
@@ -83,6 +86,25 @@ export async function POST(request: Request) {
     } else {
       brandId = brand.id;
     }
+  }
+
+  // Enforce free tier alert cap
+  const { count: activeCount } = (await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(userAlerts)
+    .where(and(eq(userAlerts.email, email), eq(userAlerts.isActive, true)))
+    .then((r) => r[0])) ?? { count: 0 };
+
+  if (activeCount >= FREE_TIER_ALERT_LIMIT) {
+    return NextResponse.json(
+      {
+        error: `Free tier is limited to ${FREE_TIER_ALERT_LIMIT} active alerts. Delete an existing alert to create a new one.`,
+        code: "ALERT_LIMIT_REACHED",
+        limit: FREE_TIER_ALERT_LIMIT,
+        current: activeCount,
+      },
+      { status: 402 },
+    );
   }
 
   // Check for duplicate alert
