@@ -91,7 +91,7 @@
 
 | # | Task | Status | Specialist | Priority |
 |---|------|--------|------------|----------|
-| 3.1 | Affiliate deep link system with attribution | TODO | Builder | Critical |
+| 3.1 | Affiliate deep link system with attribution | DONE | Builder | Critical |
 | 3.2 | Premium alerts tier (subscription) | TODO | Builder | High |
 | 3.3 | Sponsored placement system with strict labeling | TODO | Builder | Medium |
 | 3.4 | User accounts and watchlist persistence | TODO | Builder | High |

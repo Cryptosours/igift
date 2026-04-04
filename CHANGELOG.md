@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.0] — 2026-04-04
+
+### Added
+- Affiliate click tracking system (task 3.1)
+  - `affiliate_clicks` table: offer/source/brand FKs, privacy-hashed IP/UA, destination URL, network, timestamps
+  - `/api/click/[offerId]`: rate-limited (30/IP/min) 302 affiliate redirect with fire-and-forget logging
+  - `/lib/affiliate.ts`: per-network URL builder, SHA-256 privacy hashing, click stats aggregation
+  - `/api/admin/clicks`: authenticated stats endpoint (total, 24h, 7d, top 5 sources by network)
+  - Admin dashboard: Click Attribution panel + API reference entries
+- DealCard "View Deal" CTA now routes through `/api/click/` for attribution tracking
+
+---
+
 ## [2.0.0] — 2026-04-04
 
 ### Changed
