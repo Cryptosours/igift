@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.4.0] — 2026-04-04
+
+### Added
+- Sponsored placement system with strict FTC labeling (task 3.3)
+  - `sponsored_placements` table: brand FK, `placement_type` enum (`featured_deal` | `featured_brand`), start/end timestamps, isActive flag
+  - `getFeaturedPlacements(type)`: server-side query returning active placements with brand's best organic deal (position only — scores/trust data untouched)
+  - `SponsoredBadge`: amber disclosure pill + tooltip explaining paid placement (FTC-compliant, no visual downplaying)
+  - `FeaturedSection`: amber-accented deal card grid shown above organic results on `/deals` when active `featured_deal` sponsorships exist
+  - `/brands` page: amber-accented featured brands row above organic brand grid when active `featured_brand` sponsorships exist
+  - `/api/admin/sponsorships`: GET (list all), POST (create — brandSlug, placementType, startsAt, endsAt), PATCH (update isActive/endsAt/notes)
+  - Admin dashboard: Sponsorships panel with Live/Scheduled/Expired/Inactive status per row
+  - Migration applied on VPS; table live in production
+
+---
+
 ## [2.3.0] — 2026-04-04
 
 ### Added
