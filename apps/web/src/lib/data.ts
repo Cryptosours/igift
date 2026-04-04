@@ -1,6 +1,6 @@
 import { db } from "@/db";
-import { offers, brands, sources, watchlistItems } from "@/db/schema";
-import { eq, desc, and, or, ilike, count, avg, sql } from "drizzle-orm";
+import { offers, brands, sources, watchlistItems, sponsoredPlacements } from "@/db/schema";
+import { eq, desc, and, or, ilike, count, avg, sql, lte, gte } from "drizzle-orm";
 import type { DealCardProps } from "@/components/deals/deal-card";
 
 // ── Helpers ──
@@ -407,6 +407,116 @@ export async function getWatchlist(sessionId: string | null | undefined): Promis
               lastVerified: timeAgo(best.lastVerifiedAt),
               historicalLow: best.isHistoricalLow,
               initialWatched: true,
+            }
+          : null,
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+/** Get active sponsored placements with each brand's best deal.
+ *  Placement type filters which page they appear on.
+ *  Returns [] silently if DB unavailable — sponsored section simply doesn't render. */
+export async function getFeaturedPlacements(
+  type: "featured_deal" | "featured_brand",
+): Promise<Array<{
+  placementId: number;
+  brandSlug: string;
+  brandName: string;
+  brandCategory: string;
+  bestDeal: DealCardProps | null;
+}>> {
+  try {
+    const now = new Date();
+
+    const placements = await db
+      .select({
+        placementId: sponsoredPlacements.id,
+        brandId: brands.id,
+        brandSlug: brands.slug,
+        brandName: brands.name,
+        brandCategory: brands.category,
+      })
+      .from(sponsoredPlacements)
+      .innerJoin(brands, eq(sponsoredPlacements.brandId, brands.id))
+      .where(
+        and(
+          eq(sponsoredPlacements.placementType, type),
+          eq(sponsoredPlacements.isActive, true),
+          lte(sponsoredPlacements.startsAt, now),
+          gte(sponsoredPlacements.endsAt, now),
+          eq(brands.isActive, true),
+        ),
+      )
+      .orderBy(sponsoredPlacements.createdAt);
+
+    if (placements.length === 0) return [];
+
+    const brandIds = placements.map((p) => p.brandId);
+
+    const dealRows = await db
+      .select({
+        id: offers.id,
+        brandId: offers.brandId,
+        brandSlug: brands.slug,
+        brandName: brands.name,
+        title: offers.normalizedTitle,
+        originalTitle: offers.originalTitle,
+        faceValueCents: offers.faceValueCents,
+        effectivePriceCents: offers.effectivePriceCents,
+        currency: offers.currency,
+        effectiveDiscountPct: offers.effectiveDiscountPct,
+        dealQualityScore: offers.dealQualityScore,
+        confidenceScore: offers.confidenceScore,
+        trustZone: offers.trustZone,
+        sourceName: sources.name,
+        accountRegionRequired: offers.accountRegionRequired,
+        lastVerifiedAt: offers.lastVerifiedAt,
+        isHistoricalLow: offers.isHistoricalLow,
+      })
+      .from(offers)
+      .innerJoin(brands, eq(offers.brandId, brands.id))
+      .innerJoin(sources, eq(offers.sourceId, sources.id))
+      .where(
+        and(
+          eq(offers.status, "active"),
+          sql`${offers.brandId} = ANY(ARRAY[${sql.raw(brandIds.join(","))}]::int[])`,
+        ),
+      )
+      .orderBy(desc(offers.finalScore));
+
+    const bestByBrand = new Map<number, typeof dealRows[0]>();
+    for (const row of dealRows) {
+      if (!bestByBrand.has(row.brandId)) bestByBrand.set(row.brandId, row);
+    }
+
+    return placements.map((p) => {
+      const best = bestByBrand.get(p.brandId) ?? null;
+      return {
+        placementId: p.placementId,
+        brandSlug: p.brandSlug,
+        brandName: p.brandName,
+        brandCategory: categoryMeta[p.brandCategory]?.name ?? p.brandCategory,
+        bestDeal: best
+          ? {
+              id: String(best.id),
+              brand: best.brandName,
+              brandSlug: best.brandSlug,
+              title: best.title ?? best.originalTitle,
+              faceValue: best.faceValueCents / 100,
+              effectivePrice: best.effectivePriceCents / 100,
+              currency: best.currency === "USD" ? "$" : best.currency,
+              effectiveDiscount: best.effectiveDiscountPct,
+              dealScore: best.dealQualityScore ?? 0,
+              confidenceScore: best.confidenceScore ?? 0,
+              trustZone: best.trustZone,
+              sourceName: best.sourceName,
+              sourceUrl: "",
+              region: best.accountRegionRequired ?? "Global",
+              lastVerified: timeAgo(best.lastVerifiedAt),
+              historicalLow: best.isHistoricalLow,
             }
           : null,
       };

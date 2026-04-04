@@ -270,6 +270,27 @@ export const watchlistItems = pgTable(
   ],
 );
 
+// ── Sponsored Placements ──
+// Brands can purchase a featured placement in deal/brand listings.
+// We boost POSITION only — never scores, never trust data.
+// All sponsored items carry mandatory "Sponsored" disclosure (FTC compliance).
+
+export const placementTypeEnum = pgEnum("placement_type", [
+  "featured_deal",   // top of /deals listing
+  "featured_brand",  // featured row on /brands listing
+]);
+
+export const sponsoredPlacements = pgTable("sponsored_placements", {
+  id: serial("id").primaryKey(),
+  brandId: integer("brand_id").notNull().references(() => brands.id),
+  placementType: placementTypeEnum("placement_type").notNull(),
+  startsAt: timestamp("starts_at", { withTimezone: true }).notNull(),
+  endsAt: timestamp("ends_at", { withTimezone: true }).notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+  notes: text("notes"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 // ── Type exports for application use ──
 
 export type Source = typeof sources.$inferSelect;
@@ -284,3 +305,4 @@ export type SourceRequest = typeof sourceRequests.$inferSelect;
 export type ModerationCase = typeof moderationCases.$inferSelect;
 export type AffiliateClick = typeof affiliateClicks.$inferSelect;
 export type WatchlistItem = typeof watchlistItems.$inferSelect;
+export type SponsoredPlacement = typeof sponsoredPlacements.$inferSelect;

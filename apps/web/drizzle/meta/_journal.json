@@ -8,6 +8,13 @@
       "when": 1775319593427,
       "tag": "0000_calm_swordsman",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1775331600480,
+      "tag": "0001_add_sponsored_placements",
+      "breakpoints": true
     }
   ]
 }

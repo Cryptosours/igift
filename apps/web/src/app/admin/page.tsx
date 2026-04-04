@@ -11,6 +11,7 @@ import {
   offers,
   sources,
   brands,
+  sponsoredPlacements,
 } from "@/db/schema";
 import { eq, desc, and, count, sql } from "drizzle-orm";
 import { getHealthReport, type SourceHealth, type HealthStatus } from "@/lib/health";
@@ -137,6 +138,24 @@ function healthStatusStyle(status: HealthStatus): string {
   }
 }
 
+async function getSponsorships() {
+  return db
+    .select({
+      id: sponsoredPlacements.id,
+      placementType: sponsoredPlacements.placementType,
+      isActive: sponsoredPlacements.isActive,
+      startsAt: sponsoredPlacements.startsAt,
+      endsAt: sponsoredPlacements.endsAt,
+      notes: sponsoredPlacements.notes,
+      brandName: brands.name,
+      brandSlug: brands.slug,
+    })
+    .from(sponsoredPlacements)
+    .innerJoin(brands, eq(sponsoredPlacements.brandId, brands.id))
+    .orderBy(desc(sponsoredPlacements.createdAt))
+    .limit(50);
+}
+
 // ── Page Component ──
 
 export default async function AdminModerationPage() {
@@ -147,9 +166,10 @@ export default async function AdminModerationPage() {
   let healthReport: Awaited<ReturnType<typeof getHealthReport>> | null = null;
   let revalidationReport: RevalidationReport | null = null;
   let clickStats: Awaited<ReturnType<typeof getClickStats>> | null = null;
+  let sponsorships: Awaited<ReturnType<typeof getSponsorships>> = [];
 
   try {
-    [summary, openCases, flaggedOffers, recentResolved, healthReport, revalidationReport, clickStats] = await Promise.all([
+    [summary, openCases, flaggedOffers, recentResolved, healthReport, revalidationReport, clickStats, sponsorships] = await Promise.all([
       getStatusSummary(),
       getOpenCases(),
       getFlaggedOffers(),
@@ -157,6 +177,7 @@ export default async function AdminModerationPage() {
       getHealthReport(),
       getRevalidationReport(),
       getClickStats(),
+      getSponsorships(),
     ]);
   } catch {
     return (
@@ -549,6 +570,72 @@ export default async function AdminModerationPage() {
         )}
       </section>
 
+      {/* Sponsored Placements */}
+      <section>
+        <h2 className="text-lg font-semibold text-surface-800 mb-4">
+          Sponsored Placements ({sponsorships.filter((s) => s.isActive).length} active)
+        </h2>
+        {sponsorships.length === 0 ? (
+          <EmptyState message="No sponsorships configured. Use POST /api/admin/sponsorships to create one." />
+        ) : (
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-surface-50 text-surface-600 uppercase text-xs">
+                <tr>
+                  <th className="px-4 py-3 text-left">ID</th>
+                  <th className="px-4 py-3 text-left">Brand</th>
+                  <th className="px-4 py-3 text-left">Type</th>
+                  <th className="px-4 py-3 text-left">Status</th>
+                  <th className="px-4 py-3 text-left">Starts</th>
+                  <th className="px-4 py-3 text-left">Ends</th>
+                  <th className="px-4 py-3 text-left">Notes</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-surface-100">
+                {sponsorships.map((s) => {
+                  const now = new Date();
+                  const isLive = s.isActive && new Date(s.startsAt) <= now && new Date(s.endsAt) >= now;
+                  return (
+                    <tr key={s.id} className={`hover:bg-surface-50 ${!s.isActive ? "opacity-50" : ""}`}>
+                      <td className="px-4 py-3 font-mono text-xs">#{s.id}</td>
+                      <td className="px-4 py-3">
+                        <div className="font-medium text-surface-800">{s.brandName}</div>
+                        <div className="text-xs text-surface-400 font-mono">{s.brandSlug}</div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-alert-50 text-alert-700 border border-alert-200">
+                          {s.placementType === "featured_deal" ? "Featured Deal" : "Featured Brand"}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        {isLive ? (
+                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Live</span>
+                        ) : !s.isActive ? (
+                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">Inactive</span>
+                        ) : new Date(s.startsAt) > now ? (
+                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Scheduled</span>
+                        ) : (
+                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">Expired</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs text-surface-500">
+                        {new Date(s.startsAt).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs text-surface-500">
+                        {new Date(s.endsAt).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-3 text-xs text-surface-400 max-w-[180px] truncate">
+                        {s.notes ?? "—"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
       {/* API Reference */}
       <section className="bg-surface-50 rounded-lg p-6 text-sm text-surface-600">
         <h3 className="font-semibold text-surface-800 mb-2">API Reference</h3>
@@ -577,6 +664,12 @@ export default async function AdminModerationPage() {
           <div className="text-surface-400">Affiliate redirect with click logging (public, rate-limited)</div>
           <div>GET /api/admin/clicks</div>
           <div className="text-surface-400">Click attribution stats (total, 24h, 7d, top sources)</div>
+          <div>GET /api/admin/sponsorships</div>
+          <div className="text-surface-400">List all sponsorships with brand info</div>
+          <div>POST /api/admin/sponsorships</div>
+          <div className="text-surface-400">Create sponsorship (brandSlug, placementType, startsAt, endsAt)</div>
+          <div>PATCH /api/admin/sponsorships?id=N</div>
+          <div className="text-surface-400">Update sponsorship (isActive, endsAt, notes)</div>
         </div>
         <p className="mt-3 text-xs text-surface-400">
           All endpoints require <code className="bg-surface-200 px-1 rounded">Authorization: Bearer ADMIN_API_KEY</code>

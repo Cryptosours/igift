@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { SlidersHorizontal, ArrowUpDown } from "lucide-react";
-import { getDeals, getWatchedSlugs } from "@/lib/data";
+import { getDeals, getWatchedSlugs, getFeaturedPlacements } from "@/lib/data";
 import { sampleDeals } from "@/lib/sample-data";
 import { DealSearch } from "@/components/deals/deal-search";
+import { FeaturedSection } from "@/components/deals/featured-section";
 
 export const metadata: Metadata = {
   title: "All Verified Deals",
@@ -29,6 +30,9 @@ export default async function DealsPage() {
   if (watchedSlugs.size > 0) {
     deals = deals.map((d) => ({ ...d, initialWatched: watchedSlugs.has(d.brandSlug) }));
   }
+
+  // Load active sponsored placements (empty array if none / DB unavailable)
+  const featuredPlacements = await getFeaturedPlacements("featured_deal");
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -77,6 +81,11 @@ export default async function DealsPage() {
           ),
         )}
       </div>
+
+      {/* Sponsored Featured Deals */}
+      {featuredPlacements.length > 0 && (
+        <FeaturedSection placements={featuredPlacements} />
+      )}
 
       {/* Search + Deal Grid */}
       <DealSearch initialDeals={deals} />
