@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.2.0] — 2026-04-04
+
+### Added
+- Anonymous session-based watchlist (task 3.4)
+  - `watchlist_items` table: session_id + brand_id unique pairs, cascades on brand delete
+  - `middleware.ts`: mints `igift_session` UUID cookie on first visit (Edge Runtime, httpOnly, 1-year TTL)
+  - `/api/watchlist`: GET / POST / DELETE — idempotent, session-scoped
+  - `WatchButton` component: Heart icon toggle with `useTransition` for non-blocking UX
+  - `/watchlist` page: empty state + best-deal-per-brand view with alert CTA
+  - Header Heart icon links to `/watchlist`
+  - DealCard and brand pages enriched with server-read `initialWatched` state
+- Ingestion cron schedule
+  - `scripts/ingest-cron.sh`: authenticated API call, timestamped log output
+  - VPS crontab: runs `POST /api/ingest` every 6 hours
+
+---
+
 ## [2.1.0] — 2026-04-04
 
 ### Added

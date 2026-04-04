@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { offers, brands, sources } from "@/db/schema";
+import { offers, brands, sources, watchlistItems } from "@/db/schema";
 import { eq, desc, and, or, ilike, count, avg, sql } from "drizzle-orm";
 import type { DealCardProps } from "@/components/deals/deal-card";
 
@@ -310,4 +310,108 @@ export function getCategoryBySlug(slug: string) {
   const enumVal = slugToCategory[slug];
   if (!enumVal) return null;
   return categoryMeta[enumVal];
+}
+
+/** Get watched brand slugs for a session — returns an empty Set if sessionId is falsy */
+export async function getWatchedSlugs(sessionId: string | null | undefined): Promise<Set<string>> {
+  if (!sessionId) return new Set();
+  try {
+    const rows = await db
+      .select({ slug: brands.slug })
+      .from(watchlistItems)
+      .innerJoin(brands, eq(watchlistItems.brandId, brands.id))
+      .where(eq(watchlistItems.sessionId, sessionId));
+    return new Set(rows.map((r) => r.slug));
+  } catch {
+    return new Set();
+  }
+}
+
+/** Get full watchlist for a session — returns brand slug, name, category, and best deal */
+export async function getWatchlist(sessionId: string | null | undefined): Promise<
+  Array<{ slug: string; name: string; category: string; bestDeal: DealCardProps | null }>
+> {
+  if (!sessionId) return [];
+  try {
+    const watched = await db
+      .select({ brandId: watchlistItems.brandId, slug: brands.slug, name: brands.name, category: brands.category })
+      .from(watchlistItems)
+      .innerJoin(brands, eq(watchlistItems.brandId, brands.id))
+      .where(eq(watchlistItems.sessionId, sessionId))
+      .orderBy(watchlistItems.createdAt);
+
+    if (watched.length === 0) return [];
+
+    const brandIds = watched.map((w) => w.brandId);
+    const dealRows = await db
+      .select({
+        id: offers.id,
+        brandId: offers.brandId,
+        brandSlug: brands.slug,
+        brandName: brands.name,
+        title: offers.normalizedTitle,
+        originalTitle: offers.originalTitle,
+        faceValueCents: offers.faceValueCents,
+        effectivePriceCents: offers.effectivePriceCents,
+        currency: offers.currency,
+        effectiveDiscountPct: offers.effectiveDiscountPct,
+        dealQualityScore: offers.dealQualityScore,
+        confidenceScore: offers.confidenceScore,
+        trustZone: offers.trustZone,
+        sourceName: sources.name,
+        sourceUrl: sources.url,
+        accountRegionRequired: offers.accountRegionRequired,
+        lastVerifiedAt: offers.lastVerifiedAt,
+        isHistoricalLow: offers.isHistoricalLow,
+      })
+      .from(offers)
+      .innerJoin(brands, eq(offers.brandId, brands.id))
+      .innerJoin(sources, eq(offers.sourceId, sources.id))
+      .where(
+        and(
+          eq(offers.status, "active"),
+          // Filter to watched brands using SQL IN — drizzle inArray
+          sql`${offers.brandId} = ANY(ARRAY[${sql.raw(brandIds.join(","))}]::int[])`,
+        ),
+      )
+      .orderBy(desc(offers.finalScore));
+
+    // Group best deal per brand
+    const bestByBrand = new Map<number, typeof dealRows[0]>();
+    for (const row of dealRows) {
+      if (!bestByBrand.has(row.brandId)) bestByBrand.set(row.brandId, row);
+    }
+
+    return watched.map((w) => {
+      const best = bestByBrand.get(w.brandId) ?? null;
+      return {
+        slug: w.slug,
+        name: w.name,
+        category: w.category,
+        bestDeal: best
+          ? {
+              id: String(best.id),
+              brand: best.brandName,
+              brandSlug: best.brandSlug,
+              title: best.title ?? best.originalTitle,
+              faceValue: best.faceValueCents / 100,
+              effectivePrice: best.effectivePriceCents / 100,
+              currency: best.currency,
+              effectiveDiscount: best.effectiveDiscountPct,
+              dealScore: best.dealQualityScore ?? 0,
+              confidenceScore: best.confidenceScore ?? 0,
+              trustZone: best.trustZone,
+              sourceName: best.sourceName,
+              sourceUrl: best.sourceUrl,
+              region: best.accountRegionRequired ?? "Global",
+              lastVerified: timeAgo(best.lastVerifiedAt),
+              historicalLow: best.isHistoricalLow,
+              initialWatched: true,
+            }
+          : null,
+      };
+    });
+  } catch {
+    return [];
+  }
 }

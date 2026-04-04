@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { ArrowLeft, Globe, ShieldCheck, TrendingUp } from "lucide-react";
 import { DealCard } from "@/components/deals/deal-card";
-import { getBrandBySlug } from "@/lib/data";
+import { WatchButton } from "@/components/ui/watch-button";
+import { getBrandBySlug, getWatchedSlugs } from "@/lib/data";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -66,6 +68,11 @@ export default async function BrandDetailPage({ params }: Props) {
     notFound();
   }
 
+  const cookieStore = await cookies();
+  const sessionId = cookieStore.get("igift_session")?.value;
+  const watchedSlugs = await getWatchedSlugs(sessionId);
+  const isWatched = watchedSlugs.has(slug);
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <Link
@@ -87,9 +94,12 @@ export default async function BrandDetailPage({ params }: Props) {
             </div>
             <p className="mt-1 text-sm text-surface-500">{brand.description}</p>
           </div>
-          <div className="text-center">
-            <div className="price-display text-2xl font-bold text-deal-600">~{brand.avgDiscount}%</div>
-            <div className="text-xs text-surface-400">Avg. Discount</div>
+          <div className="flex items-center gap-3">
+            <div className="text-center">
+              <div className="price-display text-2xl font-bold text-deal-600">~{brand.avgDiscount}%</div>
+              <div className="text-xs text-surface-400">Avg. Discount</div>
+            </div>
+            <WatchButton brandSlug={slug} initialWatched={isWatched} />
           </div>
         </div>
 

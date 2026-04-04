@@ -5,6 +5,7 @@ import { useState, Suspense } from "react";
 import {
   Search,
   Bell,
+  Heart,
   Menu,
   X,
   TrendingUp,
@@ -58,6 +59,14 @@ export function Header() {
             >
               {searchOpen ? <X className="h-4.5 w-4.5" /> : <Search className="h-4.5 w-4.5" />}
             </button>
+            <Link
+              href="/watchlist"
+              className="rounded-lg p-2 text-surface-400 transition-all hover:bg-surface-100 hover:text-surface-700"
+              aria-label="My watchlist"
+              title="My Watchlist"
+            >
+              <Heart className="h-4.5 w-4.5" />
+            </Link>
             <Link
               href="/alerts"
               className="rounded-lg p-2 text-surface-400 transition-all hover:bg-surface-100 hover:text-surface-700"

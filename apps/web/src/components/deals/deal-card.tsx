@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ExternalLink, Clock, MapPin } from "lucide-react";
 import { TrustBadge } from "@/components/ui/trust-badge";
 import { DealScore } from "@/components/ui/deal-score";
+import { WatchButton } from "@/components/ui/watch-button";
 
 export interface DealCardProps {
   id: string;
@@ -20,6 +21,7 @@ export interface DealCardProps {
   region: string;
   lastVerified: string;
   historicalLow: boolean;
+  initialWatched?: boolean;
 }
 
 export function DealCard({ deal }: { deal: DealCardProps }) {
@@ -82,7 +84,10 @@ export function DealCard({ deal }: { deal: DealCardProps }) {
 
         {/* Right: Score + CTA */}
         <div className="flex flex-col items-end gap-2.5">
-          <DealScore score={deal.dealScore} />
+          <div className="flex items-center gap-1.5">
+            <WatchButton brandSlug={deal.brandSlug} initialWatched={deal.initialWatched} />
+            <DealScore score={deal.dealScore} />
+          </div>
           <a
             href={`/api/click/${deal.id}`}
             target="_blank"

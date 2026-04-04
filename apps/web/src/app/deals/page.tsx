@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { SlidersHorizontal, ArrowUpDown } from "lucide-react";
-import { getDeals } from "@/lib/data";
+import { getDeals, getWatchedSlugs } from "@/lib/data";
 import { sampleDeals } from "@/lib/sample-data";
 import { DealSearch } from "@/components/deals/deal-search";
 
@@ -20,6 +21,15 @@ export default async function DealsPage() {
   } catch {
     // DB unavailable — use sample data
   }
+
+  // Enrich deals with watchlist state for this session
+  const cookieStore = await cookies();
+  const sessionId = cookieStore.get("igift_session")?.value;
+  const watchedSlugs = await getWatchedSlugs(sessionId);
+  if (watchedSlugs.size > 0) {
+    deals = deals.map((d) => ({ ...d, initialWatched: watchedSlugs.has(d.brandSlug) }));
+  }
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       {/* Page Header */}

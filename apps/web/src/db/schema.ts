@@ -253,6 +253,23 @@ export const affiliateClicks = pgTable(
   ],
 );
 
+// ── Watchlist Items ──
+// Anonymous session-based brand watchlist. Session ID is a UUID cookie set on first visit.
+
+export const watchlistItems = pgTable(
+  "watchlist_items",
+  {
+    id: serial("id").primaryKey(),
+    sessionId: text("session_id").notNull(),
+    brandId: integer("brand_id").notNull().references(() => brands.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("idx_watchlist_session_brand").on(table.sessionId, table.brandId),
+    index("idx_watchlist_session").on(table.sessionId),
+  ],
+);
+
 // ── Type exports for application use ──
 
 export type Source = typeof sources.$inferSelect;
@@ -266,3 +283,4 @@ export type UserAlert = typeof userAlerts.$inferSelect;
 export type SourceRequest = typeof sourceRequests.$inferSelect;
 export type ModerationCase = typeof moderationCases.$inferSelect;
 export type AffiliateClick = typeof affiliateClicks.$inferSelect;
+export type WatchlistItem = typeof watchlistItems.$inferSelect;
