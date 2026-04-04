@@ -15,6 +15,7 @@ import {
 import { eq, desc, and, count, sql } from "drizzle-orm";
 import { getHealthReport, type SourceHealth, type HealthStatus } from "@/lib/health";
 import { getRevalidationReport, type RevalidationReport } from "@/lib/revalidation";
+import { getClickStats } from "@/lib/affiliate";
 
 export const dynamic = "force-dynamic";
 
@@ -145,15 +146,17 @@ export default async function AdminModerationPage() {
   let recentResolved: Awaited<ReturnType<typeof getRecentResolved>> = [];
   let healthReport: Awaited<ReturnType<typeof getHealthReport>> | null = null;
   let revalidationReport: RevalidationReport | null = null;
+  let clickStats: Awaited<ReturnType<typeof getClickStats>> | null = null;
 
   try {
-    [summary, openCases, flaggedOffers, recentResolved, healthReport, revalidationReport] = await Promise.all([
+    [summary, openCases, flaggedOffers, recentResolved, healthReport, revalidationReport, clickStats] = await Promise.all([
       getStatusSummary(),
       getOpenCases(),
       getFlaggedOffers(),
       getRecentResolved(),
       getHealthReport(),
       getRevalidationReport(),
+      getClickStats(),
     ]);
   } catch {
     return (
@@ -176,6 +179,50 @@ export default async function AdminModerationPage() {
           Review flagged offers, resolve cases, and manage data quality.
         </p>
       </div>
+
+      {/* Click Attribution Stats */}
+      {clickStats && (
+        <section>
+          <h2 className="text-lg font-semibold text-surface-800 mb-4">Click Attribution</h2>
+          <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="rounded-xl border border-surface-200 bg-white p-4">
+              <div className="text-2xl font-bold text-surface-900">{clickStats.total.toLocaleString()}</div>
+              <div className="text-xs text-surface-500 mt-1">Total Clicks</div>
+            </div>
+            <div className="rounded-xl border border-surface-200 bg-white p-4">
+              <div className="text-2xl font-bold text-brand-600">{clickStats.last24h.toLocaleString()}</div>
+              <div className="text-xs text-surface-500 mt-1">Last 24 Hours</div>
+            </div>
+            <div className="rounded-xl border border-surface-200 bg-white p-4">
+              <div className="text-2xl font-bold text-deal-600">{clickStats.last7d.toLocaleString()}</div>
+              <div className="text-xs text-surface-500 mt-1">Last 7 Days</div>
+            </div>
+          </div>
+          {clickStats.topSources.length > 0 && (
+            <div className="rounded-xl border border-surface-200 bg-white overflow-hidden">
+              <div className="px-4 py-3 border-b border-surface-100">
+                <span className="text-sm font-medium text-surface-700">Top Sources (7d)</span>
+              </div>
+              <table className="w-full text-sm">
+                <thead className="bg-surface-50 text-surface-500 uppercase text-xs">
+                  <tr>
+                    <th className="px-4 py-2 text-left">Source</th>
+                    <th className="px-4 py-2 text-right">Clicks</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-surface-100">
+                  {clickStats.topSources.map((s) => (
+                    <tr key={s.sourceId}>
+                      <td className="px-4 py-2 text-surface-800">{s.sourceName}</td>
+                      <td className="px-4 py-2 text-right font-mono text-surface-600">{s.clicks}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+      )}
 
       {/* Source Health Dashboard */}
       {healthReport && (
@@ -526,6 +573,10 @@ export default async function AdminModerationPage() {
           <div className="text-surface-400">Resolve case (action: approve/suppress/dismiss)</div>
           <div>PATCH /api/admin/moderation/offers/[id]</div>
           <div className="text-surface-400">Direct offer action (approve/suppress/mark_stale)</div>
+          <div>GET /api/click/[offerId]</div>
+          <div className="text-surface-400">Affiliate redirect with click logging (public, rate-limited)</div>
+          <div>GET /api/admin/clicks</div>
+          <div className="text-surface-400">Click attribution stats (total, 24h, 7d, top sources)</div>
         </div>
         <p className="mt-3 text-xs text-surface-400">
           All endpoints require <code className="bg-surface-200 px-1 rounded">Authorization: Bearer ADMIN_API_KEY</code>

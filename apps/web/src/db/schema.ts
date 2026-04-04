@@ -224,6 +224,35 @@ export const moderationCases = pgTable("moderation_cases", {
   resolvedAt: timestamp("resolved_at", { withTimezone: true }),
 });
 
+// ── Affiliate Clicks ──
+// Tracks every outbound click for attribution and analytics.
+// IP is stored as a SHA-256 hash (never raw) for privacy compliance.
+
+export const affiliateClicks = pgTable(
+  "affiliate_clicks",
+  {
+    id: serial("id").primaryKey(),
+    offerId: integer("offer_id").references(() => offers.id),
+    sourceId: integer("source_id").references(() => sources.id),
+    brandId: integer("brand_id").references(() => brands.id),
+    // Attribution context
+    referrerPage: text("referrer_page"), // /deals, /brands/steam, /categories/gaming, etc.
+    userAgentHash: text("user_agent_hash"), // hashed for fingerprinting without storing raw UA
+    ipHash: text("ip_hash"), // SHA-256 hashed IP — never raw
+    // The URL the user was sent to
+    destinationUrl: text("destination_url"),
+    // Affiliate context at time of click
+    affiliateNetwork: text("affiliate_network"),
+    affiliateProgramId: text("affiliate_program_id"),
+    clickedAt: timestamp("clicked_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("idx_clicks_offer").on(table.offerId),
+    index("idx_clicks_source").on(table.sourceId),
+    index("idx_clicks_clicked_at").on(table.clickedAt),
+  ],
+);
+
 // ── Type exports for application use ──
 
 export type Source = typeof sources.$inferSelect;
@@ -236,3 +265,4 @@ export type PriceHistoryRecord = typeof priceHistory.$inferSelect;
 export type UserAlert = typeof userAlerts.$inferSelect;
 export type SourceRequest = typeof sourceRequests.$inferSelect;
 export type ModerationCase = typeof moderationCases.$inferSelect;
+export type AffiliateClick = typeof affiliateClicks.$inferSelect;

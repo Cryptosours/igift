@@ -84,7 +84,7 @@ export function DealCard({ deal }: { deal: DealCardProps }) {
         <div className="flex flex-col items-end gap-2.5">
           <DealScore score={deal.dealScore} />
           <a
-            href={deal.sourceUrl}
+            href={`/api/click/${deal.id}`}
             target="_blank"
             rel="noopener noreferrer nofollow"
             className="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:bg-brand-700 hover:shadow-md active:scale-[0.97]"
