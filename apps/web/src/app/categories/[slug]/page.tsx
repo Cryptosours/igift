@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { DealCard } from "@/components/deals/deal-card";
 import { getDeals, getCategoryBySlug } from "@/lib/data";
 import { notFound } from "next/navigation";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
 export const dynamic = "force-dynamic";
 
@@ -44,33 +45,39 @@ export default async function CategoryDetailPage({ params }: Props) {
         All Categories
       </Link>
 
-      <div className="mt-4">
-        <div className="flex items-center gap-3">
-          <span className="text-4xl">{cat.icon}</span>
-          <div>
-            <h1 className="text-2xl font-bold text-surface-900">{cat.name}</h1>
-            <p className="text-sm text-surface-500">{cat.description}</p>
+      <FadeIn>
+        <div className="mt-4">
+          <div className="flex items-center gap-3">
+            <span className="text-4xl">{cat.icon}</span>
+            <div>
+              <h1 className="text-2xl font-bold text-surface-900">{cat.name}</h1>
+              <p className="text-sm text-surface-500">{cat.description}</p>
+            </div>
           </div>
+          <p className="mt-2 price-display text-sm text-surface-400">
+            {deals.length} verified deals across trusted sources
+          </p>
         </div>
-        <p className="mt-2 price-display text-sm text-surface-400">
-          {deals.length} verified deals across trusted sources
-        </p>
-      </div>
+      </FadeIn>
 
       {deals.length > 0 ? (
-        <div className="mt-6 grid gap-4 lg:grid-cols-2">
+        <StaggerContainer className="mt-6 grid gap-4 lg:grid-cols-2">
           {deals.map((deal) => (
-            <DealCard key={deal.id} deal={deal} />
+            <StaggerItem key={deal.id}>
+              <DealCard deal={deal} />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       ) : (
-        <p className="mt-6 text-sm text-surface-500">
-          No active deals in this category right now. Check back soon or{" "}
-          <Link href="/alerts" className="text-brand-600 hover:text-brand-700">
-            set up an alert
-          </Link>
-          .
-        </p>
+        <FadeIn delay={0.1}>
+          <p className="mt-6 text-sm text-surface-500">
+            No active deals in this category right now. Check back soon or{" "}
+            <Link href="/alerts" className="text-brand-600 hover:text-brand-700">
+              set up an alert
+            </Link>
+            .
+          </p>
+        </FadeIn>
       )}
     </div>
   );

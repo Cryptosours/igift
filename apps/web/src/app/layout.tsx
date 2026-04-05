@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { MotionProvider } from "@/components/layout/motion-provider";
+import { PageTransition } from "@/components/layout/page-transition";
 import "./globals.css";
 
 const inter = Inter({
@@ -30,6 +32,12 @@ export const metadata: Metadata = {
     "verified deals",
     "gift card comparison",
   ],
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+  },
+  manifest: "/manifest.json",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -37,12 +45,14 @@ export const metadata: Metadata = {
     title: "iGift — Verified Digital Value Deals",
     description:
       "Trust-scored deal intelligence for gift cards, digital credits, and vouchers.",
+    images: [{ url: "/og-image.svg", width: 1200, height: 630, alt: "iGift — Trust-scored deal intelligence" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "iGift — Verified Digital Value Deals",
     description:
       "Trust-scored deal intelligence for gift cards, digital credits, and vouchers.",
+    images: ["/og-image.svg"],
   },
   robots: {
     index: true,
@@ -58,9 +68,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="min-h-screen flex flex-col bg-surface-50 text-surface-900 font-sans">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <MotionProvider>
+          <Header />
+          <main className="flex-1">
+            <PageTransition>{children}</PageTransition>
+          </main>
+          <Footer />
+        </MotionProvider>
       </body>
     </html>
   );

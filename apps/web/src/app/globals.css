@@ -124,49 +124,9 @@ body {
 
 /* ══════════════════════════════════════════════
    Animation Keyframes
+   (Entrance animations now use Framer Motion;
+    these are CSS-only utilities kept for specific use cases)
    ══════════════════════════════════════════════ */
-
-/* Staggered entrance — fade up from below */
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Gentle fade in */
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Slide in from left */
-@keyframes slide-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Scale up from center */
-@keyframes scale-up {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
 
 /* Continuous gentle pulse for live indicators */
 @keyframes pulse-soft {
@@ -174,74 +134,18 @@ body {
   50% { opacity: 0.5; }
 }
 
-/* Shimmer for loading / accent */
+/* Shimmer for loading skeletons */
 @keyframes shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
 
-/* Number counter roll feel */
-@keyframes count-up {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Gradient shift for hero backgrounds */
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
 /* ══════════════════════════════════════════════
    Animation Utility Classes
+   (Most entrance animations now handled by Framer Motion)
    ══════════════════════════════════════════════ */
-.animate-fade-up {
-  animation: fade-up 0.6s ease-out both;
-}
-.animate-fade-in {
-  animation: fade-in 0.5s ease-out both;
-}
-.animate-slide-in-left {
-  animation: slide-in-left 0.5s ease-out both;
-}
-.animate-scale-up {
-  animation: scale-up 0.5s ease-out both;
-}
 .animate-pulse-soft {
   animation: pulse-soft 2s ease-in-out infinite;
-}
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient-shift 8s ease infinite;
-}
-
-/* Stagger delays */
-.delay-100 { animation-delay: 100ms; }
-.delay-200 { animation-delay: 200ms; }
-.delay-300 { animation-delay: 300ms; }
-.delay-400 { animation-delay: 400ms; }
-.delay-500 { animation-delay: 500ms; }
-.delay-600 { animation-delay: 600ms; }
-.delay-700 { animation-delay: 700ms; }
-.delay-800 { animation-delay: 800ms; }
-
-/* ══════════════════════════════════════════════
-   Scroll-Triggered Reveal (works with IntersectionObserver)
-   ══════════════════════════════════════════════ */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 /* ══════════════════════════════════════════════
@@ -315,23 +219,10 @@ body {
    Reduced Motion Preference
    ══════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-up,
-  .animate-fade-in,
-  .animate-slide-in-left,
-  .animate-scale-up {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
   .card-hover:hover {
     transform: none;
   }
-  .animate-gradient {
+  .animate-pulse-soft {
     animation: none;
   }
 }

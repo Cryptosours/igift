@@ -4,8 +4,10 @@ import { cookies } from "next/headers";
 import { ArrowLeft, Globe, ShieldCheck, TrendingUp } from "lucide-react";
 import { DealCard } from "@/components/deals/deal-card";
 import { WatchButton } from "@/components/ui/watch-button";
+import { BrandAvatar } from "@/components/ui/brand-avatar";
 import { getBrandBySlug, getWatchedSlugs } from "@/lib/data";
 import { notFound } from "next/navigation";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
 export const dynamic = "force-dynamic";
 
@@ -83,16 +85,20 @@ export default async function BrandDetailPage({ params }: Props) {
         All Brands
       </Link>
 
-      <div className="mt-4 rounded-xl border border-surface-200 bg-white p-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-surface-900">{brand.name}</h1>
-              <span className="rounded-md bg-surface-100 px-2 py-0.5 text-xs font-medium text-surface-600">
-                {brand.category}
-              </span>
+      <FadeIn>
+        <div className="mt-4 rounded-xl border border-surface-200 bg-white p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4">
+              <BrandAvatar name={brand.name} slug={slug} size="lg" />
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-2xl font-bold text-surface-900">{brand.name}</h1>
+                <span className="rounded-md bg-surface-100 px-2 py-0.5 text-xs font-medium text-surface-600">
+                  {brand.category}
+                </span>
+              </div>
+              <p className="mt-1 text-sm text-surface-500">{brand.description}</p>
             </div>
-            <p className="mt-1 text-sm text-surface-500">{brand.description}</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="text-center">
@@ -118,24 +124,31 @@ export default async function BrandDetailPage({ params }: Props) {
           </div>
         </div>
       </div>
+      </FadeIn>
 
-      <h2 className="mt-8 text-lg font-bold text-surface-900">
-        Current Deals for {brand.name}
-      </h2>
+      <FadeIn delay={0.1}>
+        <h2 className="mt-8 text-lg font-bold text-surface-900">
+          Current Deals for {brand.name}
+        </h2>
+      </FadeIn>
       {brand.deals.length > 0 ? (
-        <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        <StaggerContainer className="mt-4 grid gap-4 lg:grid-cols-2">
           {brand.deals.map((deal) => (
-            <DealCard key={deal.id} deal={deal} />
+            <StaggerItem key={deal.id}>
+              <DealCard deal={deal} />
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       ) : (
-        <p className="mt-4 text-sm text-surface-500">
-          No active deals found for {brand.name} right now. Check back soon or{" "}
-          <Link href="/alerts" className="text-brand-600 hover:text-brand-700">
-            set up an alert
-          </Link>
-          .
-        </p>
+        <FadeIn delay={0.15}>
+          <p className="mt-4 text-sm text-surface-500">
+            No active deals found for {brand.name} right now. Check back soon or{" "}
+            <Link href="/alerts" className="text-brand-600 hover:text-brand-700">
+              set up an alert
+            </Link>
+            .
+          </p>
+        </FadeIn>
       )}
 
       <BrandJsonLd brand={brand} deals={brand.deals} />

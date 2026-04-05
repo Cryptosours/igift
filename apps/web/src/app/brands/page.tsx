@@ -3,6 +3,8 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getBrands, getFeaturedPlacements } from "@/lib/data";
 import { SponsoredBadge } from "@/components/ui/sponsored-badge";
+import { BrandAvatar } from "@/components/ui/brand-avatar";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
 export const metadata: Metadata = {
   title: "Brands",
@@ -47,13 +49,15 @@ export default async function BrandsPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <span className="data-label text-brand-600">Brands</span>
-      <h1 className="mt-1 heading-display text-3xl text-surface-900">
-        Browse by brand
-      </h1>
-      <p className="mt-2 text-sm text-surface-500">
-        All brands with verified deals across sources and regions.
-      </p>
+      <FadeIn>
+        <span className="data-label text-brand-600">Brands</span>
+        <h1 className="mt-1 heading-display text-3xl text-surface-900">
+          Browse by brand
+        </h1>
+        <p className="mt-2 text-sm text-surface-500">
+          All brands with verified deals across sources and regions.
+        </p>
+      </FadeIn>
 
       {/* Sponsored featured brands row */}
       {featuredBrands.length > 0 && (
@@ -74,11 +78,14 @@ export default async function BrandsPage() {
               >
                 <div className="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-alert-400 to-alert-300" />
                 <div className="flex items-start justify-between">
-                  <div>
-                    <h2 className="text-base font-semibold text-surface-900 group-hover:text-brand-700 transition-colors">
-                      {p.brandName}
-                    </h2>
-                    <p className="mt-0.5 text-xs text-surface-400">{p.brandCategory}</p>
+                  <div className="flex items-center gap-3">
+                    <BrandAvatar name={p.brandName} slug={p.brandSlug} size="md" />
+                    <div>
+                      <h2 className="text-base font-semibold text-surface-900 group-hover:text-brand-700 transition-colors">
+                        {p.brandName}
+                      </h2>
+                      <p className="mt-0.5 text-xs text-surface-400">{p.brandCategory}</p>
+                    </div>
                   </div>
                   {p.bestDeal && (
                     <span className="inline-flex items-center rounded-lg bg-deal-50 border border-deal-100 px-2 py-0.5 text-xs font-bold text-deal-700">
@@ -98,33 +105,37 @@ export default async function BrandsPage() {
         </section>
       )}
 
-      <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <StaggerContainer className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {brands.map((brand) => (
-          <Link
-            key={brand.slug}
-            href={`/brands/${brand.slug}`}
-            className="group rounded-2xl border border-surface-200 bg-white p-5 card-hover hover:border-brand-200"
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <h2 className="text-base font-semibold text-surface-900 group-hover:text-brand-700 transition-colors">
-                  {brand.name}
-                </h2>
-                <p className="mt-0.5 text-xs text-surface-400">{brand.category}</p>
+          <StaggerItem key={brand.slug}>
+            <Link
+              href={`/brands/${brand.slug}`}
+              className="group block rounded-2xl border border-surface-200 bg-white p-5 card-hover hover:border-brand-200"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <BrandAvatar name={brand.name} slug={brand.slug} size="md" />
+                  <div>
+                    <h2 className="text-base font-semibold text-surface-900 group-hover:text-brand-700 transition-colors">
+                      {brand.name}
+                    </h2>
+                    <p className="mt-0.5 text-xs text-surface-400">{brand.category}</p>
+                  </div>
+                </div>
+                <span className="inline-flex items-center rounded-lg bg-deal-50 border border-deal-100 px-2 py-0.5 text-xs font-bold text-deal-700">
+                  ~{brand.avgDiscount}%
+                </span>
               </div>
-              <span className="inline-flex items-center rounded-lg bg-deal-50 border border-deal-100 px-2 py-0.5 text-xs font-bold text-deal-700">
-                ~{brand.avgDiscount}%
-              </span>
-            </div>
-            <div className="mt-4 flex items-center justify-between">
-              <span className="price-display text-xs text-surface-400">
-                {brand.dealCount} active deals
-              </span>
-              <ArrowRight className="h-3.5 w-3.5 text-surface-300 transition-all group-hover:translate-x-1 group-hover:text-brand-500" />
-            </div>
-          </Link>
+              <div className="mt-4 flex items-center justify-between">
+                <span className="price-display text-xs text-surface-400">
+                  {brand.dealCount} active deals
+                </span>
+                <ArrowRight className="h-3.5 w-3.5 text-surface-300 transition-all group-hover:translate-x-1 group-hover:text-brand-500" />
+              </div>
+            </Link>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerContainer>
     </div>
   );
 }

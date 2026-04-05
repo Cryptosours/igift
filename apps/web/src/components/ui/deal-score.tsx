@@ -1,4 +1,7 @@
+"use client";
+
 import { clsx } from "clsx";
+import { motion } from "motion/react";
 
 function getScoreConfig(score: number) {
   if (score >= 85) return { label: "Excellent", className: "score-excellent text-white", ring: "ring-deal-500/20" };
@@ -11,7 +14,10 @@ export function DealScore({ score }: { score: number }) {
   const config = getScoreConfig(score);
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
       className={clsx(
         "inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 ring-2 shadow-sm",
         config.className,
@@ -20,6 +26,6 @@ export function DealScore({ score }: { score: number }) {
     >
       <span className="price-display text-sm font-bold leading-none">{score}</span>
       <span className="text-[10px] font-semibold uppercase tracking-wider opacity-80">{config.label}</span>
-    </div>
+    </motion.div>
   );
 }

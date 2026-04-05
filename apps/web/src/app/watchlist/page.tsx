@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Heart, ArrowRight, Bell, TrendingUp } from "lucide-react";
 import { getWatchlist } from "@/lib/data";
 import { DealCard } from "@/components/deals/deal-card";
+import { FadeIn } from "@/components/ui/fade-in";
 
 export const metadata: Metadata = {
   title: "My Watchlist",
@@ -21,10 +22,12 @@ export default async function WatchlistPage() {
   if (watchlist.length === 0) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <span className="data-label text-brand-600">Watchlist</span>
-          <h1 className="mt-1 heading-display text-3xl text-surface-900">My Watchlist</h1>
-        </div>
+        <FadeIn>
+          <div className="mb-8">
+            <span className="data-label text-brand-600">Watchlist</span>
+            <h1 className="mt-1 heading-display text-3xl text-surface-900">My Watchlist</h1>
+          </div>
+        </FadeIn>
 
         <div className="flex flex-col items-center justify-center py-24 text-center">
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-surface-100">
@@ -50,14 +53,15 @@ export default async function WatchlistPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <span className="data-label text-brand-600">Watchlist</span>
-          <h1 className="mt-1 heading-display text-3xl text-surface-900">My Watchlist</h1>
-          <p className="mt-2 text-sm text-surface-500">
-            {watchlist.length} brand{watchlist.length !== 1 ? "s" : ""} tracked — best current deals shown below.
-          </p>
-        </div>
+      <FadeIn>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <span className="data-label text-brand-600">Watchlist</span>
+            <h1 className="mt-1 heading-display text-3xl text-surface-900">My Watchlist</h1>
+            <p className="mt-2 text-sm text-surface-500">
+              {watchlist.length} brand{watchlist.length !== 1 ? "s" : ""} tracked — best current deals shown below.
+            </p>
+          </div>
         <Link
           href="/alerts"
           className="inline-flex items-center gap-2 rounded-xl border border-surface-200 bg-white px-4 py-2.5 text-sm font-medium text-surface-600 transition-all hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
@@ -66,6 +70,7 @@ export default async function WatchlistPage() {
           Set Price Alerts
         </Link>
       </div>
+      </FadeIn>
 
       {/* Watchlist Grid */}
       <div className="mt-8 space-y-8">

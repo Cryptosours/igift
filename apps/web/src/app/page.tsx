@@ -8,21 +8,22 @@ import {
   Globe,
   ArrowRight,
   CheckCircle2,
-  Zap,
   Eye,
   Lock,
 } from "lucide-react";
 import { DealCard } from "@/components/deals/deal-card";
-import { getDeals, getCategories } from "@/lib/data";
+import { getDeals, getCategories, getHeroStats } from "@/lib/data";
 import { sampleDeals, categories as sampleCategories } from "@/lib/sample-data";
 import { HeroSearch } from "@/components/ui/hero-search";
-import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { HomeAlertForm } from "@/components/alerts/home-alert-form";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   let deals = sampleDeals;
   let categories = sampleCategories;
+  const [heroStats] = await Promise.all([getHeroStats()]);
   try {
     const [dbDeals, dbCategories] = await Promise.all([
       getDeals({ limit: 6 }),
@@ -55,51 +56,61 @@ export default async function HomePage() {
             {/* Left column — copy */}
             <div>
               {/* Eyebrow */}
-              <div className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-brand-400/20 bg-brand-500/10 px-3 py-1 text-xs font-medium text-brand-300">
-                <span className="flex h-1.5 w-1.5 rounded-full bg-deal-400 animate-pulse-soft" />
-                Live price intelligence
-              </div>
+              <FadeIn>
+                <div className="inline-flex items-center gap-2 rounded-full border border-brand-400/20 bg-brand-500/10 px-3 py-1 text-xs font-medium text-brand-300">
+                  <span className="flex h-1.5 w-1.5 rounded-full bg-deal-400 animate-pulse-soft" />
+                  Live price intelligence
+                </div>
+              </FadeIn>
 
-              <h1 className="animate-fade-up delay-100 mt-6 heading-display text-4xl text-white sm:text-5xl lg:text-[3.5rem]">
-                Stop guessing.
-                <br />
-                <span className="bg-gradient-to-r from-deal-400 to-deal-300 bg-clip-text text-transparent">
-                  Start saving.
-                </span>
-              </h1>
+              <FadeIn delay={0.1}>
+                <h1 className="mt-6 heading-display text-4xl text-white sm:text-5xl lg:text-[3.5rem]">
+                  Stop guessing.
+                  <br />
+                  <span className="bg-gradient-to-r from-deal-400 to-deal-300 bg-clip-text text-transparent">
+                    Start saving.
+                  </span>
+                </h1>
+              </FadeIn>
 
-              <p className="animate-fade-up delay-200 mt-5 max-w-lg text-base leading-relaxed text-surface-400">
-                We compute the real effective price on gift cards, credits, and
-                vouchers — factoring in fees, region locks, and seller trust — so
-                you never overpay.
-              </p>
+              <FadeIn delay={0.2}>
+                <p className="mt-5 max-w-lg text-base leading-relaxed text-surface-400">
+                  We compute the real effective price on gift cards, credits, and
+                  vouchers — factoring in fees, region locks, and seller trust — so
+                  you never overpay.
+                </p>
+              </FadeIn>
 
               {/* Search */}
-              <div className="animate-fade-up delay-300 mt-8 max-w-md">
-                <HeroSearch />
-              </div>
+              <FadeIn delay={0.3}>
+                <div className="mt-8 max-w-md">
+                  <HeroSearch />
+                </div>
+              </FadeIn>
 
               {/* CTA row */}
-              <div className="animate-fade-up delay-400 mt-5 flex flex-wrap items-center gap-3">
-                <Link
-                  href="/deals"
-                  className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-surface-900 shadow-lg shadow-white/10 transition-all hover:shadow-xl hover:shadow-white/20 active:scale-[0.98]"
-                >
-                  <Search className="h-4 w-4" />
-                  Browse All Deals
-                </Link>
-                <Link
-                  href="/alerts"
-                  className="inline-flex items-center gap-2 rounded-xl border border-surface-700 bg-surface-800/50 px-5 py-2.5 text-sm font-semibold text-surface-300 transition-all hover:border-surface-600 hover:bg-surface-800 hover:text-white"
-                >
-                  <Bell className="h-4 w-4" />
-                  Set Price Alert
-                </Link>
-              </div>
+              <FadeIn delay={0.4}>
+                <div className="mt-5 flex flex-wrap items-center gap-3">
+                  <Link
+                    href="/deals"
+                    className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-surface-900 shadow-lg shadow-white/10 transition-all hover:shadow-xl hover:shadow-white/20 active:scale-[0.98]"
+                  >
+                    <Search className="h-4 w-4" />
+                    Browse All Deals
+                  </Link>
+                  <Link
+                    href="/alerts"
+                    className="inline-flex items-center gap-2 rounded-xl border border-surface-700 bg-surface-800/50 px-5 py-2.5 text-sm font-semibold text-surface-300 transition-all hover:border-surface-600 hover:bg-surface-800 hover:text-white"
+                  >
+                    <Bell className="h-4 w-4" />
+                    Set Price Alert
+                  </Link>
+                </div>
+              </FadeIn>
             </div>
 
             {/* Right column — live stats dashboard card */}
-            <div className="animate-scale-up delay-300 hidden lg:block">
+            <FadeIn delay={0.3} className="hidden lg:block">
               <div className="relative rounded-2xl border border-surface-800 bg-surface-900/80 p-6 shadow-2xl shadow-brand-500/5">
                 {/* Card header */}
                 <div className="flex items-center justify-between mb-5">
@@ -111,27 +122,25 @@ export default async function HomePage() {
                 </div>
 
                 {/* Stats grid */}
-                <div className="grid grid-cols-2 gap-4">
+                <StaggerContainer className="grid grid-cols-2 gap-4" stagger={0.1}>
                   {[
-                    { value: "180+", label: "Active Offers", accent: "text-white" },
-                    { value: "15", label: "Verified Sources", accent: "text-brand-400" },
-                    { value: "-12%", label: "Avg. Discount", accent: "text-deal-400" },
+                    { value: `${heroStats.activeOffers}+`, label: "Active Offers", accent: "text-white" },
+                    { value: String(heroStats.verifiedSources), label: "Verified Sources", accent: "text-brand-400" },
+                    { value: `-${heroStats.avgDiscount}%`, label: "Avg. Discount", accent: "text-deal-400" },
                     { value: "2-Score", label: "Trust System", accent: "text-alert-400" },
-                  ].map((stat, i) => (
-                    <div
-                      key={stat.label}
-                      className={`animate-fade-up rounded-xl bg-surface-800/60 p-4`}
-                      style={{ animationDelay: `${400 + i * 100}ms` }}
-                    >
-                      <div className={`price-display text-2xl font-bold ${stat.accent}`}>
-                        {stat.value}
+                  ].map((stat) => (
+                    <StaggerItem key={stat.label}>
+                      <div className="rounded-xl bg-surface-800/60 p-4">
+                        <div className={`price-display text-2xl font-bold ${stat.accent}`}>
+                          {stat.value}
+                        </div>
+                        <div className="data-label text-surface-500 mt-1">
+                          {stat.label}
+                        </div>
                       </div>
-                      <div className="data-label text-surface-500 mt-1">
-                        {stat.label}
-                      </div>
-                    </div>
+                    </StaggerItem>
                   ))}
-                </div>
+                </StaggerContainer>
 
                 {/* Mini deal preview */}
                 <div className="mt-4 rounded-xl border border-surface-800 bg-surface-950/50 p-4">
@@ -151,23 +160,25 @@ export default async function HomePage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </FadeIn>
           </div>
 
           {/* Trust bar — bottom of hero */}
-          <div className="animate-fade-up delay-600 mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-surface-800 pt-8">
+          <StaggerContainer className="mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-surface-800 pt-8" stagger={0.06}>
             {[
               { icon: ShieldCheck, text: "Trust-scored sources" },
               { icon: Eye, text: "Fee transparency" },
               { icon: Globe, text: "Region-aware" },
               { icon: Lock, text: "No payment processing" },
             ].map((item) => (
-              <div key={item.text} className="flex items-center gap-2 text-sm text-surface-500">
-                <item.icon className="h-4 w-4 text-surface-600" />
-                {item.text}
-              </div>
+              <StaggerItem key={item.text}>
+                <div className="flex items-center gap-2 text-sm text-surface-500">
+                  <item.icon className="h-4 w-4 text-surface-600" />
+                  {item.text}
+                </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
@@ -176,7 +187,7 @@ export default async function HomePage() {
           ══════════════════════════════════════ */}
       <section className="relative border-b border-surface-200 bg-white py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
+          <FadeIn>
             <div className="text-center">
               <span className="data-label text-brand-600">How it works</span>
               <h2 className="mt-2 heading-display text-3xl text-surface-900 sm:text-4xl">
@@ -187,9 +198,9 @@ export default async function HomePage() {
                 and scored across four dimensions.
               </p>
             </div>
-          </ScrollReveal>
+          </FadeIn>
 
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <StaggerContainer className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
                 icon: TrendingUp,
@@ -215,9 +226,9 @@ export default async function HomePage() {
                 body: "Sources classified Green, Yellow, or Red. Authorization, buyer protection, and fraud signals — all visible.",
                 accent: "from-brand-400 to-brand-600",
               },
-            ].map((feature, i) => (
-              <ScrollReveal key={feature.title} delay={i * 100}>
-                <div className="group relative rounded-2xl border border-surface-200 bg-surface-50/50 p-6 transition-all hover:border-surface-300 hover:bg-white hover:shadow-lg hover:shadow-surface-200/50 card-hover">
+            ].map((feature) => (
+              <StaggerItem key={feature.title}>
+                <div className="group relative rounded-2xl border border-surface-200 bg-surface-50/50 p-6 transition-colors hover:border-surface-300 hover:bg-white hover:shadow-lg hover:shadow-surface-200/50">
                   <div className={`inline-flex rounded-xl bg-gradient-to-br ${feature.accent} p-2.5 shadow-sm`}>
                     <feature.icon className="h-5 w-5 text-white" />
                   </div>
@@ -228,9 +239,9 @@ export default async function HomePage() {
                     {feature.body}
                   </p>
                 </div>
-              </ScrollReveal>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
@@ -239,7 +250,7 @@ export default async function HomePage() {
           ══════════════════════════════════════ */}
       <section className="bg-dots py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
+          <FadeIn>
             <div className="flex items-end justify-between">
               <div>
                 <span className="data-label text-deal-600">Top picks</span>
@@ -258,15 +269,15 @@ export default async function HomePage() {
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-          </ScrollReveal>
+          </FadeIn>
 
-          <div className="mt-8 grid gap-4 lg:grid-cols-2">
-            {deals.map((deal, i) => (
-              <ScrollReveal key={deal.id} delay={i * 80}>
+          <StaggerContainer className="mt-8 grid gap-4 lg:grid-cols-2">
+            {deals.map((deal) => (
+              <StaggerItem key={deal.id}>
                 <DealCard deal={deal} />
-              </ScrollReveal>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
 
           <div className="mt-8 text-center sm:hidden">
             <Link
@@ -285,22 +296,24 @@ export default async function HomePage() {
           ══════════════════════════════════════ */}
       <section className="border-t border-surface-200 bg-white py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <span className="data-label text-brand-600">Categories</span>
-            <h2 className="mt-1 heading-display text-3xl text-surface-900">
-              Browse by category
-            </h2>
-            <p className="mt-2 text-sm text-surface-500">
-              Find verified deals across all major digital value categories.
-            </p>
-          </ScrollReveal>
+          <FadeIn>
+            <div>
+              <span className="data-label text-brand-600">Categories</span>
+              <h2 className="mt-1 heading-display text-3xl text-surface-900">
+                Browse by category
+              </h2>
+              <p className="mt-2 text-sm text-surface-500">
+                Find verified deals across all major digital value categories.
+              </p>
+            </div>
+          </FadeIn>
 
-          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {categories.map((cat, i) => (
-              <ScrollReveal key={cat.slug} delay={i * 60}>
+          <StaggerContainer className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3" stagger={0.06}>
+            {categories.map((cat) => (
+              <StaggerItem key={cat.slug}>
                 <Link
                   href={`/categories/${cat.slug}`}
-                  className="group flex items-center gap-4 rounded-xl border border-surface-200 bg-surface-50/50 p-5 transition-all card-hover hover:border-brand-200 hover:bg-white"
+                  className="group flex items-center gap-4 rounded-xl border border-surface-200 bg-surface-50/50 p-5 transition-colors hover:border-brand-200 hover:bg-white hover:shadow-lg hover:shadow-surface-200/50"
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-2xl transition-transform group-hover:scale-110">
                     {cat.icon}
@@ -320,9 +333,9 @@ export default async function HomePage() {
                   </div>
                   <ArrowRight className="h-4 w-4 text-surface-300 transition-all group-hover:translate-x-1 group-hover:text-brand-500" />
                 </Link>
-              </ScrollReveal>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
@@ -332,7 +345,7 @@ export default async function HomePage() {
       <section className="bg-surface-950 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-            <ScrollReveal>
+            <FadeIn>
               <div>
                 <span className="data-label text-brand-400">Our promise</span>
                 <h2 className="mt-2 heading-display text-3xl text-white sm:text-4xl">
@@ -362,39 +375,13 @@ export default async function HomePage() {
                   ))}
                 </ul>
               </div>
-            </ScrollReveal>
+            </FadeIn>
 
-            <ScrollReveal delay={150}>
+            <FadeIn delay={0.15}>
               <div className="rounded-2xl border border-surface-800 bg-surface-900 p-8">
-                <div className="flex items-center gap-2 mb-1">
-                  <Zap className="h-4 w-4 text-alert-400" />
-                  <h3 className="text-base font-semibold text-white">
-                    Free price alerts
-                  </h3>
-                </div>
-                <p className="text-sm text-surface-500">
-                  Get notified when a verified deal drops to your target price.
-                </p>
-                <div className="mt-5 space-y-3">
-                  <input
-                    type="text"
-                    placeholder="Brand or product (e.g., Steam $50)"
-                    className="w-full rounded-xl border border-surface-700 bg-surface-800 px-4 py-2.5 text-sm text-white placeholder:text-surface-600 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors"
-                  />
-                  <input
-                    type="email"
-                    placeholder="your@email.com"
-                    className="w-full rounded-xl border border-surface-700 bg-surface-800 px-4 py-2.5 text-sm text-white placeholder:text-surface-600 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors"
-                  />
-                  <button className="w-full rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-600/25 transition-all hover:bg-brand-500 hover:shadow-xl hover:shadow-brand-500/30 active:scale-[0.98]">
-                    Create Alert
-                  </button>
-                </div>
-                <p className="mt-4 text-[10px] text-surface-600">
-                  Free tier includes 3 active alerts. No spam, ever.
-                </p>
+                <HomeAlertForm />
               </div>
-            </ScrollReveal>
+            </FadeIn>
           </div>
         </div>
       </section>
