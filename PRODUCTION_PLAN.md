@@ -105,7 +105,7 @@
 | # | Task | Status | Specialist | Priority |
 |---|------|--------|------------|----------|
 | 4.1 | B2B / API product (read-only deal data API) | DONE | Architect | High |
-| 4.2 | Partner feed expansion (10+ new sources) | TODO | Operator | High |
+| 4.2 | Partner feed expansion (10+ new sources) | DONE | Operator | High |
 | 4.3 | Historical analytics and trend pages | DONE | Builder | Medium |
 | 4.4 | Merchant/source scorecards | TODO | Builder | Medium |
 | 4.5 | Additional languages (de-DE) | TODO | Builder | Medium |

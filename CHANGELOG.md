@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.9.0] — 2026-04-05
+
+### Added
+- Partner feed expansion — 10 new sources, 6 new brands (task 4.2)
+  - **5 new live HTML source adapters** (parse waterfall: JSON-LD → data attrs → regex):
+    - `cdkeys.ts` — CDKeys.com (green zone, authorized reseller, Trustpilot 4.4/5) · 23 SKUs tracked
+    - `eneba.ts` — Eneba.com (yellow zone, EU marketplace) · 15 SKUs, prefers `__NEXT_DATA__` JSON
+    - `offgamers.ts` — OffGamers.com (yellow zone, Asian marketplace) · 16 SKUs
+    - `g2a.ts` — G2A.com (yellow zone, `hasBuyerProtection: false` by default) · 14 SKUs
+    - `kinguin.ts` — Kinguin.net (yellow zone, Polish marketplace) · 17 SKUs
+  - **5 new catalog sources** (manual verification, green zone):
+    - Best Buy, Target, Newegg, Walmart, GameStop — 13 new catalog entries
+  - **6 new brands**: Roblox, Valorant, Twitch, EA Play, PlayStation Plus, Razer Gold
+  - DB migration `0003_expand_sources_brands.sql` — INSERT 10 new sources + 6 brands
+  - `seed.ts` updated with all 20 new sources/brands for local dev
+  - Orchestrator: all 5 new live adapters registered in `getRegisteredAdapters()`
+  - `adapters/index.ts`: full exports for all new adapters + catalog entries
+
+### Fixed
+- `metadataBase` warning in root layout — set to `https://igift.app` to resolve OG image URL resolution
+- Total source count: 6 live + 4 catalog → 11 live + 9 catalog (20 total)
+
 ## [2.8.0] — 2026-04-05
 
 ### Added

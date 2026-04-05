@@ -1,5 +1,41 @@
 # iGift — Session Log
 
+## Session 18 — 2026-04-05 — Partner Feed Expansion (Task 4.2)
+
+### What Was Done
+- **Task 4.2: Partner feed expansion — 10 new sources, 6 new brands**
+  - 5 new live HTML source adapters (parse waterfall pattern):
+    - `cdkeys.ts` — CDKeys.com, authorized reseller (green zone), Trustpilot 4.4/5, 23 SKUs
+    - `eneba.ts` — Eneba.com, EU marketplace (yellow zone), 15 SKUs, prefers `__NEXT_DATA__` JSON
+    - `offgamers.ts` — OffGamers.com, Asian marketplace (yellow zone), 16 SKUs
+    - `g2a.ts` — G2A.com, major marketplace (yellow zone), 14 SKUs, `hasBuyerProtection: false`
+    - `kinguin.ts` — Kinguin.net, Polish marketplace (yellow zone), 17 SKUs
+  - 5 new catalog sources added to `catalog.ts`: Best Buy, Target, Newegg, Walmart, GameStop
+  - All adapters follow the parse waterfall: JSON-LD → data attributes → regex fallback
+  - `orchestrator.ts` updated: all 5 new live adapters registered in `getRegisteredAdapters()`
+  - `adapters/index.ts`: all new exports added (live + catalog)
+  - 6 new brands: Roblox, Valorant, Twitch, EA Play, PlayStation Plus, Razer Gold
+  - DB migration `0003_expand_sources_brands.sql`: INSERT 10 new sources + 6 brands
+  - `seed.ts`: 10 new sources + 6 new brands added for local dev
+  - Root layout `metadataBase` warning fixed (`new URL("https://igift.app")`)
+
+### Build Status
+- `npx turbo build` — PASS (19.0s, 0 type errors)
+- Type errors fixed during build: `countryRedeemable: string` → `string[]`, `rawSnapshot: string` → `Record<string, unknown>`, missing `originalTitle/externalUrl/sellerName` fields
+
+### Architecture Notes
+- **Parse waterfall pattern**: JSON-LD (most semantic, most stable) → embedded Next.js `__NEXT_DATA__` (for sites using Next.js) → HTML data attributes → regex fallback. Order chosen for brittleness resistance.
+- **Trust zone encoding**: green zone adapters get `sellerRating: 0.80+`, yellow zone adapters get lower ratings (0.72-0.82). G2A explicitly sets `hasBuyerProtection: false` because their Shield program is opt-in per purchase.
+- **Polite delays**: 500-700ms between requests per adapter. No auth bypass, no session cookies.
+- **Total sources**: grew from 10 → 20 (11 live adapters + 9 catalog adapters)
+- **VPS deploy**: SSH to 69.30.247.151 port 22 refused (likely fail2ban triggered by repeated auth failures during key discovery). Code pushed to GitHub — manual `git pull + docker compose build` needed on VPS.
+
+### Git
+- Commit: `feat: partner feed expansion — 10 new sources, 6 new brands (task 4.2)` — c71eb94
+- Pushed to: github.com/Cryptosours/igift main
+
+---
+
 ## Session 17 — 2026-04-05 — Historical Analytics & Trend Pages (Task 4.3)
 
 ### What Was Done
