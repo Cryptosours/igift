@@ -33,6 +33,12 @@ import { raiseAdapter } from "./adapters/raise";
 import { giftCardGrannyAdapter } from "./adapters/giftcardgranny";
 import { gameflipAdapter } from "./adapters/gameflip";
 import { buySellVouchersAdapter } from "./adapters/buysellvouchers";
+// Phase 4.2 — new live source adapters
+import { cdkeysAdapter } from "./adapters/cdkeys";
+import { enebaAdapter } from "./adapters/eneba";
+import { offgamersAdapter } from "./adapters/offgamers";
+import { g2aAdapter } from "./adapters/g2a";
+import { kinguinAdapter } from "./adapters/kinguin";
 import { getAllCatalogAdapters } from "./adapters/catalog";
 
 /** All registered adapters. Add new ones here. */
@@ -44,6 +50,12 @@ function getRegisteredAdapters(): SourceAdapter[] {
     giftCardGrannyAdapter,
     gameflipAdapter,
     buySellVouchersAdapter,
+    // Phase 4.2 live adapters
+    cdkeysAdapter,
+    enebaAdapter,
+    offgamersAdapter,
+    g2aAdapter,
+    kinguinAdapter,
     ...getAllCatalogAdapters(),
   ];
 }

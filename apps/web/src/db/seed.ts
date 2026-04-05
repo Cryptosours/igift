@@ -129,7 +129,126 @@ async function seed() {
       ])
       .returning();
 
-  console.log(`  Seeded ${10} sources`);
+  console.log(`  Seeded 10 existing sources`);
+
+  // Phase 4.2 — 10 new sources
+  await db
+    .insert(sources)
+    .values([
+      {
+        name: "CDKeys",
+        slug: "cdkeys",
+        url: "https://www.cdkeys.com",
+        sourceType: "authorized_reseller",
+        trustZone: "green",
+        hasBuyerProtection: true,
+        hasRefundPolicy: true,
+        refreshIntervalMinutes: 60,
+        contractNotes: "Reputable authorized reseller. Trustpilot 4.4/5.",
+      },
+      {
+        name: "Eneba",
+        slug: "eneba",
+        url: "https://www.eneba.com",
+        sourceType: "marketplace_resale",
+        trustZone: "yellow",
+        hasBuyerProtection: true,
+        hasRefundPolicy: true,
+        refreshIntervalMinutes: 60,
+        contractNotes: "EU-regulated digital marketplace.",
+      },
+      {
+        name: "OffGamers",
+        slug: "offgamers",
+        url: "https://www.offgamers.com",
+        sourceType: "marketplace_resale",
+        trustZone: "yellow",
+        hasBuyerProtection: true,
+        hasRefundPolicy: false,
+        refreshIntervalMinutes: 60,
+        contractNotes: "Asian-based digital key marketplace. Global coverage.",
+      },
+      {
+        name: "G2A",
+        slug: "g2a",
+        url: "https://www.g2a.com",
+        sourceType: "marketplace_resale",
+        trustZone: "yellow",
+        hasBuyerProtection: false,
+        hasRefundPolicy: false,
+        refreshIntervalMinutes: 60,
+        contractNotes: "Major key marketplace. G2A Shield is opt-in per purchase.",
+      },
+      {
+        name: "Kinguin",
+        slug: "kinguin",
+        url: "https://www.kinguin.net",
+        sourceType: "marketplace_resale",
+        trustZone: "yellow",
+        hasBuyerProtection: true,
+        hasRefundPolicy: false,
+        refreshIntervalMinutes: 60,
+        contractNotes: "Polish marketplace. Kinguin Buyer Protection available.",
+      },
+      {
+        name: "Best Buy",
+        slug: "bestbuy",
+        url: "https://www.bestbuy.com",
+        sourceType: "authorized_reseller",
+        trustZone: "green",
+        hasBuyerProtection: true,
+        hasRefundPolicy: true,
+        refreshIntervalMinutes: 120,
+        contractNotes: "Major authorized US retailer.",
+      },
+      {
+        name: "Target",
+        slug: "target",
+        url: "https://www.target.com",
+        sourceType: "authorized_reseller",
+        trustZone: "green",
+        hasBuyerProtection: true,
+        hasRefundPolicy: true,
+        refreshIntervalMinutes: 120,
+        contractNotes: "Major authorized US retailer.",
+      },
+      {
+        name: "Newegg",
+        slug: "newegg",
+        url: "https://www.newegg.com",
+        sourceType: "authorized_reseller",
+        trustZone: "green",
+        hasBuyerProtection: true,
+        hasRefundPolicy: true,
+        refreshIntervalMinutes: 120,
+        contractNotes: "Authorized electronics/gaming reseller.",
+      },
+      {
+        name: "Walmart",
+        slug: "walmart",
+        url: "https://www.walmart.com",
+        sourceType: "authorized_reseller",
+        trustZone: "green",
+        hasBuyerProtection: true,
+        hasRefundPolicy: true,
+        refreshIntervalMinutes: 120,
+        contractNotes: "Major authorized US retailer.",
+      },
+      {
+        name: "GameStop",
+        slug: "gamestop",
+        url: "https://www.gamestop.com",
+        sourceType: "authorized_reseller",
+        trustZone: "green",
+        hasBuyerProtection: true,
+        hasRefundPolicy: true,
+        refreshIntervalMinutes: 120,
+        contractNotes: "Major authorized gaming retailer.",
+      },
+    ])
+    .onConflictDoNothing();
+
+  console.log(`  Seeded 10 new sources (Phase 4.2)`);
 
   // ── Brands ──
   const brandRows = await db
@@ -151,7 +270,23 @@ async function seed() {
     ])
     .returning();
 
-  console.log(`  Seeded ${brandRows.length} brands`);
+  console.log(`  Seeded ${brandRows.length} existing brands`);
+
+  // Phase 4.2 — 6 new brands
+  const newBrandRows = await db
+    .insert(brands)
+    .values([
+      { name: "Roblox",           slug: "roblox",          category: "gaming",    description: "Roblox platform gift cards", regionsSupported: ["US", "Global"] },
+      { name: "Valorant",         slug: "valorant",         category: "gaming",    description: "Valorant Points gift cards", regionsSupported: ["US", "EU", "Global"] },
+      { name: "Twitch",           slug: "twitch",           category: "streaming", description: "Twitch gift cards & subscriptions", regionsSupported: ["US", "EU", "Global"] },
+      { name: "EA Play",          slug: "ea-play",          category: "gaming",    description: "EA Play membership gift cards", regionsSupported: ["US", "EU", "Global"] },
+      { name: "PlayStation Plus", slug: "playstation-plus", category: "gaming",    description: "PlayStation Plus membership cards", regionsSupported: ["US", "EU", "JP"] },
+      { name: "Razer Gold",       slug: "razer-gold",       category: "gaming",    description: "Razer Gold in-game currency cards", regionsSupported: ["US", "Global"] },
+    ])
+    .onConflictDoNothing()
+    .returning();
+
+  console.log(`  Seeded ${newBrandRows.length} new brands (Phase 4.2)`);
 
   // ── Offers ──
   // Realistic deals with scoring

@@ -19,6 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://igift.app"),
   title: {
     default: "iGift — Verified Digital Value Deals",
     template: "%s | iGift",
