@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.8.0] — 2026-04-05
+
+### Added
+- Historical analytics and trend pages (task 4.3)
+  - `PriceHistoryChart` client component (`src/components/analytics/price-history-chart.tsx`)
+    - Recharts `ComposedChart` with dual Y-axes: effective price (left, indigo area) + discount % (right, green line)
+    - All-time low reference line, custom tooltip, empty-state fallback
+  - `/historical-lows` page: SEO-optimised grid of brands currently at all-time low prices
+    - Fetches via `getHistoricalLowBrands()` (joins `brands` + `offers WHERE isHistoricalLow = true`)
+    - Category emoji badges, price/discount display, CTA → `/alerts`
+  - 90-day price trend section on each `/brands/[slug]` detail page
+    - Parallel fetch via `Promise.all([getWatchedSlugs, getPriceHistory])`
+    - All-time low badge in page header
+  - `GET /api/v1/brands/:slug/history` B2B endpoint
+    - Free tier: max 90 days · Pro tier: max 365 days
+    - Query params: `days`, `denomination`
+    - Returns `{ data: PricePoint[], meta: { allTimeLowCents, days, points, tier, maxDays } }`
+  - `getPriceHistory()` in `lib/data.ts`: daily-aggregated price series via `DATE_TRUNC('day') + MIN()`
+  - `getHistoricalLowBrands()` in `lib/data.ts`: brands at all-time lows with best-offer details
+  - `getBrandBySlug()` now exposes `id` field (required for price history lookup)
+  - Header nav: "Hist. Lows" link · Footer: "Historical Lows" in Product section
+
 ## [2.7.0] — 2026-04-05
 
 ### Added
