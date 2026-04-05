@@ -5,7 +5,8 @@ import { ArrowLeft, Globe, ShieldCheck, TrendingUp } from "lucide-react";
 import { DealCard } from "@/components/deals/deal-card";
 import { WatchButton } from "@/components/ui/watch-button";
 import { BrandAvatar } from "@/components/ui/brand-avatar";
-import { getBrandBySlug, getWatchedSlugs } from "@/lib/data";
+import { getBrandBySlug, getWatchedSlugs, getPriceHistory } from "@/lib/data";
+import { PriceHistoryChart } from "@/components/analytics/price-history-chart";
 import { notFound } from "next/navigation";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
@@ -72,8 +73,16 @@ export default async function BrandDetailPage({ params }: Props) {
 
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("igift_session")?.value;
-  const watchedSlugs = await getWatchedSlugs(sessionId);
+  const [watchedSlugs, priceHistory] = await Promise.all([
+    getWatchedSlugs(sessionId),
+    getPriceHistory(brand.id, { days: 90 }),
+  ]);
   const isWatched = watchedSlugs.has(slug);
+
+  // Compute all-time low from historical data to show as reference line
+  const allTimeLowCents = priceHistory.length > 0
+    ? Math.min(...priceHistory.map((p) => p.priceCents))
+    : undefined;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -150,6 +159,34 @@ export default async function BrandDetailPage({ params }: Props) {
           </p>
         </FadeIn>
       )}
+
+      {/* Price History Chart */}
+      <FadeIn delay={0.18}>
+        <div className="mt-10">
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-bold text-surface-900">90-Day Price Trend</h2>
+              <p className="mt-0.5 text-xs text-surface-400">
+                Daily best price · Indigo = effective price · Green = discount %
+              </p>
+            </div>
+            {allTimeLowCents && (
+              <div className="rounded-xl border border-deal-200 bg-deal-50 px-3 py-1.5 text-right">
+                <p className="text-[10px] font-medium uppercase tracking-wide text-deal-600">All-time low</p>
+                <p className="price-display text-sm font-bold text-deal-700">
+                  ${(allTimeLowCents / 100).toFixed(2)}
+                </p>
+              </div>
+            )}
+          </div>
+          <div className="rounded-2xl border border-surface-200 bg-white p-5">
+            <PriceHistoryChart
+              data={priceHistory}
+              allTimeLowCents={allTimeLowCents}
+            />
+          </div>
+        </div>
+      </FadeIn>
 
       <BrandJsonLd brand={brand} deals={brand.deals} />
     </div>

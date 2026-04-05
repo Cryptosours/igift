@@ -1,6 +1,6 @@
 import { db } from "@/db";
-import { offers, brands, sources, watchlistItems, sponsoredPlacements } from "@/db/schema";
-import { eq, desc, and, or, ilike, count, avg, sql, lte, gte } from "drizzle-orm";
+import { offers, brands, sources, watchlistItems, sponsoredPlacements, priceHistory } from "@/db/schema";
+import { eq, desc, and, or, ilike, count, avg, sql, lte, gte, min } from "drizzle-orm";
 import type { DealCardProps } from "@/components/deals/deal-card";
 
 // ── Helpers ──
@@ -263,6 +263,7 @@ export async function getBrandBySlug(slug: string) {
   const deals = await getDeals({ brandSlug: slug, limit: 50 });
 
   return {
+    id: brand.id,
     name: brand.name,
     slug: brand.slug,
     category: categoryMeta[brand.category]?.name ?? brand.category,
@@ -568,6 +569,128 @@ export async function getDashboardStats(): Promise<{
 }
 
 /** Aggregate stats for the hero dashboard card */
+// ── Price History ──
+
+export interface PricePoint {
+  date: string;          // ISO date string YYYY-MM-DD
+  priceCents: number;    // lowest effective price seen that day
+  discountPct: number;   // corresponding discount percentage
+}
+
+/**
+ * Returns daily price history for a brand over the last N days.
+ * One point per day: the lowest effective price seen (best deal of the day).
+ * Optionally filtered by denomination (e.g. "$50", "€25").
+ */
+export async function getPriceHistory(
+  brandId: number,
+  options?: { days?: number; denomination?: string },
+): Promise<PricePoint[]> {
+  const days = options?.days ?? 90;
+  const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+
+  try {
+    // Daily aggregation using DATE_TRUNC — one point per day (lowest price)
+    const rows = await db
+      .select({
+        day: sql<string>`DATE_TRUNC('day', ${priceHistory.recordedAt})::date::text`,
+        priceCents: min(priceHistory.effectivePriceCents),
+        discountPct: min(priceHistory.effectiveDiscountPct),
+      })
+      .from(priceHistory)
+      .where(
+        and(
+          eq(priceHistory.brandId, brandId),
+          gte(priceHistory.recordedAt, cutoff),
+          ...(options?.denomination
+            ? [eq(priceHistory.denomination, options.denomination)]
+            : []),
+        ),
+      )
+      .groupBy(sql`DATE_TRUNC('day', ${priceHistory.recordedAt})::date`)
+      .orderBy(sql`DATE_TRUNC('day', ${priceHistory.recordedAt})::date`);
+
+    return rows.map((r) => ({
+      date: r.day,
+      priceCents: Number(r.priceCents ?? 0),
+      discountPct: Number(r.discountPct ?? 0),
+    }));
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Returns all brands currently at a confirmed historical low —
+ * i.e. they have at least one active offer with isHistoricalLow = true.
+ * Used for the /historical-lows page.
+ */
+export async function getHistoricalLowBrands(): Promise<
+  {
+    id: number;
+    name: string;
+    slug: string;
+    category: string;
+    bestDeal: {
+      faceValueCents: number;
+      effectivePriceCents: number;
+      discountPct: number;
+      finalScore: number;
+      currency: string;
+    } | null;
+  }[]
+> {
+  try {
+    const rows = await db
+      .select({
+        id: brands.id,
+        name: brands.name,
+        slug: brands.slug,
+        category: brands.category,
+        faceValueCents: offers.faceValueCents,
+        effectivePriceCents: offers.effectivePriceCents,
+        discountPct: offers.effectiveDiscountPct,
+        finalScore: offers.finalScore,
+        currency: offers.currency,
+      })
+      .from(brands)
+      .innerJoin(
+        offers,
+        and(
+          eq(offers.brandId, brands.id),
+          eq(offers.status, "active"),
+          eq(offers.isHistoricalLow, true),
+        ),
+      )
+      .where(eq(brands.isActive, true))
+      .orderBy(desc(offers.finalScore));
+
+    // Deduplicate — one entry per brand (the best scoring offer)
+    const seen = new Set<number>();
+    return rows
+      .filter((r) => {
+        if (seen.has(r.id)) return false;
+        seen.add(r.id);
+        return true;
+      })
+      .map((r) => ({
+        id: r.id,
+        name: r.name,
+        slug: r.slug,
+        category: r.category,
+        bestDeal: {
+          faceValueCents: r.faceValueCents,
+          effectivePriceCents: r.effectivePriceCents,
+          discountPct: Number(r.discountPct),
+          finalScore: Number(r.finalScore ?? 0),
+          currency: r.currency,
+        },
+      }));
+  } catch {
+    return [];
+  }
+}
+
 export async function getHeroStats(): Promise<{
   activeOffers: number;
   verifiedSources: number;

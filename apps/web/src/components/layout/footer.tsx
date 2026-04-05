@@ -4,6 +4,7 @@ import { Logo } from "@/components/ui/logo";
 const footerLinks = {
   Product: [
     { name: "Deals", href: "/deals" },
+    { name: "Historical Lows", href: "/historical-lows" },
     { name: "Brands", href: "/brands" },
     { name: "Categories", href: "/categories" },
     { name: "Price Alerts", href: "/alerts" },

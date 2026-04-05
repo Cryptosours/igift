@@ -10,6 +10,7 @@ import {
   Menu,
   X,
   TrendingUp,
+  TrendingDown,
   Tag,
   Store,
   BookOpen,
@@ -21,6 +22,7 @@ import { Logo } from "@/components/ui/logo";
 
 const navigation = [
   { name: "Deals", href: "/deals", icon: TrendingUp },
+  { name: "Hist. Lows", href: "/historical-lows", icon: TrendingDown },
   { name: "Brands", href: "/brands", icon: Tag },
   { name: "Categories", href: "/categories", icon: Store },
   { name: "Methodology", href: "/methodology", icon: BookOpen },
