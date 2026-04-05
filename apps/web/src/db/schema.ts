@@ -291,6 +291,37 @@ export const sponsoredPlacements = pgTable("sponsored_placements", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+// ── API Keys ──
+// B2B read-only API access. Raw key shown once at creation; only SHA-256 hash stored.
+// Rate limiting: requests counted per key per rolling 1-hour window.
+
+export const apiTierEnum = pgEnum("api_tier", ["free", "pro"]);
+
+export const apiKeys = pgTable(
+  "api_keys",
+  {
+    id: serial("id").primaryKey(),
+    // SHA-256 hash of the raw key — never store plaintext
+    keyHash: text("key_hash").notNull().unique(),
+    // Human-readable label for the key owner
+    name: text("name").notNull(),
+    ownerEmail: text("owner_email").notNull(),
+    tier: apiTierEnum("tier").notNull().default("free"),
+    // free: 100 req/hour, pro: 1000 req/hour
+    rateLimitPerHour: integer("rate_limit_per_hour").notNull().default(100),
+    isActive: boolean("is_active").notNull().default(true),
+    lastUsedAt: timestamp("last_used_at", { withTimezone: true }),
+    // Rolling window request count (reset logic in middleware)
+    requestCountHour: integer("request_count_hour").notNull().default(0),
+    windowStartAt: timestamp("window_start_at", { withTimezone: true }).notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("idx_api_keys_hash").on(table.keyHash),
+    index("idx_api_keys_email").on(table.ownerEmail),
+  ],
+);
+
 // ── Type exports for application use ──
 
 export type Source = typeof sources.$inferSelect;
@@ -306,3 +337,5 @@ export type ModerationCase = typeof moderationCases.$inferSelect;
 export type AffiliateClick = typeof affiliateClicks.$inferSelect;
 export type WatchlistItem = typeof watchlistItems.$inferSelect;
 export type SponsoredPlacement = typeof sponsoredPlacements.$inferSelect;
+export type ApiKey = typeof apiKeys.$inferSelect;
+export type NewApiKey = typeof apiKeys.$inferInsert;

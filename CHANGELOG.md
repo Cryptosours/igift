@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.7.0] — 2026-04-05
+
+### Added
+- B2B API product (task 4.1)
+  - `api_keys` table in DB schema with SHA-256 key hashing, tier enum (free/pro), rolling rate-limit counters
+  - Migration: `0002_add_api_keys.sql`
+  - Auth middleware: `src/app/api/v1/auth.ts` — extracts key from `X-API-Key` or `Authorization: Bearer`, hashes, validates, enforces rolling 1-hour rate window via DB
+  - `GET /api/v1/deals` — paginated active deals with filters (category, trust_zone, region, min_score, cursor)
+  - `GET /api/v1/brands` — paginated active brands with active offer counts
+  - `GET /api/v1/brands/[slug]` — single brand with all current active offers
+  - `GET /api/v1/stats` — platform statistics (total active offers, brands, historical lows, by-category breakdown)
+  - `GET|POST|DELETE /api/admin/api-keys` — admin key management; POST returns raw key once (never stored again)
+  - `/developers` page — public API documentation with quick-start curl example, endpoint reference, auth guide, error examples, pricing plans
+  - Footer: "API for Developers" link added to Company section
+
 ## [2.6.0] — 2026-04-05
 
 ### Added
