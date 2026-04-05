@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { offers, brands, sources, watchlistItems, sponsoredPlacements, priceHistory } from "@/db/schema";
-import { eq, desc, and, or, ilike, count, avg, sql, lte, gte, min } from "drizzle-orm";
+import { eq, desc, and, or, ilike, count, avg, sql, lte, gte, min, max } from "drizzle-orm";
 import type { DealCardProps } from "@/components/deals/deal-card";
 
 // ── Helpers ──
@@ -726,5 +726,164 @@ export async function getHeroStats(): Promise<{
     };
   } catch {
     return { activeOffers: 180, verifiedSources: 15, avgDiscount: 12, trackedBrands: 12 };
+  }
+}
+
+// ── Source Scorecards ──
+
+export interface SourceScorecard {
+  id: number;
+  slug: string;
+  name: string;
+  url: string;
+  sourceType: string;
+  trustZone: "green" | "yellow" | "red";
+  isActive: boolean;
+  hasBuyerProtection: boolean;
+  hasRefundPolicy: boolean;
+  affiliateNetwork: string | null;
+  contractNotes: string | null;
+  // Live performance
+  fetchSuccessRate: number;
+  lastFetchedAt: Date | null;
+  lastSuccessAt: Date | null;
+  minutesSinceLastSuccess: number | null;
+  slaMinutes: number;
+  isStale: boolean;
+  // Offer stats (computed)
+  activeOfferCount: number;
+  uniqueBrandCount: number;
+  avgDiscountPct: number;
+  bestDiscountPct: number;
+  avgFinalScore: number;
+  historicalLowCount: number;
+  // Computed trust score 0-100
+  trustScore: number;
+  // Health status
+  healthStatus: "healthy" | "degraded" | "unhealthy" | "unknown";
+  createdAt: Date;
+}
+
+function computeTrustScore(s: {
+  trustZone: string;
+  hasBuyerProtection: boolean;
+  hasRefundPolicy: boolean;
+  fetchSuccessRate: number;
+  isActive: boolean;
+}): number {
+  let score = 0;
+  // Trust zone: 40 pts
+  if (s.trustZone === "green") score += 40;
+  else if (s.trustZone === "yellow") score += 20;
+  // Buyer protection: 20 pts
+  if (s.hasBuyerProtection) score += 20;
+  // Refund policy: 15 pts
+  if (s.hasRefundPolicy) score += 15;
+  // Fetch reliability: 25 pts
+  score += Math.round(s.fetchSuccessRate * 25);
+  return Math.min(100, score);
+}
+
+function computeHealthStatus(
+  minutesSinceLastSuccess: number | null,
+  slaMinutes: number,
+  fetchSuccessRate: number,
+  isActive: boolean
+): "healthy" | "degraded" | "unhealthy" | "unknown" {
+  if (!isActive) return "unknown";
+  if (minutesSinceLastSuccess === null) return "unknown";
+  const staleFactor = minutesSinceLastSuccess / slaMinutes;
+  if (fetchSuccessRate >= 0.9 && staleFactor <= 1.1) return "healthy";
+  if (fetchSuccessRate >= 0.7 && staleFactor <= 2.0) return "degraded";
+  return "unhealthy";
+}
+
+export async function getAllSourceScorecards(): Promise<SourceScorecard[]> {
+  try {
+    const rows = await db
+      .select({
+        id: sources.id,
+        slug: sources.slug,
+        name: sources.name,
+        url: sources.url,
+        sourceType: sources.sourceType,
+        trustZone: sources.trustZone,
+        isActive: sources.isActive,
+        hasBuyerProtection: sources.hasBuyerProtection,
+        hasRefundPolicy: sources.hasRefundPolicy,
+        affiliateNetwork: sources.affiliateNetwork,
+        contractNotes: sources.contractNotes,
+        fetchSuccessRate: sources.fetchSuccessRate,
+        lastFetchedAt: sources.lastFetchedAt,
+        lastSuccessAt: sources.lastSuccessAt,
+        slaMinutes: sources.refreshIntervalMinutes,
+        createdAt: sources.createdAt,
+        // Aggregate offer stats
+        activeOfferCount: count(sql`CASE WHEN ${offers.status} = 'active' THEN 1 END`),
+        uniqueBrandCount: sql<number>`COUNT(DISTINCT CASE WHEN ${offers.status} = 'active' THEN ${offers.brandId} END)`,
+        avgDiscountPct: avg(sql`CASE WHEN ${offers.status} = 'active' THEN ${offers.effectiveDiscountPct} END`),
+        bestDiscountPct: max(sql`CASE WHEN ${offers.status} = 'active' THEN ${offers.effectiveDiscountPct} END`),
+        avgFinalScore: avg(sql`CASE WHEN ${offers.status} = 'active' THEN ${offers.finalScore} END`),
+        historicalLowCount: count(sql`CASE WHEN ${offers.status} = 'active' AND ${offers.isHistoricalLow} = true THEN 1 END`),
+      })
+      .from(sources)
+      .leftJoin(offers, eq(offers.sourceId, sources.id))
+      .groupBy(sources.id)
+      .orderBy(desc(sources.trustZone), desc(sources.fetchSuccessRate));
+
+    const now = Date.now();
+    return rows.map((r) => {
+      const minutesSinceLastSuccess = r.lastSuccessAt
+        ? Math.floor((now - r.lastSuccessAt.getTime()) / 60000)
+        : null;
+      const slaMinutes = r.slaMinutes ?? 60;
+      const fetchSuccessRate = r.fetchSuccessRate ?? 1.0;
+
+      return {
+        id: r.id,
+        slug: r.slug,
+        name: r.name,
+        url: r.url,
+        sourceType: r.sourceType,
+        trustZone: r.trustZone as "green" | "yellow" | "red",
+        isActive: r.isActive,
+        hasBuyerProtection: r.hasBuyerProtection,
+        hasRefundPolicy: r.hasRefundPolicy,
+        affiliateNetwork: r.affiliateNetwork,
+        contractNotes: r.contractNotes,
+        fetchSuccessRate,
+        lastFetchedAt: r.lastFetchedAt,
+        lastSuccessAt: r.lastSuccessAt,
+        minutesSinceLastSuccess,
+        slaMinutes,
+        isStale: minutesSinceLastSuccess !== null && minutesSinceLastSuccess > slaMinutes * 1.5,
+        activeOfferCount: Number(r.activeOfferCount ?? 0),
+        uniqueBrandCount: Number(r.uniqueBrandCount ?? 0),
+        avgDiscountPct: Math.round(Number(r.avgDiscountPct ?? 0) * 100),
+        bestDiscountPct: Math.round(Number(r.bestDiscountPct ?? 0) * 100),
+        avgFinalScore: Math.round(Number(r.avgFinalScore ?? 0)),
+        historicalLowCount: Number(r.historicalLowCount ?? 0),
+        trustScore: computeTrustScore({
+          trustZone: r.trustZone,
+          hasBuyerProtection: r.hasBuyerProtection,
+          hasRefundPolicy: r.hasRefundPolicy,
+          fetchSuccessRate,
+          isActive: r.isActive,
+        }),
+        healthStatus: computeHealthStatus(minutesSinceLastSuccess, slaMinutes, fetchSuccessRate, r.isActive),
+        createdAt: r.createdAt,
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+export async function getSourceScorecardBySlug(slug: string): Promise<SourceScorecard | null> {
+  try {
+    const all = await getAllSourceScorecards();
+    return all.find((s) => s.slug === slug) ?? null;
+  } catch {
+    return null;
   }
 }

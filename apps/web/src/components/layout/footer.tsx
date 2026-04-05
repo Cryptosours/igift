@@ -7,6 +7,7 @@ const footerLinks = {
     { name: "Historical Lows", href: "/historical-lows" },
     { name: "Brands", href: "/brands" },
     { name: "Categories", href: "/categories" },
+    { name: "Source Directory", href: "/sources" },
     { name: "Price Alerts", href: "/alerts" },
     { name: "Dashboard", href: "/dashboard" },
   ],

@@ -15,6 +15,7 @@ import {
   Store,
   BookOpen,
   LayoutDashboard,
+  ShieldCheck,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { SearchBar } from "@/components/ui/search-bar";
@@ -25,6 +26,7 @@ const navigation = [
   { name: "Hist. Lows", href: "/historical-lows", icon: TrendingDown },
   { name: "Brands", href: "/brands", icon: Tag },
   { name: "Categories", href: "/categories", icon: Store },
+  { name: "Sources", href: "/sources", icon: ShieldCheck },
   { name: "Methodology", href: "/methodology", icon: BookOpen },
 ];
 
