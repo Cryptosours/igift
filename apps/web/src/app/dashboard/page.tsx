@@ -1,8 +1,19 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import { Heart, Bell, TrendingUp, ArrowRight, LayoutDashboard } from "lucide-react";
-import { getWatchlist } from "@/lib/data";
+import {
+  Heart,
+  Bell,
+  TrendingUp,
+  ArrowRight,
+  LayoutDashboard,
+  Zap,
+  Target,
+  Flame,
+  BarChart3,
+  CheckCircle2,
+} from "lucide-react";
+import { getWatchlist, getDashboardStats } from "@/lib/data";
 import { DealCard } from "@/components/deals/deal-card";
 import { AlertManager } from "@/components/alerts/alert-manager";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
@@ -18,10 +29,31 @@ export const dynamic = "force-dynamic";
 export default async function DashboardPage() {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("igift_session")?.value;
-  const watchlist = await getWatchlist(sessionId);
 
+  const [watchlist, marketStats] = await Promise.all([
+    getWatchlist(sessionId),
+    getDashboardStats(),
+  ]);
+
+  // Derived metrics — computed from watchlist data, no extra DB queries
   const dealsAvailable = watchlist.filter((w) => w.bestDeal !== null).length;
   const hasWatchlist = watchlist.length > 0;
+
+  const bestDeals = watchlist
+    .map((w) => w.bestDeal)
+    .filter((d): d is NonNullable<typeof d> => d !== null);
+
+  const savingsTotal = bestDeals.reduce(
+    (sum, d) => sum + (d.faceValue - d.effectivePrice),
+    0,
+  );
+
+  const historicalLowsInWatchlist = bestDeals.filter((d) => d.historicalLow).length;
+
+  const topOpportunity = bestDeals.reduce<(typeof bestDeals)[0] | null>((best, d) => {
+    if (!best || d.dealScore > best.dealScore) return d;
+    return best;
+  }, null);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -34,13 +66,44 @@ export default async function DashboardPage() {
           </div>
           <h1 className="mt-1 heading-display text-3xl text-surface-900">My Dashboard</h1>
           <p className="mt-2 text-sm text-surface-500">
-            Watchlist, alerts, and deal activity — all in one place.
+            Watchlist, alerts, and live market intelligence — all in one place.
           </p>
         </div>
       </FadeIn>
 
-      {/* Stats row */}
-      <StaggerContainer className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
+      {/* ── Market Pulse strip ── */}
+      <FadeIn delay={0.05}>
+        <div className="mb-6 rounded-2xl border border-surface-200 bg-gradient-to-r from-surface-950 to-surface-900 px-5 py-4">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="flex h-1.5 w-1.5 rounded-full bg-deal-400 animate-pulse" />
+            <span className="data-label text-surface-400">Market Pulse</span>
+            <span className="data-label text-surface-600 ml-auto">Updated continuously</span>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <div className="price-display text-xl font-bold text-white">
+                +{marketStats.newIn24h}
+              </div>
+              <div className="mt-0.5 text-xs text-surface-500">new deals today</div>
+            </div>
+            <div>
+              <div className="price-display text-xl font-bold text-deal-400">
+                {marketStats.historicalLowsTotal}
+              </div>
+              <div className="mt-0.5 text-xs text-surface-500">at historical low</div>
+            </div>
+            <div>
+              <div className="text-sm font-semibold text-brand-300">
+                {marketStats.topCategory}
+              </div>
+              <div className="mt-0.5 text-xs text-surface-500">top category now</div>
+            </div>
+          </div>
+        </div>
+      </FadeIn>
+
+      {/* ── Stats row ── */}
+      <StaggerContainer className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {/* Watched brands */}
         <StaggerItem>
           <div className="rounded-2xl border border-surface-200 bg-white p-5">
@@ -59,7 +122,7 @@ export default async function DashboardPage() {
           </div>
         </StaggerItem>
 
-        {/* Live deals for watched brands */}
+        {/* Live deals */}
         <StaggerItem>
           <div className="rounded-2xl border border-surface-200 bg-white p-5">
             <div className="flex items-center gap-2.5">
@@ -74,36 +137,75 @@ export default async function DashboardPage() {
             <p className="mt-0.5 text-xs text-surface-400">
               {watchlist.length === 0
                 ? "no brands watched"
-                : `of ${watchlist.length} watched brand${watchlist.length !== 1 ? "s" : ""}`}
+                : `of ${watchlist.length} watched`}
             </p>
           </div>
         </StaggerItem>
 
-        {/* Alerts prompt */}
+        {/* Savings opportunity */}
         <StaggerItem>
-          <div className="col-span-2 rounded-2xl border border-alert-200 bg-alert-50 p-5 sm:col-span-1">
+          <div className="rounded-2xl border border-deal-100 bg-deal-50/50 p-5">
             <div className="flex items-center gap-2.5">
-              <div className="rounded-xl bg-alert-100 p-2">
-                <Bell className="h-4 w-4 text-alert-600" />
+              <div className="rounded-xl bg-deal-100 p-2">
+                <Zap className="h-4 w-4 text-deal-600" />
               </div>
-              <span className="text-xs font-medium uppercase tracking-wide text-alert-700">
-                Alerts
+              <span className="text-xs font-medium uppercase tracking-wide text-deal-600">
+                Savings
               </span>
             </div>
-            <p className="mt-3 text-sm font-medium text-alert-800">Enter your email below</p>
-            <p className="mt-0.5 text-xs text-alert-600">to view and manage your active alerts</p>
+            <p className="mt-3 price-display text-2xl font-bold text-deal-700">
+              ${savingsTotal.toFixed(2)}
+            </p>
+            <p className="mt-0.5 text-xs text-deal-500">
+              {dealsAvailable > 0 ? "available right now" : "no live deals yet"}
+            </p>
+          </div>
+        </StaggerItem>
+
+        {/* Historical lows in watchlist */}
+        <StaggerItem>
+          <div className="rounded-2xl border border-surface-200 bg-white p-5">
+            <div className="flex items-center gap-2.5">
+              <div className="rounded-xl bg-alert-50 p-2">
+                <Flame className="h-4 w-4 text-alert-500" />
+              </div>
+              <span className="text-xs font-medium uppercase tracking-wide text-surface-500">
+                Hist. Lows
+              </span>
+            </div>
+            <p className="mt-3 text-2xl font-bold text-surface-900">{historicalLowsInWatchlist}</p>
+            <p className="mt-0.5 text-xs text-surface-400">in your watchlist</p>
           </div>
         </StaggerItem>
       </StaggerContainer>
 
-      {/* Main two-column layout */}
+      {/* ── Top Opportunity ── */}
+      {topOpportunity && (
+        <FadeIn delay={0.1}>
+          <div className="mb-8 rounded-2xl border border-brand-200 bg-gradient-to-br from-brand-50 to-white p-5">
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Target className="h-4 w-4 text-brand-500" />
+                <span className="text-sm font-semibold text-brand-800">Top Opportunity</span>
+                <span className="rounded-full bg-brand-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-700">
+                  Score {topOpportunity.dealScore}
+                </span>
+              </div>
+              <span className="text-xs text-brand-500">highest in your watchlist</span>
+            </div>
+            <DealCard deal={topOpportunity} />
+          </div>
+        </FadeIn>
+      )}
+
+      {/* ── Main two-column layout ── */}
       <div className="grid gap-10 lg:grid-cols-[1fr_360px]">
-        {/* ── Left: Watchlist ── */}
+        {/* Left: Watchlist */}
         <section>
           <div className="mb-4 flex items-center justify-between">
             <h2 className="flex items-center gap-2 text-base font-semibold text-surface-900">
               <Heart className="h-4 w-4 text-brand-500" />
-              Watchlist
+              All Watched Brands
             </h2>
             <Link href="/deals" className="text-xs text-brand-600 hover:underline">
               Browse all deals →
@@ -115,18 +217,27 @@ export default async function DashboardPage() {
               {watchlist.map(({ slug, name, bestDeal }) => (
                 <div key={slug}>
                   <div className="mb-2 flex items-center justify-between">
-                    <Link
-                      href={`/brands/${slug}`}
-                      className="text-sm font-semibold text-surface-700 transition-colors hover:text-brand-600"
-                    >
-                      {name}
-                    </Link>
-                    <Link
-                      href={`/alerts?brand=${slug}`}
-                      className="text-xs text-surface-400 transition-colors hover:text-brand-600"
-                    >
-                      Set alert →
-                    </Link>
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href={`/brands/${slug}`}
+                        className="text-sm font-semibold text-surface-700 transition-colors hover:text-brand-600"
+                      >
+                        {name}
+                      </Link>
+                      {bestDeal?.historicalLow && (
+                        <span className="rounded-full bg-brand-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-brand-700">
+                          Hist. Low
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Link
+                        href={`/alerts?brand=${slug}`}
+                        className="text-xs text-surface-400 transition-colors hover:text-brand-600"
+                      >
+                        Set alert →
+                      </Link>
+                    </div>
                   </div>
 
                   {bestDeal ? (
@@ -163,25 +274,95 @@ export default async function DashboardPage() {
           )}
         </section>
 
-        {/* ── Right: Alerts panel ── */}
-        <aside>
-          <div className="mb-4 flex items-center gap-2">
-            <Bell className="h-4 w-4 text-alert-600" />
-            <h2 className="text-base font-semibold text-surface-900">Price Alerts</h2>
+        {/* Right: Alerts + quick stats */}
+        <aside className="space-y-6">
+          {/* Alerts panel */}
+          <div>
+            <div className="mb-4 flex items-center gap-2">
+              <Bell className="h-4 w-4 text-alert-600" />
+              <h2 className="text-base font-semibold text-surface-900">Price Alerts</h2>
+            </div>
+            <div className="rounded-2xl border border-surface-200 bg-white p-5">
+              <AlertManager />
+              <div className="mt-4 border-t border-surface-100 pt-4 text-center">
+                <Link href="/alerts" className="text-xs text-brand-600 hover:underline">
+                  Create a new alert →
+                </Link>
+              </div>
+            </div>
+            <p className="mt-2 text-center text-xs text-surface-400">
+              Free tier: up to 5 active alerts · 24-hour delivery cooldown
+            </p>
           </div>
 
+          {/* Intelligence summary */}
           <div className="rounded-2xl border border-surface-200 bg-white p-5">
-            <AlertManager />
-            <div className="mt-4 border-t border-surface-100 pt-4 text-center">
-              <Link href="/alerts" className="text-xs text-brand-600 hover:underline">
-                Create a new alert →
-              </Link>
+            <div className="mb-3 flex items-center gap-2">
+              <BarChart3 className="h-4 w-4 text-surface-400" />
+              <h3 className="text-sm font-semibold text-surface-900">Watchlist Snapshot</h3>
+            </div>
+            <ul className="space-y-2.5">
+              {[
+                {
+                  label: "Brands tracked",
+                  value: String(watchlist.length),
+                  active: watchlist.length > 0,
+                },
+                {
+                  label: "Live deals",
+                  value: `${dealsAvailable} of ${watchlist.length}`,
+                  active: dealsAvailable > 0,
+                },
+                {
+                  label: "Savings available",
+                  value: `$${savingsTotal.toFixed(2)}`,
+                  active: savingsTotal > 0,
+                },
+                {
+                  label: "At historical low",
+                  value: String(historicalLowsInWatchlist),
+                  active: historicalLowsInWatchlist > 0,
+                },
+              ].map(({ label, value, active }) => (
+                <li key={label} className="flex items-center justify-between text-xs">
+                  <span className="flex items-center gap-1.5 text-surface-500">
+                    <CheckCircle2
+                      className={`h-3.5 w-3.5 ${active ? "text-deal-500" : "text-surface-300"}`}
+                    />
+                    {label}
+                  </span>
+                  <span className={`price-display font-semibold ${active ? "text-surface-900" : "text-surface-400"}`}>
+                    {value}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Quick links */}
+          <div className="rounded-2xl border border-surface-100 bg-surface-50 p-4">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-surface-400">
+              Quick Links
+            </h3>
+            <div className="space-y-1">
+              {[
+                { label: "Browse all deals", href: "/deals" },
+                { label: "All brands", href: "/brands" },
+                { label: "My watchlist", href: "/watchlist" },
+                { label: "Set price alerts", href: "/alerts" },
+                { label: "How scores work", href: "/methodology" },
+              ].map(({ label, href }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="flex items-center justify-between rounded-lg px-3 py-2 text-xs text-surface-600 transition-colors hover:bg-white hover:text-brand-600"
+                >
+                  {label}
+                  <ArrowRight className="h-3 w-3 text-surface-300" />
+                </Link>
+              ))}
             </div>
           </div>
-
-          <p className="mt-2 text-center text-xs text-surface-400">
-            Free tier: up to 5 active alerts · 24-hour delivery cooldown
-          </p>
         </aside>
       </div>
     </div>

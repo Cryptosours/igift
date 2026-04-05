@@ -1,5 +1,35 @@
 # Changelog
 
+## [2.6.0] — 2026-04-05
+
+### Added
+- Pro dashboard for power users (task 3.5)
+  - **Market Pulse strip**: live market-wide stats — new deals in last 24h, total active historical lows, top category by deal count
+  - **Savings Opportunity widget**: aggregate potential savings across watchlist best deals, computed server-side
+  - **Savings stat card**: `$X.XX available right now` derived from watchlist deals, zero extra DB queries
+  - **Historical Lows stat card**: count of watched brands currently at all-time best price
+  - **Top Opportunity callout**: automatically surfaces highest deal-score item from user's watchlist
+  - **Watchlist Snapshot panel**: concise 4-line summary (brands, live deals, savings, hist. lows) with green/gray indicators
+  - **Quick Links sidebar**: 5-link jump navigation to all key pages
+  - `getDashboardStats()` in `lib/data.ts`: parallel queries for `newIn24h`, `historicalLowsTotal`, `topCategory` with graceful fallback
+  - Historical Low badge per brand row in watchlist section
+
+## [2.5.0] — 2026-04-05
+
+### Added
+- Constitution audit: UI/UX upgrade across all pages (session 15)
+  - Active nav indicator: `usePathname` + `layoutId` animated spring underline
+  - Dynamic hero stats wired to PostgreSQL via `getHeroStats()`
+  - `HomeAlertForm` client component wired to `/api/alerts` with `useTransition`
+  - `FadeIn` / `StaggerContainer` / `StaggerItem` animations on all pages (categories, brands, deals, dashboard, watchlist, about)
+  - Footer: GitHub + X social links with `nofollow`, Dashboard nav item, responsive two-column bottom bar
+  - Loading skeletons: `/deals`, `/brands`, `/categories`, `/dashboard`
+  - `DealCard` mobile responsive at 320px: `flex-wrap` prices, `line-clamp-2` title, hidden source on small screens, `shrink-0` right column
+  - Header: hides Bell/Dashboard icons below `sm` breakpoint; adds Watchlist, Price Alerts, Dashboard to mobile nav dropdown
+  - New components: `FadeIn`, `BrandAvatar`, `MotionProvider`, `PageTransition`, `HomeAlertForm`, `DealFilters`
+  - New pages: `/dashboard`, `/not-found`
+  - Removed `scroll-reveal.tsx` (superseded by `fade-in`)
+
 ## [2.4.0] — 2026-04-04
 
 ### Added

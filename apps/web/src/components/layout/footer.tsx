@@ -57,7 +57,7 @@ export function Footer() {
               <a
                 href="https://github.com/Cryptosours/igift"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
                 className="rounded-lg p-2 text-surface-400 transition-colors hover:bg-surface-100 hover:text-surface-700"
                 aria-label="GitHub"
               >
@@ -66,7 +66,7 @@ export function Footer() {
               <a
                 href="https://x.com/igiftapp"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
                 className="rounded-lg p-2 text-surface-400 transition-colors hover:bg-surface-100 hover:text-surface-700"
                 aria-label="X (Twitter)"
               >
