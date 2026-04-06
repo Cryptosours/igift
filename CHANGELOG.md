@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.1.0] — 2026-04-07
+
+### Added
+- **CI/CD pipeline** (Task 5.14): `.github/workflows/ci.yml` — lint + test + build on every push to main and PR. Postgres 16 service, npm + turborepo cache. First run: all green.
+- **Adapter unit tests** (Task 5.7 — 21 tests): `adapters.test.ts` — bitrefill (7 tests), dundle (5 tests), raise (6 tests). Mocked fetch with HTML fixtures, fake timers for polite delays. Tests: dryRun, parsing, discounts, OutOfStock filtering, HTTP errors, fallback parsers.
+- **Phase 5** added to `PRODUCTION_PLAN.md` (14 tasks, 8 DONE).
+
+### Fixed
+- `package-lock.json` missing `@swc/helpers@0.5.21` — caused `npm ci` failure in Docker build. Regenerated lock file.
+
+### Infrastructure
+- **VPS deploy**: All 6 pending commits deployed. `igift-web` container rebuilt and running latest code. Resolved Docker project-name mismatch (`realdeal` vs `igift`).
+
 ## [4.0.0] — 2026-04-06
 
 ### Added

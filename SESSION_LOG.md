@@ -1,5 +1,34 @@
 # iGift — Session Log
 
+## Session 23 — 2026-04-07 — Phase 5 cont.: CI/CD, adapter tests, VPS deploy
+
+### What Was Done
+- **VPS deploy**: SSH working via `~/.ssh/realdeal` key. Pulled 6 commits (Sessions 17–22), rebuilt `realdeal-web` Docker image from latest `igift-web:latest` tag, container recreated and healthy (HTTP 200). Fixed project-name mismatch (`realdeal` vs `igift`) by running `docker compose -p realdeal` to match existing containers.
+- **Lock file fix**: `npm ci` in Docker failed — `@swc/helpers@0.5.21` missing from `package-lock.json` after vitest was added. Regenerated with `npm install`, committed and pushed fix.
+- **CI/CD pipeline** (Task 5.14): Created `.github/workflows/ci.yml` — triggers on push to main + PRs, Postgres 16 service container, npm + turborepo cache, sequential: lint → test → build. First run passed on GitHub Actions.
+- **Adapter unit tests** (Task 5.7 — 21 tests): `adapters.test.ts` — bitrefill (7), dundle (5), raise (6), shared helpers (3). Tests use `vi.stubGlobal('fetch', ...)` with HTML fixtures + `vi.useFakeTimers()` to skip polite delays. Verified dryRun paths, HTML parsing, discount detection, OutOfStock filtering, HTTP errors, fallback parsers.
+- **Notion**: Added Phase 5 option to task database, created all 14 Phase 5 tasks with correct statuses.
+
+### Build Status
+- Local: `npm run test` — **110 tests passing** (4 files, 217ms)
+- CI: GitHub Actions run `8697477` — ✅ Lint · Test · Build all green
+- VPS: Live at igift.app — running commit `aaad8b3`
+
+### Architecture Notes
+- Adapter tests avoid real HTTP by mocking `globalThis.fetch`. Combined with `vi.useFakeTimers()` + `vi.runAllTimersAsync()`, 12-product adapter loops run in milliseconds.
+- Docker project name was `realdeal` (from original setup) but directory is `/opt/igift`. Always use `docker compose -p realdeal` on VPS or the containers will conflict.
+- GitHub Actions Node 20 deprecation notice (forced Node 24 by June 2026) — informational only, no action needed now.
+
+### Pending
+- 5.8 API route integration tests (High)
+- 5.9 Clustering engine tests (Medium)
+- 5.10 Alert matcher tests (Medium)
+- 5.11 Sentry error tracking (High)
+- 5.12 Performance audit (Medium)
+- 5.13 Accessibility audit (Medium)
+
+---
+
 ## Session 22 — 2026-04-06 — Phase 5: Quality & Production Hardening
 
 ### What Was Done
