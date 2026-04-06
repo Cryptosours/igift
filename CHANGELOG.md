@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.0.0] — 2026-04-05
+
+### Added
+- Merchant/source scorecards — Task 4.4 complete
+  - **`getAllSourceScorecards()` / `getSourceScorecardBySlug()`** in `lib/data.ts`
+    - Drizzle join of `sources` + `offers` for live aggregate stats (offer count, brands, avg/best discount, ATL count)
+    - `computeTrustScore()`: trust zone (40pts) + buyer protection (20pts) + refund policy (15pts) + fetch reliability (25pts) = 0–100
+    - `computeHealthStatus()`: healthy / degraded / unhealthy / unknown from staleness factor and success rate
+  - **`/sources` listing page** — ISR 30m, two zone sections (green/yellow), summary stats banner, methodology callout
+  - **`/sources/[slug]` detail page** — SSG with `generateStaticParams`, trust score ring, score breakdown table, live stats grid, buyer protection panel, data freshness section, deals CTA
+  - **`SourceCard` component** — animated trust-score bar (Framer Motion), stagger entrance, zone-color badges, health indicator, stats grid
+  - **`GET /api/v1/sources`** — ISR 30m, returns full scorecard array + meta summary counts
+  - **Header nav** — "Sources" link added with `ShieldCheck` icon
+  - **Footer** — "Source Directory" link added to Product column
+  - Build: ✓ 0 type errors · `/sources` (ISR 30m) · `/sources/[slug]` (SSG) · `/api/v1/sources` (ISR 30m)
+
 ## [2.9.0] — 2026-04-05
 
 ### Added

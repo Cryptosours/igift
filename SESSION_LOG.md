@@ -1,5 +1,33 @@
 # iGift — Session Log
 
+## Session 19 — 2026-04-05 — Source Scorecard Pages (Task 4.4)
+
+### What Was Done
+- **Task 4.4: Merchant/source scorecards — COMPLETE**
+  - Data layer: `getAllSourceScorecards()` + `getSourceScorecardBySlug()` in `lib/data.ts`
+    - Drizzle left-join query: sources + offers with conditional COUNT/AVG/MAX aggregates
+    - `computeTrustScore()`: 0–100 from zone (40pts) + buyerProtection (20pts) + refundPolicy (15pts) + fetchSuccessRate×25 (25pts)
+    - `computeHealthStatus()`: healthy / degraded / unhealthy / unknown from staleness factor and success rate
+    - `SourceScorecard` interface (typed: trustZone, healthStatus, all offer stats)
+  - **`/sources/page.tsx`** — ISR 30m, two zone sections, stats banner, methodology callout
+  - **`/sources/[slug]/page.tsx`** — SSG, trust ring, score breakdown table, buyer protection panel, freshness indicators, deals CTA
+  - **`components/sources/source-card.tsx`** — animated trust bar (Framer Motion), stagger entry, zone color system, stats grid
+  - **`GET /api/v1/sources`** — ISR 30m, response includes `sources[]` + `meta` summary object
+  - Header nav: added "Sources" with `ShieldCheck` icon; Footer: "Source Directory" in Product column
+  - Deploy: Docker build + container recreated on VPS · igift.app/sources live
+
+### Build Status
+- Local: `npx turbo build` — PASS (22.4s, 0 type errors)
+- VPS: Build + deploy — PASS (2m57s Docker build)
+- New routes: `/sources` (ISR 30m) · `/sources/[slug]` (SSG) · `/api/v1/sources` (ISR 30m)
+
+### Architecture Notes
+- **SSG vs ISR split**: `/sources/[slug]` pages are SSG via `generateStaticParams` — generated at build time from DB. The listing `/sources` is ISR 30m since source counts change as we add new adapters. Each slug page revalidates independently at 30m on-demand.
+- **Score architecture**: Trust score is application-layer computation (not a DB column) — avoids a migration whenever the scoring formula evolves. The formula coefficients are intentionally transparent (40+20+15+25=100) so they can be published in `/methodology`.
+- **Zone color system**: `ZONE_CONFIG` maps zone strings to Tailwind class sets. Both the listing card and detail page share the same config, preventing color drift.
+
+---
+
 ## Session 18 — 2026-04-05 — Partner Feed Expansion (Task 4.2)
 
 ### What Was Done
