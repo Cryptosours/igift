@@ -7,25 +7,29 @@ import { motion } from "motion/react";
 import { SearchBar } from "@/components/ui/search-bar";
 import { DealCard } from "@/components/deals/deal-card";
 import type { DealCardProps } from "@/components/deals/deal-card";
+import { REGIONS, SELECTABLE_REGIONS } from "@/lib/regions";
 
-const REGION_FILTERS = ["All Regions", "US", "EU", "Global"] as const;
 const TOGGLE_FILTERS = [
   { key: "greenOnly", label: "Green Sources Only" },
   { key: "historicalLows", label: "Historical Lows" },
 ] as const;
 
-
 interface DealFiltersProps {
   initialDeals: DealCardProps[];
+  /** Pre-selected region from locale detection (e.g. "EU" for German users) */
+  defaultRegion?: string;
 }
 
-function DealFiltersInner({ initialDeals }: DealFiltersProps) {
+function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") ?? "";
+  const regionParam = searchParams.get("region");
+
+  const resolvedDefault = regionParam ?? defaultRegion ?? "All Regions";
 
   const [searchResults, setSearchResults] = useState<DealCardProps[] | null>(null);
   const [activeQuery, setActiveQuery] = useState(initialQuery);
-  const [activeRegion, setActiveRegion] = useState<string>("All Regions");
+  const [activeRegion, setActiveRegion] = useState<string>(resolvedDefault);
   const [toggles, setToggles] = useState<Record<string, boolean>>({});
 
   const handleResults = useCallback((deals: unknown[], query: string) => {
@@ -49,7 +53,9 @@ function DealFiltersInner({ initialDeals }: DealFiltersProps) {
 
     if (activeRegion !== "All Regions") {
       result = result.filter(
-        (d) => d.region.toLowerCase() === activeRegion.toLowerCase() || d.region.toLowerCase() === "global"
+        (d) =>
+          d.region.toLowerCase() === activeRegion.toLowerCase() ||
+          d.region.toLowerCase() === "global",
       );
     }
 
@@ -65,26 +71,47 @@ function DealFiltersInner({ initialDeals }: DealFiltersProps) {
   }, [baseDeals, activeRegion, toggles]);
 
   const isSearching = activeQuery.length > 0;
-  const hasActiveFilters = activeRegion !== "All Regions" || Object.values(toggles).some(Boolean);
+  const hasActiveFilters =
+    activeRegion !== "All Regions" || Object.values(toggles).some(Boolean);
 
   return (
     <>
-      {/* Filter Pills */}
+      {/* Region filter pills + toggle filters */}
       <div className="mt-5 flex flex-wrap gap-2">
-        {REGION_FILTERS.map((filter) => (
-          <button
-            key={filter}
-            onClick={() => setActiveRegion(filter)}
-            className={`rounded-full border px-3.5 py-1 text-xs font-medium transition-all ${
-              activeRegion === filter
-                ? "border-brand-300 bg-brand-50 text-brand-700"
-                : "border-surface-200 bg-white text-surface-500 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
-            }`}
-          >
-            {filter}
-          </button>
-        ))}
+        {/* All Regions pill */}
+        <button
+          onClick={() => setActiveRegion("All Regions")}
+          className={`rounded-full border px-3.5 py-1 text-xs font-medium transition-all ${
+            activeRegion === "All Regions"
+              ? "border-brand-300 bg-brand-50 text-brand-700"
+              : "border-surface-200 bg-white text-surface-500 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
+          }`}
+        >
+          All Regions
+        </button>
+
+        {/* Per-region pills with flag emoji */}
+        {SELECTABLE_REGIONS.map((code) => {
+          const r = REGIONS[code];
+          return (
+            <button
+              key={code}
+              onClick={() => setActiveRegion(code)}
+              className={`rounded-full border px-3.5 py-1 text-xs font-medium transition-all ${
+                activeRegion === code
+                  ? "border-brand-300 bg-brand-50 text-brand-700"
+                  : "border-surface-200 bg-white text-surface-500 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
+              }`}
+            >
+              <span className="mr-1">{r.flag}</span>
+              {code}
+            </button>
+          );
+        })}
+
         <span className="border-l border-surface-200 mx-1" />
+
+        {/* Toggle filters */}
         {TOGGLE_FILTERS.map(({ key, label }) => (
           <button
             key={key}
@@ -111,7 +138,7 @@ function DealFiltersInner({ initialDeals }: DealFiltersProps) {
         </Suspense>
       </div>
 
-      {/* Status */}
+      {/* Active filter status */}
       {(isSearching || hasActiveFilters) && (
         <div className="mt-3 flex items-center gap-2 text-sm text-surface-500">
           <Search className="h-4 w-4" />
@@ -120,7 +147,9 @@ function DealFiltersInner({ initialDeals }: DealFiltersProps) {
             {isSearching && (
               <>
                 {" "}for{" "}
-                <span className="font-medium text-surface-700">&quot;{activeQuery}&quot;</span>
+                <span className="font-medium text-surface-700">
+                  &quot;{activeQuery}&quot;
+                </span>
               </>
             )}
             {hasActiveFilters && !isSearching && " matching filters"}
@@ -128,7 +157,7 @@ function DealFiltersInner({ initialDeals }: DealFiltersProps) {
           {hasActiveFilters && (
             <button
               onClick={() => {
-                setActiveRegion("All Regions");
+                setActiveRegion(defaultRegion ?? "All Regions");
                 setToggles({});
               }}
               className="ml-1 text-xs text-brand-600 hover:text-brand-700 transition-colors"

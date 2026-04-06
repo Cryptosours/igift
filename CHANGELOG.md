@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.2.0] — 2026-04-06
+
+### Added
+- **Task 4.6 — EU, UK, AU region support**
+  - **`src/lib/regions.ts`** — canonical region registry: US, EU, UK, AU, Global; each with `flag` emoji, `currency`, `symbol`, `displayName`, `countryCodes`; `formatRegionPrice()` (Intl.NumberFormat locale-aware), `regionFromCurrency()`, `LOCALE_TO_REGION` map, `getRegion()` helper
+  - **`deal-filters.tsx`** — updated from hardcoded 4-item array to `SELECTABLE_REGIONS` from config; flag emoji + region code in each filter pill; `defaultRegion` prop passed from server; `?region=` URL param support; Clear Filters resets to `defaultRegion`
+  - **`deal-card.tsx`** — region display updated from raw text to `{flag} {displayName}` from region config
+  - **`deals/page.tsx`** — reads `getLocale()` and maps via `LOCALE_TO_REGION` to pre-select `defaultRegion` (German locale → EU filter suggestion)
+  - Build: ✓ 0 errors · 0 lint warnings
+
 ## [3.1.0] — 2026-04-06
 
 ### Added

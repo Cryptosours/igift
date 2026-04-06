@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
+import { getLocale } from "next-intl/server";
 import { getDeals, getWatchedSlugs, getFeaturedPlacements } from "@/lib/data";
 import { sampleDeals } from "@/lib/sample-data";
 import { DealFilters } from "@/components/deals/deal-filters";
 import { FeaturedSection } from "@/components/deals/featured-section";
 import { FadeIn } from "@/components/ui/fade-in";
+import { LOCALE_TO_REGION } from "@/lib/regions";
 
 export const metadata: Metadata = {
   title: "All Verified Deals",
@@ -15,6 +17,8 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function DealsPage() {
+  const locale = await getLocale();
+
   let deals = sampleDeals;
   try {
     const dbDeals = await getDeals({ limit: 50 });
@@ -33,6 +37,9 @@ export default async function DealsPage() {
 
   // Load active sponsored placements (empty array if none / DB unavailable)
   const featuredPlacements = await getFeaturedPlacements("featured_deal");
+
+  // Suggest a region filter based on the active locale (e.g. German → EU)
+  const defaultRegion = LOCALE_TO_REGION[locale];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -55,7 +62,7 @@ export default async function DealsPage() {
       )}
 
       {/* Filters + Search + Deal Grid */}
-      <DealFilters initialDeals={deals} />
+      <DealFilters initialDeals={deals} defaultRegion={defaultRegion} />
     </div>
   );
 }

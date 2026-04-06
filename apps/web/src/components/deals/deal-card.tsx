@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { TrustBadge } from "@/components/ui/trust-badge";
 import { DealScore } from "@/components/ui/deal-score";
 import { WatchButton } from "@/components/ui/watch-button";
+import { getRegion } from "@/lib/regions";
 
 export interface DealCardProps {
   id: string;
@@ -29,6 +30,7 @@ export interface DealCardProps {
 
 export function DealCard({ deal }: { deal: DealCardProps }) {
   const discount = Math.round(deal.effectiveDiscount * 100);
+  const regionConfig = getRegion(deal.region);
 
   return (
     <motion.div
@@ -79,7 +81,8 @@ export function DealCard({ deal }: { deal: DealCardProps }) {
           <div className="mt-3 flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-surface-400">
             <span className="flex items-center gap-1">
               <MapPin className="h-3 w-3" />
-              {deal.region}
+              <span>{regionConfig.flag}</span>
+              {regionConfig.displayName}
             </span>
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" />

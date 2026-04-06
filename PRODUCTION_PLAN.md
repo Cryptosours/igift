@@ -109,4 +109,4 @@
 | 4.3 | Historical analytics and trend pages | DONE | Builder | Medium |
 | 4.4 | Merchant/source scorecards | DONE | Builder | Medium |
 | 4.5 | Additional languages (de-DE) | DONE | Builder | Medium |
-| 4.6 | Additional regions (EU, UK, AU) | TODO | Builder | Medium |
+| 4.6 | Additional regions (EU, UK, AU) | DONE | Builder | Medium |
