@@ -1,5 +1,25 @@
 # Changelog
 
+## [4.0.0] — 2026-04-06
+
+### Added
+- **Phase 5: Quality & Production Hardening**
+  - **Error boundaries**: `app/[locale]/error.tsx` (branded error page within app shell) + `app/global-error.tsx` (standalone HTML for root layout failures)
+  - **Vitest testing infrastructure**: `vitest.config.ts`, `test`/`test:watch` scripts, path alias support
+  - **Scoring engine tests** (30 tests): deal quality score, confidence score, scoreOffer pipeline, label helpers, suppression rules, fraud penalty, historical low detection
+  - **Normalization pipeline tests** (39 tests): brand resolution, FX conversion, region mapping, denomination extraction, title normalization, full pipeline
+  - **Regions module tests** (20 tests): config completeness, getRegion, formatRegionPrice, regionFromCurrency, locale mapping
+
+### Fixed
+- **Empty brand slug bug**: `resolveBrandSlug("")` incorrectly matched to a brand via partial match (`"apple".includes("") === true`). Added guard for empty/whitespace-only input.
+
+### Changed
+- **Removed sample-data fallback** from home page, deals page, categories page, and search API. Pages now render empty states when DB is unavailable instead of showing fake data.
+
+### Dependencies
+- `vitest ^4.1.2` (dev)
+- `@vitejs/plugin-react ^6.0.1` (dev)
+
 ## [3.3.0] — 2026-04-06
 
 ### Added

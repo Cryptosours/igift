@@ -97,6 +97,7 @@ const BRAND_ALIASES: Record<string, string> = {
 /** Resolve a messy brand name to a canonical slug. Returns null if unknown. */
 export function resolveBrandSlug(rawName: string): string | null {
   const normalized = rawName.trim().toLowerCase().replace(/[™®©]/g, "");
+  if (!normalized) return null;
   if (BRAND_ALIASES[normalized]) return BRAND_ALIASES[normalized];
 
   // Try partial match — check if any alias is a substring

@@ -1,5 +1,35 @@
 # iGift — Session Log
 
+## Session 22 — 2026-04-06 — Phase 5: Quality & Production Hardening
+
+### What Was Done
+- **Discovery Protocol**: Verified all 4 phases (46 tasks) genuinely DONE. Identified 5 critical gaps: zero tests, no error boundaries, sample-data fallback masking DB failures, 2 TODOs in orchestrator, 4 commits pending VPS deploy.
+- **Error boundaries**: Created `[locale]/error.tsx` (branded, within app shell, Try Again + Back to Home) and `global-error.tsx` (standalone HTML with inline styles, catches root layout failures).
+- **Sample-data removal**: Removed `sampleDeals`/`sampleCategories` imports from home page, deals page, categories page, and search API. Pages now render empty sections when DB unavailable. Search API returns `{ error: "Search temporarily unavailable" }` instead of fake results.
+- **Vitest infrastructure**: Installed `vitest ^4.1.2` + `@vitejs/plugin-react ^6.0.1`. Created `vitest.config.ts` with `@/` path alias. Added `test` and `test:watch` scripts.
+- **Scoring engine tests** (30 tests): `scoring.test.ts` — deal quality (discount, fees, region, trust zone, history, freshness), confidence (source type, fraud flags, agreement, reference data), full pipeline (red zone suppression, region incompatible, fraud penalty, unknown region, historical low detection, formula verification), label helpers.
+- **Normalization tests** (39 tests): `normalize.test.ts` — brand resolution (exact, case-insensitive, aliases, trademark symbols, partial match, unknown), FX conversion (USD passthrough, EUR, GBP, case-insensitive, unknown passthrough, rounding), region mapping (full names, shorthand, global, unknown fallback, dedup), denomination extraction (USD/EUR/GBP/suffix, null), title normalization (currency symbols, fallback), full pipeline (brand, denomination, USD conversion, effective price, discount, dedup, EUR conversion, snapshot, override).
+- **Regions tests** (20 tests): `regions.test.ts` — config completeness, required fields, EU includes DE, Global empty, selectable excludes Global, locale mapping, getRegion (known + fallback), formatRegionPrice (USD/en, EUR/de, zero, default locale), regionFromCurrency (all currencies + unknown + case-insensitive).
+- **Bug fix**: `resolveBrandSlug("")` returned `"apple"` instead of `null` due to `"apple".includes("") === true`. Added empty-string guard.
+- **Phase 5 added to PRODUCTION_PLAN.md**: 14 tasks, 6 DONE in this session, 8 TODO.
+
+### Build Status
+- Local: `npx turbo build --force` — PASS (19.7s, 0 errors)
+- Tests: `npx vitest run` — 89 tests passing (237ms)
+- VPS: SSH still down — 4 commits pending deploy
+
+### Architecture Notes
+- Vitest runs in Node environment (not jsdom) — sufficient for pure logic modules. Component tests would need jsdom.
+- Error boundaries: `[locale]/error.tsx` catches page errors while preserving the Header/Footer shell. `global-error.tsx` catches root layout errors and must render its own `<html>/<body>` with inline styles.
+- Sample-data.ts is still in the codebase but no longer imported by any production code. Safe to keep as a dev reference.
+
+### Pending
+- VPS SSH: still needs Contabo VNC console restart
+- 5 commits now pending VPS deploy
+- Phase 5 remaining: adapter tests, API integration tests, clustering/alert matcher tests, Sentry, perf audit, a11y audit, CI/CD pipeline
+
+---
+
 ## Session 21 — 2026-04-06 — Phase 2 Tasks 2.5–2.7 (Continuation)
 
 ### What Was Done

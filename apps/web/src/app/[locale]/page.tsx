@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { DealCard } from "@/components/deals/deal-card";
 import { getDeals, getCategories, getHeroStats } from "@/lib/data";
-import { sampleDeals, categories as sampleCategories } from "@/lib/sample-data";
 import { HeroSearch } from "@/components/ui/hero-search";
 import { HomeAlertForm } from "@/components/alerts/home-alert-form";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
@@ -21,18 +20,18 @@ import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  let deals = sampleDeals;
-  let categories = sampleCategories;
+  let deals: Awaited<ReturnType<typeof getDeals>> = [];
+  let categories: Awaited<ReturnType<typeof getCategories>> = [];
   const [heroStats] = await Promise.all([getHeroStats()]);
   try {
     const [dbDeals, dbCategories] = await Promise.all([
       getDeals({ limit: 6 }),
       getCategories(),
     ]);
-    if (dbDeals.length > 0) deals = dbDeals;
-    if (dbCategories.length > 0) categories = dbCategories;
+    deals = dbDeals;
+    categories = dbCategories;
   } catch {
-    // DB unavailable — use sample data
+    // DB unavailable — pages render with empty sections
   }
 
   return (

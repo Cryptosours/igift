@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { getDeals, getWatchedSlugs, getFeaturedPlacements } from "@/lib/data";
-import { sampleDeals } from "@/lib/sample-data";
 import { DealFilters } from "@/components/deals/deal-filters";
 import { FeaturedSection } from "@/components/deals/featured-section";
 import { FadeIn } from "@/components/ui/fade-in";
@@ -19,12 +18,11 @@ export const dynamic = "force-dynamic";
 export default async function DealsPage() {
   const locale = await getLocale();
 
-  let deals = sampleDeals;
+  let deals: Awaited<ReturnType<typeof getDeals>> = [];
   try {
-    const dbDeals = await getDeals({ limit: 50 });
-    if (dbDeals.length > 0) deals = dbDeals;
+    deals = await getDeals({ limit: 50 });
   } catch {
-    // DB unavailable — use sample data
+    // DB unavailable — render with empty deal list
   }
 
   // Enrich deals with watchlist state for this session

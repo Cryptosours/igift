@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getCategories } from "@/lib/data";
-import { categories as sampleCategories } from "@/lib/sample-data";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
 export const metadata: Metadata = {
@@ -13,12 +12,11 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function CategoriesPage() {
-  let categories = sampleCategories;
+  let categories: Awaited<ReturnType<typeof getCategories>> = [];
   try {
-    const dbCategories = await getCategories();
-    if (dbCategories.length > 0) categories = dbCategories;
+    categories = await getCategories();
   } catch {
-    // DB unavailable — use sample data
+    // DB unavailable — render with empty category list
   }
 
   return (
