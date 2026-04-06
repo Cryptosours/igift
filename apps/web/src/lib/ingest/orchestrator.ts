@@ -21,9 +21,9 @@ import { normalizeOffer, type NormalizedOffer } from "./normalize";
 import { flagOffer, type FlagContext } from "./flagging";
 import { markStaleOffers } from "@/lib/health";
 import { runRevalidation } from "@/lib/revalidation";
-import { processAlerts, type AlertsResult } from "@/lib/alerts";
-import { runClustering, type ClusterResult } from "@/lib/clustering";
-import { isGlobalKillActive, isCategorySuppressed } from "@/lib/killswitch";
+import { processAlerts } from "@/lib/alerts";
+import { runClustering } from "@/lib/clustering";
+import { isGlobalKillActive } from "@/lib/killswitch";
 
 // ── Adapter Registry ──
 

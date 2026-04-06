@@ -72,17 +72,7 @@ export async function POST(request: Request) {
       .limit(1);
 
     if (!brand) {
-      // Try name match
-      const rows = await db
-        .select({ id: brands.id })
-        .from(brands)
-        .where(eq(brands.isActive, true));
-
-      const nameMatch = rows.find(
-        (r) => r.id > 0, // fallback — search by name not well supported in Drizzle
-      );
-      // For now, if brand not found by slug, we skip brand filter
-      // (alert will match all brands)
+      // Brand not found by slug — skip brand filter (alert will match all brands)
     } else {
       brandId = brand.id;
     }

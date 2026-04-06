@@ -11,8 +11,8 @@
  */
 
 import { db } from "@/db";
-import { offers, sources } from "@/db/schema";
-import { eq, and, lt, sql, ne, isNotNull } from "drizzle-orm";
+import { offers } from "@/db/schema";
+import { eq, and, lt, sql } from "drizzle-orm";
 
 // ── Configuration ──
 

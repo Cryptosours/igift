@@ -14,8 +14,7 @@
 
 import { db } from "@/db";
 import { userAlerts, offers, brands, sources } from "@/db/schema";
-import { eq, and, gte, or, isNull, lt } from "drizzle-orm";
-import { sql } from "drizzle-orm";
+import { eq, and, or, isNull, lt, sql } from "drizzle-orm";
 
 // ── Types ──
 
@@ -43,8 +42,6 @@ export interface AlertMatch {
 /** Minimum hours between alerts to the same email for the same alert */
 const ALERT_COOLDOWN_HOURS = 24;
 
-/** Only alert on these trust zones */
-const ALLOWED_TRUST_ZONES = ["green", "yellow"];
 
 // ── Matching Logic ──
 

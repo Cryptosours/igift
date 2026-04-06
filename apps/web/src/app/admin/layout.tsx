@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -23,9 +24,9 @@ export default function AdminLayout({
             Sources
           </a>
         </div>
-        <a href="/" className="text-surface-400 hover:text-white text-xs">
+        <Link href="/" className="text-surface-400 hover:text-white text-xs">
           ← Back to site
-        </a>
+        </Link>
       </nav>
       <div className="max-w-7xl mx-auto px-6 py-8">{children}</div>
     </div>

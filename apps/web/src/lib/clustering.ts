@@ -15,8 +15,7 @@
 
 import { db } from "@/db";
 import { offers, brands, sources } from "@/db/schema";
-import { eq, and, sql, ne } from "drizzle-orm";
-import { scoreOffer } from "@/lib/scoring";
+import { eq, and, sql } from "drizzle-orm";
 
 // ── Types ──
 

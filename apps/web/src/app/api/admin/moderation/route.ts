@@ -8,7 +8,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { moderationCases, offers, sources, brands } from "@/db/schema";
-import { eq, desc, and, sql, count } from "drizzle-orm";
+import { eq, desc, and, count } from "drizzle-orm";
 import { checkAdminAuth } from "../auth";
 
 export const dynamic = "force-dynamic";

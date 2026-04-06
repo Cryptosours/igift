@@ -13,8 +13,8 @@ import {
   brands,
   sponsoredPlacements,
 } from "@/db/schema";
-import { eq, desc, and, count, sql } from "drizzle-orm";
-import { getHealthReport, type SourceHealth, type HealthStatus } from "@/lib/health";
+import { eq, desc, count } from "drizzle-orm";
+import { getHealthReport, type HealthStatus } from "@/lib/health";
 import { getRevalidationReport, type RevalidationReport } from "@/lib/revalidation";
 import { getClickStats } from "@/lib/affiliate";
 

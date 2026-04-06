@@ -14,7 +14,6 @@ const TOGGLE_FILTERS = [
   { key: "historicalLows", label: "Historical Lows" },
 ] as const;
 
-type ToggleKey = (typeof TOGGLE_FILTERS)[number]["key"];
 
 interface DealFiltersProps {
   initialDeals: DealCardProps[];

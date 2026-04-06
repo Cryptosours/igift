@@ -12,7 +12,7 @@
 
 import { db } from "@/db";
 import { sources, offers } from "@/db/schema";
-import { eq, and, lt, count } from "drizzle-orm";
+import { eq, and, count } from "drizzle-orm";
 
 // ── Health Status Types ──
 
@@ -219,17 +219,6 @@ export async function markStaleOffers(): Promise<number> {
     .map((s) => s.slug);
 
   if (staleSlugs.length === 0) return 0;
-
-  // Get source IDs for stale sources
-  const staleSourceRows = await db
-    .select({ id: sources.id })
-    .from(sources)
-    .where(
-      and(
-        eq(sources.isActive, true),
-        // Filter to stale slugs — use individual queries since we can't do IN with Drizzle easily
-      ),
-    );
 
   let totalMarked = 0;
   for (const slug of staleSlugs) {
