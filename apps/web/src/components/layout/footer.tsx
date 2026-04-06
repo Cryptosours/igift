@@ -1,29 +1,6 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { Logo } from "@/components/ui/logo";
-
-const footerLinks = {
-  Product: [
-    { name: "Deals", href: "/deals" },
-    { name: "Historical Lows", href: "/historical-lows" },
-    { name: "Brands", href: "/brands" },
-    { name: "Categories", href: "/categories" },
-    { name: "Source Directory", href: "/sources" },
-    { name: "Price Alerts", href: "/alerts" },
-    { name: "Dashboard", href: "/dashboard" },
-  ],
-  Company: [
-    { name: "About", href: "/about" },
-    { name: "Methodology", href: "/methodology" },
-    { name: "Trust & Safety", href: "/methodology#trust" },
-    { name: "API for Developers", href: "/developers" },
-    { name: "Contact", href: "/about#contact" },
-  ],
-  Legal: [
-    { name: "Terms of Service", href: "/terms" },
-    { name: "Privacy Policy", href: "/privacy" },
-    { name: "Affiliate Disclosure", href: "/disclosure" },
-  ],
-};
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -41,7 +18,33 @@ function XIcon({ className }: { className?: string }) {
   );
 }
 
-export function Footer() {
+export async function Footer() {
+  const t = await getTranslations("Footer");
+
+  const footerLinks = {
+    [t("Product")]: [
+      { name: t("links.deals"), href: "/deals" },
+      { name: t("links.historicalLows"), href: "/historical-lows" },
+      { name: t("links.brands"), href: "/brands" },
+      { name: t("links.categories"), href: "/categories" },
+      { name: t("links.sourceDirectory"), href: "/sources" },
+      { name: t("links.priceAlerts"), href: "/alerts" },
+      { name: t("links.dashboard"), href: "/dashboard" },
+    ],
+    [t("Company")]: [
+      { name: t("links.about"), href: "/about" },
+      { name: t("links.methodology"), href: "/methodology" },
+      { name: t("links.trustSafety"), href: "/methodology#trust" },
+      { name: t("links.apiDevelopers"), href: "/developers" },
+      { name: t("links.contact"), href: "/about#contact" },
+    ],
+    [t("Legal")]: [
+      { name: t("links.terms"), href: "/terms" },
+      { name: t("links.privacy"), href: "/privacy" },
+      { name: t("links.disclosure"), href: "/disclosure" },
+    ],
+  };
+
   return (
     <footer className="border-t border-surface-200 bg-white">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
@@ -52,8 +55,7 @@ export function Footer() {
               <Logo size="sm" showSubtitle={false} />
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-surface-500">
-              Trust-scored deal intelligence for digital gift cards, credits,
-              and vouchers.
+              {t("tagline")}
             </p>
             {/* Social links */}
             <div className="mt-5 flex items-center gap-3">
@@ -81,12 +83,10 @@ export function Footer() {
           {/* Link Columns */}
           {Object.entries(footerLinks).map(([heading, links]) => (
             <div key={heading}>
-              <h3 className="data-label text-surface-400">
-                {heading}
-              </h3>
+              <h3 className="data-label text-surface-400">{heading}</h3>
               <ul className="mt-4 space-y-2.5">
                 {links.map((link) => (
-                  <li key={link.name}>
+                  <li key={link.href}>
                     <Link
                       href={link.href}
                       className="text-sm text-surface-500 transition-colors hover:text-brand-600"
@@ -102,16 +102,13 @@ export function Footer() {
 
         <div className="mt-12 border-t border-surface-100 pt-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
           <p className="text-xs text-surface-400 leading-relaxed text-center sm:text-left">
-            &copy; {new Date().getFullYear()} iGift. Deal discovery and verification platform.
-            We do not sell gift cards, hold funds, or process payments.{" "}
+            &copy; {new Date().getFullYear()} iGift. {t("copyright")}{" "}
             <Link href="/disclosure" className="underline underline-offset-2 hover:text-brand-600">
-              Affiliate disclosure
+              {t("affiliateDisclosure")}
             </Link>
             .
           </p>
-          <p className="text-xs text-surface-300 shrink-0">
-            Prices sourced from third-party sellers and may change.
-          </p>
+          <p className="text-xs text-surface-300 shrink-0">{t("priceDisclaimer")}</p>
         </div>
       </div>
     </footer>

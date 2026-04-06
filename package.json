@@ -1,7 +1,10 @@
 {
   "name": "igift",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
@@ -16,5 +19,8 @@
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "npm@10.8.0"
+  "packageManager": "npm@10.8.0",
+  "dependencies": {
+    "next-intl": "^4.9.0"
+  }
 }

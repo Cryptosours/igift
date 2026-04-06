@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getAllSourceScorecards } from "@/lib/data";
 import { SourceCard } from "@/components/sources/source-card";
 import { ShieldCheck, TrendingUp, Store } from "lucide-react";
@@ -144,12 +145,12 @@ export default async function SourcesPage() {
               resellers. Yellow Zone sources are reputable marketplaces where individual seller
               quality varies.
             </p>
-            <a
+            <Link
               href="/methodology#sources"
               className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-800 underline underline-offset-2"
             >
               Read full methodology →
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.1.0] — 2026-04-06
+
+### Added
+- **Task 4.5 — de-DE language support (next-intl v4.9.0)**
+  - **`[locale]` routing architecture** — all front-end pages now live under `app/[locale]/`; English serves at `/` (no prefix), German at `/de/`; API routes and admin remain untouched
+  - **`src/i18n/routing.ts`** — `defineRouting({ locales: ['en','de'], defaultLocale: 'en', localePrefix: 'as-needed' })`
+  - **`src/i18n/request.ts`** — `getRequestConfig` loads the correct message bundle for each request; validates locale, falls back to `'en'`
+  - **`messages/en.json`** + **`messages/de.json`** — 60+ strings across `Navigation`, `Footer`, `Home`, `Common`, and `Metadata` namespaces
+  - **`next.config.ts`** — wrapped with `createNextIntlPlugin('./src/i18n/request.ts')`
+  - **`middleware.ts`** — next-intl `createMiddleware(routing)` merged with existing session cookie logic; API routes excluded from matcher
+  - **`app/layout.tsx`** — root HTML shell now async; reads `getLocale()` to set dynamic `lang` attribute
+  - **`app/[locale]/layout.tsx`** — app shell layout: `NextIntlClientProvider` + `MotionProvider` + `Header` + `PageTransition` + `Footer`; locale validated with `hasLocale()`; per-locale `generateMetadata`
+  - **Header** — converted nav items and aria-labels to `useTranslations('Navigation')` (client component)
+  - **Footer** — converted section headings, link names, tagline, copyright, and disclaimer to `getTranslations('Footer')` (server component, now async)
+  - Build: ✓ 0 errors · 0 lint warnings · all 16 front-end routes under `[locale]/` · middleware 45.3 kB
+
+### Fixed
+- `sources/page.tsx` — `<a href="/methodology">` → `<Link>`
+- `admin/layout.tsx` — remaining `<a href="/admin">` and `<a href="/admin/sources">` → `<Link>`
+
 ## [3.0.0] — 2026-04-05
 
 ### Added

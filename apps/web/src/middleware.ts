@@ -1,20 +1,25 @@
 /**
- * Next.js Middleware — sets an anonymous session cookie on first visit.
- * The `igift_session` cookie is a UUID that ties watchlist items to a visitor
- * without requiring any login. It expires in 1 year.
+ * Next.js Middleware — handles two concerns:
+ * 1. Locale routing via next-intl (en at /, de at /de/)
+ * 2. Anonymous session cookie (UUID) for watchlist persistence
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import createMiddleware from "next-intl/middleware";
+import { type NextRequest, NextResponse } from "next/server";
+import { routing } from "./i18n/routing";
 
 const SESSION_COOKIE = "igift_session";
 const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 
-export function middleware(request: NextRequest) {
-  const response = NextResponse.next();
+// next-intl middleware handles locale detection and URL rewriting
+const intlMiddleware = createMiddleware(routing);
 
-  // If no session cookie, mint one
+export function middleware(request: NextRequest): NextResponse {
+  // Run locale routing first — it may redirect or rewrite the request
+  const response = intlMiddleware(request) as NextResponse;
+
+  // Mint an anonymous session cookie if not present
   if (!request.cookies.get(SESSION_COOKIE)) {
-    // crypto.randomUUID() is available in Edge Runtime (Web Crypto API)
     response.cookies.set(SESSION_COOKIE, crypto.randomUUID(), {
       httpOnly: true,
       sameSite: "lax",
@@ -28,6 +33,8 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Run on all pages but skip Next.js internals and static files
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)"],
+  // Run on all pages but skip Next.js internals, static files, and API routes
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|api/).*)",
+  ],
 };

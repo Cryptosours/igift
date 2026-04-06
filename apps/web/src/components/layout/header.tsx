@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, Suspense } from "react";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   Search,
   Bell,
@@ -21,25 +22,26 @@ import { AnimatePresence, motion } from "motion/react";
 import { SearchBar } from "@/components/ui/search-bar";
 import { Logo } from "@/components/ui/logo";
 
-const navigation = [
-  { name: "Deals", href: "/deals", icon: TrendingUp },
-  { name: "Hist. Lows", href: "/historical-lows", icon: TrendingDown },
-  { name: "Brands", href: "/brands", icon: Tag },
-  { name: "Categories", href: "/categories", icon: Store },
-  { name: "Sources", href: "/sources", icon: ShieldCheck },
-  { name: "Methodology", href: "/methodology", icon: BookOpen },
-];
-
-const mobileOnlyNav = [
-  { name: "Watchlist", href: "/watchlist", icon: Heart },
-  { name: "Price Alerts", href: "/alerts", icon: Bell },
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-];
-
 export function Header() {
+  const t = useTranslations("Navigation");
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  const navigation = [
+    { name: t("deals"), href: "/deals", icon: TrendingUp },
+    { name: t("historicalLows"), href: "/historical-lows", icon: TrendingDown },
+    { name: t("brands"), href: "/brands", icon: Tag },
+    { name: t("categories"), href: "/categories", icon: Store },
+    { name: t("sources"), href: "/sources", icon: ShieldCheck },
+    { name: t("methodology"), href: "/methodology", icon: BookOpen },
+  ];
+
+  const mobileOnlyNav = [
+    { name: t("watchlist"), href: "/watchlist", icon: Heart },
+    { name: t("priceAlerts"), href: "/alerts", icon: Bell },
+    { name: t("dashboard"), href: "/dashboard", icon: LayoutDashboard },
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-surface-200/60 glass">
@@ -56,7 +58,7 @@ export function Header() {
               const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
               return (
                 <Link
-                  key={item.name}
+                  key={item.href}
                   href={item.href}
                   className={[
                     "relative flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-all",
@@ -83,7 +85,7 @@ export function Header() {
           <div className="flex items-center gap-1.5">
             <button
               className="rounded-lg p-2 text-surface-400 transition-all hover:bg-surface-100 hover:text-surface-700"
-              aria-label="Search deals"
+              aria-label={t("searchDeals")}
               onClick={() => setSearchOpen(!searchOpen)}
             >
               {searchOpen ? <X className="h-4.5 w-4.5" /> : <Search className="h-4.5 w-4.5" />}
@@ -91,23 +93,23 @@ export function Header() {
             <Link
               href="/watchlist"
               className="rounded-lg p-2 text-surface-400 transition-all hover:bg-surface-100 hover:text-surface-700"
-              aria-label="My watchlist"
-              title="My Watchlist"
+              aria-label={t("myWatchlist")}
+              title={t("watchlist")}
             >
               <Heart className="h-4.5 w-4.5" />
             </Link>
             <Link
               href="/alerts"
               className="hidden sm:flex rounded-lg p-2 text-surface-400 transition-all hover:bg-surface-100 hover:text-surface-700"
-              aria-label="Manage alerts"
+              aria-label={t("manageAlerts")}
             >
               <Bell className="h-4.5 w-4.5" />
             </Link>
             <Link
               href="/dashboard"
               className="hidden sm:flex rounded-lg p-2 text-surface-400 transition-all hover:bg-surface-100 hover:text-surface-700"
-              aria-label="My dashboard"
-              title="My Dashboard"
+              aria-label={t("myDashboard")}
+              title={t("dashboard")}
             >
               <LayoutDashboard className="h-4.5 w-4.5" />
             </Link>
@@ -116,14 +118,14 @@ export function Header() {
               className="hidden sm:inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-brand-700 hover:shadow-md active:scale-[0.98]"
             >
               <Bell className="h-3.5 w-3.5" />
-              Set Alert
+              {t("setAlert")}
             </Link>
 
             {/* Mobile Menu Toggle */}
             <button
               className="rounded-lg p-2 text-surface-400 md:hidden"
               onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Toggle menu"
+              aria-label={t("toggleMenu")}
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -142,7 +144,11 @@ export function Header() {
             >
               <div className="py-3">
                 <Suspense>
-                  <SearchBar variant="compact" autoFocus placeholder="Search brands, deals, stores..." />
+                  <SearchBar
+                    variant="compact"
+                    autoFocus
+                    placeholder={t("searchPlaceholder")}
+                  />
                 </Suspense>
               </div>
             </motion.div>
@@ -164,7 +170,7 @@ export function Header() {
                   const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
                   return (
                     <Link
-                      key={item.name}
+                      key={item.href}
                       href={item.href}
                       className={[
                         "flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
@@ -185,7 +191,7 @@ export function Header() {
                   const isActive = pathname === item.href;
                   return (
                     <Link
-                      key={item.name}
+                      key={item.href}
                       href={item.href}
                       className={[
                         "flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors sm:hidden",
