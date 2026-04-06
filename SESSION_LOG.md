@@ -1,5 +1,67 @@
 # iGift — Session Log
 
+## Session 21 — 2026-04-06 — Phase 2 Tasks 2.5–2.7 (Continuation)
+
+### What Was Done
+- **Opsera pre-commit security gate** — full `pre-commit` scan completed across all 6 phases
+  - gitleaks: 15 FP (all in `.next/` gitignored build artifacts)
+  - grype: 150 findings (all Go stdlib CVEs from system scan, not app code)
+  - semgrep: 3 pre-existing findings (email.ts + buysellvouchers.ts)
+  - npm audit: 4 moderate (pre-existing)
+  - **New findings from Phase 2 code: 0** — cleared for commit
+- **Committed + pushed** `270a4e5`: Tasks 2.5–2.7 (734 insertions)
+
+### Build Status
+- Local: `npx turbo build` — PASS (cached, 0 errors)
+- VPS: SSH port 22 still refusing — pending Contabo console restart
+- 4 commits now pending VPS deploy: `dd65b5a` + `4ab3e26` + `0a01f7c` + `270a4e5`
+
+### Pending
+- VPS SSH: sshd needs restart via Contabo VNC console (my.contabo.com)
+- Deploy when SSH restored: `cd /opt/realdeal && git pull origin main && docker compose build web && docker compose up -d web`
+
+---
+
+## Session 20 — 2026-04-06 — de-DE Language Support (Task 4.5)
+
+### What Was Done
+- **Task 4.5: de-DE language support — COMPLETE**
+  - **Architecture**: `[locale]` routing with next-intl v4.9.0; English at `/` (no prefix), German at `/de/`; `localePrefix: 'as-needed'`
+  - **Config**: `src/i18n/routing.ts` (defineRouting) + `src/i18n/request.ts` (getRequestConfig with locale validation)
+  - **Messages**: `messages/en.json` + `messages/de.json` — 60+ strings across Navigation, Footer, Home, Common, Metadata namespaces
+  - **next.config.ts**: wrapped with `createNextIntlPlugin('./src/i18n/request.ts')`
+  - **Middleware**: next-intl `createMiddleware(routing)` merged with session cookie; API routes excluded from matcher
+  - **Root layout** (`app/layout.tsx`): async, reads `getLocale()` for dynamic `lang` attribute; fonts and body class only
+  - **Locale layout** (`app/[locale]/layout.tsx`): `NextIntlClientProvider` + app shell; `hasLocale()` validation; per-locale `generateMetadata`
+  - **Header**: `useTranslations('Navigation')` for all nav labels and aria-labels (client component)
+  - **Footer**: `getTranslations('Footer')` for all link/section text (server component, now async)
+  - **Page migration**: 16 front-end routes moved from `app/` to `app/[locale]/` via `git mv`
+  - **Lint fixes**: `sources/page.tsx` and `admin/layout.tsx` `<a>` → `<Link>`
+  - **Commit**: `4ab3e26` pushed to GitHub
+
+### Build Status
+- Local: `npx turbo build` — PASS (19.5s, 0 type errors, 0 lint warnings)
+- VPS: SSH port 22 refusing connections — container still running (igift.app serving HTTP 200), pending deployment
+- Deploy command when SSH restored: `cd /opt/realdeal && git pull origin main && docker compose build web && docker compose up -d web`
+
+### Architecture Notes
+- **[locale] routing**: Next.js 15 App Router requires a root layout (`app/layout.tsx`) with `<html>/<body>`. The i18n layout at `app/[locale]/layout.tsx` handles the app shell (Header, Footer, providers) WITHOUT nesting html elements — root layout stays as the HTML shell.
+- **getLocale() in root layout**: Allows the root `lang` attribute to be dynamic (en/de) without moving html/body into `[locale]/layout.tsx`. This requires the root layout to be async.
+- **hasLocale() guard**: Prevents crafted URLs like `/fr/deals` from causing 500 — they get a clean 404.
+- **NextIntlClientProvider**: Passes messages to client components (Header uses `useTranslations`). Server components use `getTranslations` directly.
+
+### Pending
+- VPS SSH access down: sshd needs restart via Contabo panel (my.contabo.com VNC console)
+- 3 commits pending VPS deploy: `dd65b5a` (lint fix) + `4ab3e26` (i18n) + `0a01f7c` (regions)
+- Dependabot 1 moderate vulnerability on GitHub (pre-existing, to investigate)
+
+### Also in this session: Task 4.6 — EU/UK/AU regions
+- `src/lib/regions.ts`: canonical region registry with flag emojis, currencies, `formatRegionPrice()`, `LOCALE_TO_REGION`
+- `deal-filters.tsx`: all 4 regions with flag emoji pills, `defaultRegion` prop, URL `?region=` param
+- `deal-card.tsx`: region display → `{flag} {displayName}` via `getRegion()`
+- `deals/page.tsx`: `getLocale()` → `LOCALE_TO_REGION` → `defaultRegion` hint (de → EU)
+- Commit: `0a01f7c` pushed to GitHub
+
 ## Session 19 — 2026-04-05 — Source Scorecard Pages (Task 4.4)
 
 ### What Was Done
