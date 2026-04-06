@@ -124,11 +124,11 @@
 | 5.4 | Scoring engine tests (30 tests) | DONE | Builder | Critical |
 | 5.5 | Normalization pipeline tests (39 tests) + empty-brand bug fix | DONE | Builder | Critical |
 | 5.6 | Regions module tests (20 tests) | DONE | Builder | High |
-| 5.7 | Adapter unit tests (bitrefill, dundle, raise) | TODO | Builder | High |
+| 5.7 | Adapter unit tests (bitrefill, dundle, raise) | DONE | Builder | High |
 | 5.8 | API route integration tests | TODO | Builder | High |
 | 5.9 | Clustering engine tests | TODO | Builder | Medium |
 | 5.10 | Alert matcher tests | TODO | Builder | Medium |
 | 5.11 | Error tracking (Sentry or similar) | TODO | Operator | High |
 | 5.12 | Performance audit (bundle analysis, LCP) | TODO | Builder | Medium |
 | 5.13 | Accessibility audit | TODO | Designer | Medium |
-| 5.14 | CI/CD pipeline (GitHub Actions: lint + test + build) | TODO | Operator | High |
+| 5.14 | CI/CD pipeline (GitHub Actions: lint + test + build) | DONE | Operator | High |
