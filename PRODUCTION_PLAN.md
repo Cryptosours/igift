@@ -79,9 +79,9 @@
 | 2.2 | Automated offer revalidation and staleness detection | DONE | Builder | Critical |
 | 2.3 | Duplicate clustering engine | DONE | Builder | High |
 | 2.4 | Email/Telegram alert delivery system | DONE | Builder | Critical |
-| 2.5 | LLM-assisted multilingual title normalization | TODO | Builder | Medium |
-| 2.6 | LLM-assisted category mapping from messy text | TODO | Builder | Medium |
-| 2.7 | Merchant complaint workflow | TODO | Builder | Medium |
+| 2.5 | LLM-assisted multilingual title normalization | DONE | Builder | Medium |
+| 2.6 | LLM-assisted category mapping from messy text | DONE | Builder | Medium |
+| 2.7 | Merchant complaint workflow | DONE | Builder | Medium |
 | 2.8 | Source kill switches (per-source, per-category, global) | DONE | Builder | High |
 
 ---

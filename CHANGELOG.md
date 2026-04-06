@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.3.0] — 2026-04-06
+
+### Added
+- **Task 2.5 — LLM-assisted multilingual title normalization**
+  - **`src/lib/ingest/title-normalizer.ts`** — two-stage pipeline: rule-based first (fast/free), Claude claude-haiku-4-5 LLM fallback for low-confidence titles; `PRODUCT_TYPE_MAP` covers EN/DE/FR/ES/IT/NL/PT/PL/SV synonyms; `CURRENCY_PATTERNS` handles $, €, £, A$, suffix forms; `detectLanguage()` heuristic; `normalizeOfferTitle()` async main entry; only calls LLM when `ANTHROPIC_API_KEY` is set
+- **Task 2.6 — LLM-assisted category mapping**
+  - Same `title-normalizer.ts` module: `CATEGORY_SLUG_MAP` covers EN/DE/FR/ES multilingual category names → canonical slugs; `mapCategory()` with LLM fallback for unmapped categories; output validated against allowed slug enum
+  - **`POST /api/admin/normalize`** — admin API to trigger batch re-normalization; `scope: titles|categories|all`; `limit` param; `dryRun` flag; ADMIN_API_KEY protected; updates `offers.normalizedTitle` and `brands.category`; returns `llmAvailable` flag
+- **Task 2.7 — Merchant complaint workflow**
+  - **`POST /api/complaints`** — public endpoint to submit data quality reports; types: `incorrect_price`, `wrong_brand`, `expired`, `region_mismatch`, `low_quality`, `other`; validation of offerId, description (10–1000 chars), optional reporterEmail; stored in `moderationCases` with `caseType: complaint:{type}` for admin review; Cloudflare rate-limited
+  - Anthropic SDK `@anthropic-ai/sdk ^0.82.0` added to web dependencies
+  - Build: ✓ 0 errors · 0 lint warnings
+
 ## [3.2.0] — 2026-04-06
 
 ### Added
