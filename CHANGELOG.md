@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.2.0] — 2026-04-07
+
+### Added
+- **API route integration tests** (36 tests) covering deals, brands, search, ingest, complaints, click, admin health
+- Chainable Drizzle ORM mock pattern for DB-free route testing
+- Total test count: 146 (up from 110)
+
+---
+
 ## [4.1.0] — 2026-04-07
 
 ### Added

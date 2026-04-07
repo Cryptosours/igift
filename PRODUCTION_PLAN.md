@@ -125,7 +125,7 @@
 | 5.5 | Normalization pipeline tests (39 tests) + empty-brand bug fix | DONE | Builder | Critical |
 | 5.6 | Regions module tests (20 tests) | DONE | Builder | High |
 | 5.7 | Adapter unit tests (bitrefill, dundle, raise) | DONE | Builder | High |
-| 5.8 | API route integration tests | TODO | Builder | High |
+| 5.8 | API route integration tests (36 tests) | DONE | Builder | High |
 | 5.9 | Clustering engine tests | TODO | Builder | Medium |
 | 5.10 | Alert matcher tests | TODO | Builder | Medium |
 | 5.11 | Error tracking (Sentry or similar) | TODO | Operator | High |

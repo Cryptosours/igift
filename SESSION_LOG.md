@@ -1,5 +1,27 @@
 # iGift — Session Log
 
+## Session 24 — 2026-04-07 — Phase 5 cont.: API route integration tests
+
+### What Was Done
+- **Task 5.8**: API route integration tests — 36 tests covering 7 route groups
+  - `GET /api/deals` — query params, region filtering, DB failure graceful degradation
+  - `GET /api/brands` — brand listing, DB error handling
+  - `GET /api/brands/[slug]` — brand detail with offers, 404, 503 on DB failure
+  - `GET /api/search` — search with params, empty queries, search engine errors, limit capping
+  - `POST /api/ingest` — auth rejection, valid ingestion, param forwarding, pipeline errors
+  - `POST /api/complaints` — full validation battery (JSON, fields, types, lengths, email, 404)
+  - `GET /api/click/[offerId]` — affiliate redirect, invalid IDs, missing offers, Referrer-Policy
+  - `GET /api/admin/health` — auth check, health report
+- **Test Infrastructure**: Created chainable Drizzle ORM mock (`createChain()`) for DB-free route testing
+- **Total**: 146 tests passing (30 scoring + 39 normalization + 20 regions + 21 adapters + 36 API routes)
+
+### Build Status
+- All 146 tests passing
+- Lint clean
+- Build clean
+
+---
+
 ## Session 23 — 2026-04-07 — Phase 5 cont.: CI/CD, adapter tests, VPS deploy
 
 ### What Was Done
