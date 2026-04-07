@@ -147,6 +147,6 @@
 | 6.5 | Deploy latest code to VPS | DONE | Operator | Critical |
 | 6.6 | Create Sentry project + set SENTRY_DSN on VPS | TODO | Operator | High |
 | 6.7 | Verify VPS env vars (ADMIN_API_KEY, INGEST_API_KEY) after auth hardening | DONE | Operator | Critical |
-| 6.8 | npm audit fix (1 moderate Dependabot vulnerability) | TODO | Builder | Medium |
+| 6.8 | npm audit fix (esbuild override + root next-intl cleanup) | DONE | Builder | Medium |
 | 6.9 | Automated deploy pipeline (GitHub → VPS on push) | TODO | Operator | Medium |
-| 6.10 | Rate limiter for public API routes (anti-abuse) | TODO | Builder | Medium |
+| 6.10 | Rate limiter for public API routes (anti-abuse) | DONE | Builder | Medium |

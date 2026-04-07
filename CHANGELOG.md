@@ -7,8 +7,10 @@
 - **Dynamic OG images** (Task 6.2): `opengraph-image.tsx` for site-wide, brand detail, and category detail using Next.js ImageResponse
 - **VPS deploy** (Task 6.5): All pending commits deployed, Docker container rebuilt
 - **Frontend component tests** (Task 6.3): 43 tests for DealCard, DealScore, TrustBadge, DealFilters. Shared motion/react mock factory, jsdom + React Testing Library infrastructure
+- **Rate limiter** (Task 6.10): In-memory sliding-window rate limiter for 7 public API routes. Per-IP per-route bucketing, 429 responses with `X-RateLimit-*` headers
 
 ### Fixed
+- **npm audit** (Task 6.8): esbuild override to 0.25.12 eliminates GHSA-67mh-4wv8-2f99 (moderate). Removed duplicate root-level `next-intl` that caused next@16 vs next@15 type conflict
 - **OG image Satori layout**: Added `display: "flex"` on multi-child divs, converted `{var} text` patterns to template literals for Satori compatibility
 - **JSON-LD pricing**: `effectivePrice` is already in dollars (not cents), `priceCurrency` hardcoded to ISO 4217 `"USD"` (not display symbol `"$"`)
 - **VPS env vars verified** (Task 6.7): Auth endpoints confirmed fail-closed without valid keys

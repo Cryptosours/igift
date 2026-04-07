@@ -23,10 +23,19 @@
   - `deal-filters.test.tsx` (13 tests): region filtering, global inclusion, green-only/historical toggles, combined filters, empty state, aria-pressed
   - Infra: shared `test-mocks.tsx` (motion/react factory mock), `test-setup.ts` (jest-dom matchers), vitest config updated for jsdom + React plugin
 
+- **Task 6.8 (npm audit)**: Fixed esbuild vulnerability (GHSA-67mh-4wv8-2f99) via root package.json override forcing esbuild 0.25.12 for @esbuild-kit/core-utils. Also removed duplicate `next-intl` from root dependencies that caused next@16 vs next@15 type conflict. `npm audit` now reports 0 vulnerabilities.
+- **Task 6.10 (Rate limiter)**: Built sliding-window in-memory rate limiter (`src/lib/rate-limit.ts`) with per-IP, per-route bucketing. Applied to 7 public API routes with appropriate limits:
+  - deals/brands: 60 req/min (read-heavy, page loads)
+  - search: 30 req/min (heavier DB queries)
+  - watchlist: 20 req/min (write operations)
+  - alerts GET: 30/min, alerts POST/DELETE: 10/min
+  - complaints: 5/min (abuse-sensitive)
+  - Returns 429 with `X-RateLimit-*` headers and `Retry-After`
+
 ### Key Metrics
-- Tests: **242** (199 existing + 43 new component tests)
-- Commits: 5 pushed (2348568 JSON-LD, 6d1daf9 OG images, 47f393d Satori fix, 05e9399 docs, ee05ef2 component tests)
-- Tasks completed: 6.1, 6.2, 6.3, 6.5, 6.7
+- Tests: **250** (199 backend + 43 component + 8 rate-limit)
+- Commits: 8 pushed this session
+- Tasks completed: 6.1, 6.2, 6.3, 6.5, 6.7, 6.8, 6.10
 
 ### Architecture Notes
 - OG images use `runtime = "nodejs"` (not edge) when importing from `@/lib/data.ts` because the postgres driver (`net`, `tls`) is incompatible with edge runtime — even for pure functions, webpack bundles all top-level imports
@@ -37,6 +46,9 @@
 - Initially used `runtime = "edge"` for all OG images — failed build due to postgres driver imports
 - Initially divided `effectivePrice` by 100 in JSON-LD — already in dollars, caused wrong prices
 - Satori `{var} text` pattern creates multiple child nodes — need template literals or `display: "flex"`
+- npm override `"@esbuild-kit/core-utils>esbuild"` syntax rejected — needs nested object syntax
+- npm override `$esbuild` reference fails at monorepo root — esbuild not a root dep; use explicit version
+- Clean `npm install` after removing lockfile exposed latent `next-intl` at root pulling next@16 — always check `npm ls` for hoisting conflicts before declaring an install clean
 
 ---
 
