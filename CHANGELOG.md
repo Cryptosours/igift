@@ -1,5 +1,28 @@
 # Changelog
 
+## [4.6.0] — 2026-04-07
+
+### Added
+- **Live FX rates**: `fx-rates.ts` fetches from open.er-api.com (free tier), 6h in-memory cache, static fallback for 13 currencies. Orchestrator loads rates once per ingestion run. (RD-35)
+- **Timing-safe auth**: `safeCompare()` using `crypto.timingSafeEqual` for all API key comparisons. Prevents timing side-channel attacks.
+- **10 new tests** for FX rate module (total: 199 tests)
+- **Phase 6** added to production plan: launch polish, OG images, component tests, dark mode
+
+### Fixed
+- **SECURITY**: Removed hardcoded fallback API keys (`"dev-admin-key"`, `"dev-ingest-key"`) from production auth. Now fail-closed when env vars unset.
+- **SECURITY**: Error message leakage in ingest and admin/sources 500 responses — now returns generic messages only.
+- **SEO**: Sitemap now DB-driven with dynamic brand/source pages, added 5 missing routes.
+
+### Removed
+- `apps/web/src/lib/sample-data.ts` (dead code, no imports)
+
+### Changed
+- `normalizeOffer()` accepts optional `fxRates` parameter (backward-compatible)
+- Moved security scan reports to `docs/security-scans/`
+- Restored `packages/{ui,schemas,utils}` with `.gitkeep` placeholders
+
+---
+
 ## [4.5.0] — 2026-04-07
 
 ### Added

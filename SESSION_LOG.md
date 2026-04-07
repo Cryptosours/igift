@@ -1,5 +1,30 @@
 # iGift — Session Log
 
+## Session 28 — 2026-04-07 — Flight audit + security hardening + live FX rates
+
+### What Was Done
+- **Constitution Flight Audit**: Full 106-point audit across 15 domains. Verdict: CONDITIONAL GO → now GO after fixes.
+- **Security: Auth hardening**: Removed hardcoded fallback API keys from admin and ingest auth. Now fail-closed when env vars unset.
+- **Security: Timing-safe auth**: Replaced `===` string comparison with `crypto.timingSafeEqual` in all auth paths (admin + ingest).
+- **Security: Error message sanitization**: Removed internal error details from 500 responses in ingest and admin/sources routes.
+- **SEO: Dynamic sitemap**: Rewrote sitemap.ts to query DB for brands/sources dynamically, added 5 missing routes (/sources, /historical-lows, /developers, /alerts, /about).
+- **Feature: Live FX rates (RD-35)**: New `fx-rates.ts` module fetching from open.er-api.com with 6h cache + static fallback. Orchestrator loads rates once per run, passes to normalizer. 10 new tests.
+- **Dead code removal**: Deleted unused `sample-data.ts`, cleaned up empty directories.
+- **Notion sync**: Marked RD-49 (kill switches), RD-48 (complaints), RD-47 (LLM category mapping), RD-35 (live FX) as Done. All tasks now cleared.
+- **Phase 6 added** to production plan with discovered next tasks.
+
+### Key Metrics
+- Tests: 189 → **199** (+10 FX rate tests)
+- Commits: 4 pushed (161dbb7, 4654281, 437fd69, b76aa8c)
+- Security findings fixed: 5 (2 High auth fallbacks, 2 Medium timing, 1 Medium error leak)
+
+### Architecture Notes
+- `fx-rates.ts`: In-memory cache with 6h TTL, `STATIC_RATES` export for backward-compat
+- `safeCompare()`: Exported from `admin/auth.ts` for reuse across any auth path
+- `normalizeOffer()`: Now accepts optional `fxRates` parameter (3rd arg, backward-compatible)
+
+---
+
 ## Session 27 — 2026-04-07 — Phase 5 complete: Performance audit + Accessibility audit
 
 ### What Was Done
