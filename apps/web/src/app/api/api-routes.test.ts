@@ -150,6 +150,19 @@ vi.mock("@/lib/affiliate", () => ({
   logClick: mockLogClick,
 }));
 
+// ── Mock: @/app/api/admin/auth ────────────────────────────────────────
+// Mock the auth module so ingest route can resolve it (avoids @/ alias
+// resolution issues with Vitest 4.x dynamic imports) and so health route
+// doesn't depend on module-level env var capture timing.
+vi.mock("@/app/api/admin/auth", () => ({
+  safeCompare: (a: string, b: string) => a === b,
+  checkAdminAuth: (req: Request) => {
+    const authHeader = req.headers.get("authorization");
+    const token = authHeader?.replace("Bearer ", "");
+    return token === "dev-admin-key";
+  },
+}));
+
 // ── Mock: next/headers (for watchlist which uses cookies()) ────────────
 vi.mock("next/headers", () => ({
   cookies: vi.fn(() => Promise.resolve({

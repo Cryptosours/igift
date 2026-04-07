@@ -9,8 +9,6 @@ import {
   acceptAll,
   rejectAll,
   setConsent,
-  getConsent,
-  type ConsentPreferences,
 } from "@/lib/consent";
 
 export function CookieBanner() {

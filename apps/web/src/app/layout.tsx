@@ -25,7 +25,6 @@ export default async function RootLayout({
 }) {
   const locale = await getLocale();
 
-  /* eslint-disable @next/next/no-sync-scripts -- FOUC prevention: static script sets .dark before paint */
   return (
     <html
       lang={locale}
