@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.3.0] — 2026-04-07
+
+### Added
+- **Clustering engine tests** (18 tests) — cluster key normalization, agreement bonuses, confidence capping
+- **Alert matcher tests** (25 tests) — 4-filter matching (brand, category, discount, region), cooldown, title fallback
+- Total test count: 189 (up from 146)
+
+---
+
 ## [4.2.0] — 2026-04-07
 
 ### Added

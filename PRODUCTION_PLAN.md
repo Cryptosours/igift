@@ -126,8 +126,8 @@
 | 5.6 | Regions module tests (20 tests) | DONE | Builder | High |
 | 5.7 | Adapter unit tests (bitrefill, dundle, raise) | DONE | Builder | High |
 | 5.8 | API route integration tests (36 tests) | DONE | Builder | High |
-| 5.9 | Clustering engine tests | TODO | Builder | Medium |
-| 5.10 | Alert matcher tests | TODO | Builder | Medium |
+| 5.9 | Clustering engine tests (18 tests) | DONE | Builder | Medium |
+| 5.10 | Alert matcher tests (25 tests) | DONE | Builder | Medium |
 | 5.11 | Error tracking (Sentry or similar) | TODO | Operator | High |
 | 5.12 | Performance audit (bundle analysis, LCP) | TODO | Builder | Medium |
 | 5.13 | Accessibility audit | TODO | Designer | Medium |

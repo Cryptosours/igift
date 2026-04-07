@@ -1,5 +1,29 @@
 # iGift — Session Log
 
+## Session 25 — 2026-04-07 — Phase 5 cont.: Clustering + Alert matcher tests
+
+### What Was Done
+- **Task 5.9**: Clustering engine tests — 18 tests covering:
+  - Cluster key generation (brand + denomination + currency normalization)
+  - Single-source skip, multi-source clustering, price spread calculation
+  - Agreement bonus (+5/source, max +15), confidence cap at 100
+  - Currency/denomination/brand isolation, null denomination handling
+  - Multiple distinct clusters in one run, getClusterForOffer queries
+- **Task 5.10**: Alert matcher tests — 25 tests covering:
+  - 4-filter matching: brand, category, discount threshold, region
+  - Each filter: positive match, negative rejection, null wildcard behavior
+  - Combined filter application, one-match-per-alert rule
+  - Multiple alerts → different offers, title fallback, response shape
+  - markAlertsSent: empty array no-op, update each ID
+- **Total**: 189 tests passing across 7 test files
+
+### Build Status
+- All 189 tests passing
+- Lint clean
+- Build clean
+
+---
+
 ## Session 24 — 2026-04-07 — Phase 5 cont.: API route integration tests
 
 ### What Was Done
