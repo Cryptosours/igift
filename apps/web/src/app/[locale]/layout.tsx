@@ -7,6 +7,8 @@ import { Footer } from "@/components/layout/footer";
 import { MotionProvider } from "@/components/layout/motion-provider";
 import { PageTransition } from "@/components/layout/page-transition";
 import { ThemeProvider } from "@/components/layout/theme-provider";
+import { CookieBanner } from "@/components/ui/cookie-banner";
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import type { Metadata } from "next";
 
 interface LocaleLayoutProps {
@@ -88,6 +90,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
             <PageTransition>{children}</PageTransition>
           </main>
           <Footer />
+          <CookieBanner />
+          <GoogleAnalytics />
         </MotionProvider>
       </ThemeProvider>
     </NextIntlClientProvider>

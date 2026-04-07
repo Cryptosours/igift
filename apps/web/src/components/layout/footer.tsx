@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Logo } from "@/components/ui/logo";
+import { CookieSettingsButton } from "@/components/ui/cookie-banner";
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -108,7 +109,10 @@ export async function Footer() {
             </Link>
             .
           </p>
-          <p className="text-xs text-surface-300 shrink-0">{t("priceDisclaimer")}</p>
+          <div className="flex items-center gap-4 shrink-0">
+            <CookieSettingsButton />
+            <p className="text-xs text-surface-300">{t("priceDisclaimer")}</p>
+          </div>
         </div>
       </div>
     </footer>

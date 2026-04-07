@@ -145,7 +145,7 @@
 | 6.3 | Frontend component tests (DealCard, DealScore, TrustBadge, DealFilters) | DONE | Builder | High |
 | 6.4 | Dark mode (CSS variables + toggle) | DONE | Designer | Medium |
 | 6.5 | Deploy latest code to VPS | DONE | Operator | Critical |
-| 6.6 | Create Sentry project + set SENTRY_DSN on VPS | TODO | Operator | High |
+| 6.6 | Create Sentry project + set SENTRY_DSN on VPS | DONE | Operator | High |
 | 6.7 | Verify VPS env vars (ADMIN_API_KEY, INGEST_API_KEY) after auth hardening | DONE | Operator | Critical |
 | 6.8 | npm audit fix (esbuild override + root next-intl cleanup) | DONE | Builder | Medium |
 | 6.9 | Automated deploy pipeline (GitHub → VPS on push) | DONE* | Operator | Medium |
