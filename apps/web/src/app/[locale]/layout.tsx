@@ -9,6 +9,7 @@ import { PageTransition } from "@/components/layout/page-transition";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { CookieBanner } from "@/components/ui/cookie-banner";
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
+import { AdSenseScript } from "@/components/ads/adsense";
 import type { Metadata } from "next";
 
 interface LocaleLayoutProps {
@@ -92,6 +93,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           <Footer />
           <CookieBanner />
           <GoogleAnalytics />
+          <AdSenseScript />
         </MotionProvider>
       </ThemeProvider>
     </NextIntlClientProvider>

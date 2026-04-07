@@ -54,6 +54,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-turbo-
 
+      - name: Disable Corepack
+        run: corepack disable
+
       - name: Install dependencies
         run: npm ci
 

@@ -5,6 +5,7 @@ import { getDeals, getWatchedSlugs, getFeaturedPlacements } from "@/lib/data";
 import { DealFilters } from "@/components/deals/deal-filters";
 import { FeaturedSection } from "@/components/deals/featured-section";
 import { FadeIn } from "@/components/ui/fade-in";
+import { AdUnit } from "@/components/ads/adsense";
 import { LOCALE_TO_REGION } from "@/lib/regions";
 
 export const metadata: Metadata = {
@@ -83,8 +84,14 @@ export default async function DealsPage() {
         <FeaturedSection placements={featuredPlacements} />
       )}
 
+      {/* Ad: horizontal banner between header and grid (AdSense slot TBD) */}
+      <AdUnit slot="deals-top" format="horizontal" className="my-6" />
+
       {/* Filters + Search + Deal Grid */}
       <DealFilters initialDeals={deals} defaultRegion={defaultRegion} />
+
+      {/* Ad: rectangle after grid (AdSense slot TBD) */}
+      <AdUnit slot="deals-bottom" format="rectangle" className="mt-8 flex justify-center" />
     </div>
   );
 }

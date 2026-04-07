@@ -22,11 +22,14 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      // Google Analytics (gtag.js) + future AdSense
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://adservice.google.com",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: https:",
       "font-src 'self' data:",
-      "connect-src 'self' https: https://*.ingest.sentry.io",
+      "connect-src 'self' https: https://*.ingest.sentry.io https://www.google-analytics.com https://analytics.google.com",
+      // AdSense ad iframes
+      "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
