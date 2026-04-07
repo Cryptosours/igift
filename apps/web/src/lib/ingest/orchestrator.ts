@@ -24,6 +24,7 @@ import { runRevalidation } from "@/lib/revalidation";
 import { processAlerts } from "@/lib/alerts";
 import { runClustering } from "@/lib/clustering";
 import { isGlobalKillActive } from "@/lib/killswitch";
+import { getAllRates } from "@/lib/fx-rates";
 
 // ── Adapter Registry ──
 
@@ -310,9 +311,11 @@ export async function runIngestion(options?: {
   let totalFlagged = 0;
   let totalErrors = 0;
 
-  // Load lookup maps
+  // Load lookup maps and live FX rates
   const sourceMap = await loadSourceMap();
   const brandMap = await loadBrandMap();
+  const { rates: fxRates, source: fxSource } = await getAllRates();
+  console.log(`[Ingest] FX rates loaded (source: ${fxSource}, currencies: ${Object.keys(fxRates).length})`);
 
   // Track upserted offer IDs for alert matching
   const upsertedOfferIds: number[] = [];
@@ -380,7 +383,7 @@ export async function runIngestion(options?: {
     // Step 2: Normalize + Score + Upsert each offer
     for (const rawOffer of fetchResult.offers) {
       try {
-        const normalized = normalizeOffer(rawOffer);
+        const normalized = normalizeOffer(rawOffer, undefined, fxRates);
 
         // Resolve brand
         if (!normalized.brandSlug) {

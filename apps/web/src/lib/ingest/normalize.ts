@@ -112,36 +112,29 @@ export function resolveBrandSlug(rawName: string): string | null {
 
 // ── Currency / FX ──
 
-/**
- * Hardcoded FX rates to USD. Updated periodically.
- * For V1, we use static rates. Phase 2+ will fetch live rates.
- */
-const FX_TO_USD: Record<string, number> = {
-  USD: 1.0,
-  EUR: 1.08,
-  GBP: 1.26,
-  CAD: 0.74,
-  AUD: 0.65,
-  JPY: 0.0067,
-  CHF: 1.12,
-  SEK: 0.096,
-  NOK: 0.094,
-  DKK: 0.145,
-  BRL: 0.20,
-  MXN: 0.058,
-  INR: 0.012,
-};
+import { STATIC_RATES } from "@/lib/fx-rates";
 
-/** Convert an amount in cents from sourceCurrency to USD cents */
-export function toUsdCents(amountCents: number, sourceCurrency: string): number {
-  const rate = FX_TO_USD[sourceCurrency.toUpperCase()];
+/**
+ * Convert an amount in cents from sourceCurrency to USD cents.
+ * Uses provided rates map if given, otherwise falls back to static rates.
+ * Live rates are fetched once per ingestion run by the orchestrator.
+ */
+export function toUsdCents(
+  amountCents: number,
+  sourceCurrency: string,
+  fxRates: Record<string, number> = STATIC_RATES,
+): number {
+  const rate = fxRates[sourceCurrency.toUpperCase()];
   if (!rate) return amountCents; // default to passthrough if unknown
   return Math.round(amountCents * rate);
 }
 
 /** Check if a currency is supported */
-export function isSupportedCurrency(currency: string): boolean {
-  return currency.toUpperCase() in FX_TO_USD;
+export function isSupportedCurrency(
+  currency: string,
+  fxRates: Record<string, number> = STATIC_RATES,
+): boolean {
+  return currency.toUpperCase() in fxRates;
 }
 
 // ── Region Mapping ──
@@ -243,15 +236,19 @@ export interface NormalizedOffer {
 }
 
 /** Run the full normalization pipeline on a raw offer */
-export function normalizeOffer(raw: RawOffer, brandNameOverride?: string): NormalizedOffer {
+export function normalizeOffer(
+  raw: RawOffer,
+  brandNameOverride?: string,
+  fxRates?: Record<string, number>,
+): NormalizedOffer {
   const brandSlug = resolveBrandSlug(raw.rawBrandName);
   const denomination = raw.denomination ?? extractDenomination(raw.originalTitle);
   const countries = normalizeCountries(raw.countryRedeemable);
 
-  // Convert to USD cents
-  const faceUsd = toUsdCents(raw.faceValueCents, raw.currency);
-  const askingUsd = toUsdCents(raw.askingPriceCents, raw.currency);
-  const feeUsd = toUsdCents(raw.feeTotalCents, raw.currency);
+  // Convert to USD cents (uses live rates if provided, else static fallback)
+  const faceUsd = toUsdCents(raw.faceValueCents, raw.currency, fxRates);
+  const askingUsd = toUsdCents(raw.askingPriceCents, raw.currency, fxRates);
+  const feeUsd = toUsdCents(raw.feeTotalCents, raw.currency, fxRates);
   const effectiveUsd = askingUsd + feeUsd;
 
   const discountPct = faceUsd > 0
