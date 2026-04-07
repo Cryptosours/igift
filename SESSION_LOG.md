@@ -39,10 +39,12 @@
   - Brand, deal, alert palettes adjusted for dark backgrounds (brighter on dark)
   - Glass, card-hover, bg-grid, bg-dots overrides for dark context
 
+- **Task 6.9 (Deploy pipeline)**: Created `.github/workflows/deploy.yml` — CI (lint/test/build) → SSH deploy → health check. Uses `appleboy/ssh-action`, `concurrency` group to prevent overlapping deploys, `workflow_dispatch` for manual trigger. **BLOCKED**: needs 3 GitHub Secrets set: `VPS_HOST` (69.30.247.151), `VPS_USER` (realdeal), `VPS_SSH_KEY` (private key from ~/.ssh/realdeal).
+
 ### Key Metrics
 - Tests: **250** (199 backend + 43 component + 8 rate-limit)
-- Commits: 9 pushed this session
-- Tasks completed: 6.1, 6.2, 6.3, 6.4, 6.5, 6.7, 6.8, 6.10
+- Commits: 11 pushed this session
+- Tasks completed: 6.1, 6.2, 6.3, 6.4, 6.5, 6.7, 6.8, 6.9*, 6.10
 
 ### Architecture Notes
 - OG images use `runtime = "nodejs"` (not edge) when importing from `@/lib/data.ts` because the postgres driver (`net`, `tls`) is incompatible with edge runtime — even for pure functions, webpack bundles all top-level imports
