@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { getWatchlist, getDashboardStats } from "@/lib/data";
 import { DealCard } from "@/components/deals/deal-card";
-import { AlertManager } from "@/components/alerts/alert-manager";
+import { LazyAlertManager as AlertManager } from "@/components/alerts/lazy-alert-manager";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
 export const metadata: Metadata = {

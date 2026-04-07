@@ -7,7 +7,7 @@ import { WatchButton } from "@/components/ui/watch-button";
 import { ShareButton, SocialShareLinks } from "@/components/ui/share-button";
 import { BrandAvatar } from "@/components/ui/brand-avatar";
 import { getBrandBySlug, getWatchedSlugs, getPriceHistory } from "@/lib/data";
-import { PriceHistoryChart } from "@/components/analytics/price-history-chart";
+import { LazyPriceChart } from "@/components/analytics/lazy-price-chart";
 import { notFound } from "next/navigation";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
@@ -192,7 +192,7 @@ export default async function BrandDetailPage({ params }: Props) {
             )}
           </div>
           <div className="rounded-2xl border border-surface-200 bg-white p-5">
-            <PriceHistoryChart
+            <LazyPriceChart
               data={priceHistory}
               allTimeLowCents={allTimeLowCents}
             />

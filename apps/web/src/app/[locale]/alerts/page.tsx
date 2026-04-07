@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Bell, Zap, Shield, Mail, CheckCircle } from "lucide-react";
 import { AlertForm } from "@/components/alerts/alert-form";
-import { AlertManager } from "@/components/alerts/alert-manager";
+import { LazyAlertManager as AlertManager } from "@/components/alerts/lazy-alert-manager";
 import { db } from "@/db";
 import { userAlerts } from "@/db/schema";
 import { eq } from "drizzle-orm";

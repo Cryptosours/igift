@@ -163,8 +163,8 @@
 | 7.3 | Pin vitest 3.x — fix Vite 8 JSX regression (250 tests green) | DONE | Builder | Critical |
 | 7.4 | Ad placement integration (deals page sidebar, between listings) | TODO | Builder | High |
 | 7.5 | Performance optimization (dynamic imports, bundle splitting) | TODO | Builder | High |
-| 7.6 | Enhanced sitemap (dynamic deal/brand pages, lastmod) | TODO | SEO | High |
-| 7.7 | Social sharing (share buttons, copy-link, WhatsApp/X) | TODO | Builder | Medium |
+| 7.6 | Enhanced sitemap (i18n hreflang, dynamic brand/source pages, lastmod) | DONE | SEO | High |
+| 7.7 | Social sharing (share buttons, copy-link, WhatsApp/X/Reddit) | DONE | Builder | Medium |
 | 7.8 | Newsletter / email capture (deal digest signup) | TODO | Builder | Medium |
 | 7.9 | Google Search Console verification + sitemap submission | HUMAN | Operator | Critical |
 | 7.10 | Google Analytics property creation + measurement ID setup | HUMAN | Operator | Critical |
