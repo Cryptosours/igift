@@ -129,6 +129,6 @@
 | 5.9 | Clustering engine tests (18 tests) | DONE | Builder | Medium |
 | 5.10 | Alert matcher tests (25 tests) | DONE | Builder | Medium |
 | 5.11 | Error tracking (Sentry) — DSN-ready, awaiting project creation | DONE | Operator | High |
-| 5.12 | Performance audit (bundle analysis, LCP) | TODO | Builder | Medium |
-| 5.13 | Accessibility audit | TODO | Designer | Medium |
+| 5.12 | Performance audit (bundle analysis, TTFB) | DONE | Builder | Medium |
+| 5.13 | Accessibility audit (skip-link, labels, ARIA, a11y linting) | DONE | Designer | Medium |
 | 5.14 | CI/CD pipeline (GitHub Actions: lint + test + build) | DONE | Operator | High |

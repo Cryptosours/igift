@@ -18,10 +18,12 @@ export function HeroSearch() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="relative">
+    <form onSubmit={handleSubmit} role="search" aria-label="Search deals" className="relative">
       <div className="flex items-center rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-3 focus-within:bg-white/15 focus-within:border-white/40 transition-colors">
-        <Search className="h-5 w-5 shrink-0 text-brand-300" />
+        <Search className="h-5 w-5 shrink-0 text-brand-300" aria-hidden="true" />
+        <label htmlFor="hero-search" className="sr-only">Search deals</label>
         <input
+          id="hero-search"
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}

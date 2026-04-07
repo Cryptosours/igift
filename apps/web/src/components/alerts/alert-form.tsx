@@ -65,23 +65,24 @@ export function AlertForm({ initialBrand = "" }: AlertFormProps) {
       </h2>
 
       {state === "success" && (
-        <div className="mt-4 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-800">
+        <div role="alert" className="mt-4 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-800">
           {message}
         </div>
       )}
 
       {state === "error" && (
-        <div className="mt-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-800">
+        <div role="alert" className="mt-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-800">
           {message}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
         <div>
-          <label className="block text-sm font-medium text-surface-700">
+          <label htmlFor="alert-brand" className="block text-sm font-medium text-surface-700">
             Brand or product
           </label>
           <input
+            id="alert-brand"
             type="text"
             value={brand}
             onChange={(e) => setBrand(e.target.value)}
@@ -91,10 +92,11 @@ export function AlertForm({ initialBrand = "" }: AlertFormProps) {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-surface-700">
+            <label htmlFor="alert-discount" className="block text-sm font-medium text-surface-700">
               Target discount
             </label>
             <select
+              id="alert-discount"
               value={targetDiscount}
               onChange={(e) => setTargetDiscount(e.target.value)}
               className="mt-1 w-full rounded-lg border border-surface-300 px-3 py-2 text-sm text-surface-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
@@ -107,10 +109,11 @@ export function AlertForm({ initialBrand = "" }: AlertFormProps) {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-surface-700">
+            <label htmlFor="alert-region" className="block text-sm font-medium text-surface-700">
               Region
             </label>
             <select
+              id="alert-region"
               value={region}
               onChange={(e) => setRegion(e.target.value)}
               className="mt-1 w-full rounded-lg border border-surface-300 px-3 py-2 text-sm text-surface-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
@@ -124,10 +127,11 @@ export function AlertForm({ initialBrand = "" }: AlertFormProps) {
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-surface-700">
+          <label htmlFor="alert-email" className="block text-sm font-medium text-surface-700">
             Email
           </label>
           <input
+            id="alert-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}

@@ -1,5 +1,35 @@
 # iGift — Session Log
 
+## Session 27 — 2026-04-07 — Phase 5 complete: Performance audit + Accessibility audit
+
+### What Was Done
+- **Task 5.12**: Performance audit — bundle analysis + TTFB measurement
+  - Shared JS bundle: **218KB** (124KB Sentry SDK, 37.2KB React/Next, 54.2KB React DOM, 2.73KB other)
+  - Heaviest page: `/brands/[slug]` at 386KB total (121KB recharts — page-specific `"use client"` component, NOT shared)
+  - TTFB (production Docker): Home 34ms, Deals 19ms, Brands 15ms — **excellent**
+  - Sentry replay SDK: lazy-loaded in v10, not counted against initial bundle
+  - Recharts: isolated to brand detail pages only, no shared bundle impact
+  - **Verdict**: No critical issues. Bundle is well-structured with proper code splitting.
+
+- **Task 5.13**: Accessibility audit — comprehensive a11y hardening
+  - **Skip-to-content link**: Added `<a href="#main-content">` in root layout, target `id="main-content"` on `<main>`, sr-only with focus-visible styling
+  - **Form label associations**: Added explicit `htmlFor`/`id` pairs to `alert-form.tsx` (4 inputs), `home-alert-form.tsx` (2 inputs with sr-only labels), `hero-search.tsx`, `search-bar.tsx`
+  - **ARIA states**: `aria-pressed` on filter toggle buttons (region pills + toggle filters in `deal-filters.tsx`), `aria-label` on `DealScore` component with full context for screen readers
+  - **Live region announcements**: `role="alert"` on success/error messages in both `alert-form.tsx` and `home-alert-form.tsx`
+  - **Search semantics**: `role="search"` + `aria-label="Search deals"` on all search forms, `aria-hidden="true"` on decorative icons
+  - **Automated enforcement**: Installed `eslint-plugin-jsx-a11y` with `recommended` ruleset, `no-autofocus` set to warn (intentional use on search)
+  - **Already good**: `<html lang>` per locale, semantic `<header>/<nav>/<main>/<footer>` landmarks, `aria-label` on icon-only buttons, `aria-hidden` on decorative SVGs, `rel="noopener noreferrer nofollow"` on external links, no raw `<img>` tags
+
+### Phase 5 Status
+- **ALL 14 TASKS COMPLETE** — Phase 5 (Quality & Production Hardening) is now finished
+- 189 tests passing, build clean, lint clean (warnings only)
+
+### Build Status
+- All 189 tests passing
+- Build clean, lint clean (a11y warnings only: intentional autoFocus)
+
+---
+
 ## Session 26 — 2026-04-07 — Phase 5 cont.: Sentry error tracking integration
 
 ### What Was Done

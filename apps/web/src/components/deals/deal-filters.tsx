@@ -81,6 +81,7 @@ function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
         {/* All Regions pill */}
         <button
           onClick={() => setActiveRegion("All Regions")}
+          aria-pressed={activeRegion === "All Regions"}
           className={`rounded-full border px-3.5 py-1 text-xs font-medium transition-all ${
             activeRegion === "All Regions"
               ? "border-brand-300 bg-brand-50 text-brand-700"
@@ -97,6 +98,7 @@ function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
             <button
               key={code}
               onClick={() => setActiveRegion(code)}
+              aria-pressed={activeRegion === code}
               className={`rounded-full border px-3.5 py-1 text-xs font-medium transition-all ${
                 activeRegion === code
                   ? "border-brand-300 bg-brand-50 text-brand-700"
@@ -116,6 +118,7 @@ function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
           <button
             key={key}
             onClick={() => handleToggle(key)}
+            aria-pressed={!!toggles[key]}
             className={`rounded-full border px-3.5 py-1 text-xs font-medium transition-all ${
               toggles[key]
                 ? "border-brand-300 bg-brand-50 text-brand-700"

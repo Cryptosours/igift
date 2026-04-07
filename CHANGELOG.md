@@ -1,5 +1,24 @@
 # Changelog
 
+## [4.5.0] — 2026-04-07
+
+### Added
+- **Performance audit** (Task 5.12) — bundle analysis + TTFB measurement
+  - Shared JS: 218KB (Sentry 124KB, React 37KB, React DOM 54KB)
+  - TTFB: 15–34ms across all routes (excellent)
+  - Recharts (121KB) confirmed page-specific, not shared
+  - No critical performance issues found
+- **Accessibility audit** (Task 5.13) — comprehensive a11y hardening
+  - Skip-to-content link in root layout with keyboard-visible focus styling
+  - Explicit `htmlFor`/`id` label associations on all form inputs (8 inputs fixed)
+  - `aria-pressed` on filter toggle buttons, `aria-label` on DealScore
+  - `role="alert"` on form success/error messages for screen reader announcements
+  - `role="search"` on all search forms, `aria-hidden` on decorative icons
+  - `eslint-plugin-jsx-a11y` (recommended ruleset) for automated a11y enforcement
+- **Phase 5 complete** — all 14 quality & hardening tasks finished
+
+---
+
 ## [4.4.0] — 2026-04-07
 
 ### Added

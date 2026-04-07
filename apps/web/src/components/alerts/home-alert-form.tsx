@@ -49,21 +49,29 @@ export function HomeAlertForm() {
         Get notified when a verified deal drops to your target price.
       </p>
       <div className="mt-5 space-y-3">
-        <input
-          type="text"
-          value={brand}
-          onChange={(e) => { setBrand(e.target.value); setStatus("idle"); }}
-          placeholder="Brand or product (e.g., Steam)"
-          className="w-full rounded-xl border border-surface-700 bg-surface-800 px-4 py-2.5 text-sm text-white placeholder:text-surface-600 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors"
-        />
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => { setEmail(e.target.value); setStatus("idle"); }}
-          placeholder="your@email.com"
-          required
-          className="w-full rounded-xl border border-surface-700 bg-surface-800 px-4 py-2.5 text-sm text-white placeholder:text-surface-600 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors"
-        />
+        <div>
+          <label htmlFor="home-alert-brand" className="sr-only">Brand or product</label>
+          <input
+            id="home-alert-brand"
+            type="text"
+            value={brand}
+            onChange={(e) => { setBrand(e.target.value); setStatus("idle"); }}
+            placeholder="Brand or product (e.g., Steam)"
+            className="w-full rounded-xl border border-surface-700 bg-surface-800 px-4 py-2.5 text-sm text-white placeholder:text-surface-600 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors"
+          />
+        </div>
+        <div>
+          <label htmlFor="home-alert-email" className="sr-only">Email address</label>
+          <input
+            id="home-alert-email"
+            type="email"
+            value={email}
+            onChange={(e) => { setEmail(e.target.value); setStatus("idle"); }}
+            placeholder="your@email.com"
+            required
+            className="w-full rounded-xl border border-surface-700 bg-surface-800 px-4 py-2.5 text-sm text-white placeholder:text-surface-600 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 transition-colors"
+          />
+        </div>
         <button
           type="submit"
           disabled={isPending || !brand.trim() || !email.trim()}
@@ -74,20 +82,20 @@ export function HomeAlertForm() {
       </div>
 
       {status === "success" && (
-        <p className="mt-3 flex items-center gap-1.5 text-xs text-deal-400">
-          <Check className="h-3.5 w-3.5" />
+        <p role="alert" className="mt-3 flex items-center gap-1.5 text-xs text-deal-400">
+          <Check className="h-3.5 w-3.5" aria-hidden="true" />
           Alert created! We&apos;ll notify you when a deal appears.
         </p>
       )}
       {status === "limit" && (
-        <p className="mt-3 flex items-center gap-1.5 text-xs text-alert-400">
-          <AlertCircle className="h-3.5 w-3.5" />
+        <p role="alert" className="mt-3 flex items-center gap-1.5 text-xs text-alert-400">
+          <AlertCircle className="h-3.5 w-3.5" aria-hidden="true" />
           Free tier limit reached (5 alerts). Manage alerts to free a slot.
         </p>
       )}
       {status === "error" && (
-        <p className="mt-3 flex items-center gap-1.5 text-xs text-red-400">
-          <AlertCircle className="h-3.5 w-3.5" />
+        <p role="alert" className="mt-3 flex items-center gap-1.5 text-xs text-red-400">
+          <AlertCircle className="h-3.5 w-3.5" aria-hidden="true" />
           Something went wrong. Please try again.
         </p>
       )}

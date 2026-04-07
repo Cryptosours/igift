@@ -82,7 +82,7 @@ export function SearchBar({
   const isCompact = variant === "compact";
 
   return (
-    <form onSubmit={handleSubmit} className={isCompact ? "relative" : "relative w-full"}>
+    <form onSubmit={handleSubmit} role="search" aria-label="Search deals" className={isCompact ? "relative" : "relative w-full"}>
       <div
         className={`flex items-center rounded-lg border transition-colors focus-within:border-brand-400 focus-within:ring-2 focus-within:ring-brand-100 ${
           isCompact
@@ -91,12 +91,14 @@ export function SearchBar({
         }`}
       >
         {isSearching ? (
-          <Loader2 className={`shrink-0 animate-spin text-brand-500 ${isCompact ? "h-4 w-4" : "h-5 w-5"}`} />
+          <Loader2 className={`shrink-0 animate-spin text-brand-500 ${isCompact ? "h-4 w-4" : "h-5 w-5"}`} aria-hidden="true" />
         ) : (
-          <Search className={`shrink-0 text-surface-400 ${isCompact ? "h-4 w-4" : "h-5 w-5"}`} />
+          <Search className={`shrink-0 text-surface-400 ${isCompact ? "h-4 w-4" : "h-5 w-5"}`} aria-hidden="true" />
         )}
+        <label htmlFor={isCompact ? "search-compact" : "search-expanded"} className="sr-only">Search deals</label>
         <input
           ref={inputRef}
+          id={isCompact ? "search-compact" : "search-expanded"}
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}

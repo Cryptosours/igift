@@ -18,14 +18,16 @@ export function DealScore({ score }: { score: number }) {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
+      role="status"
+      aria-label={`Deal quality score: ${score} out of 100, rated ${config.label}`}
       className={clsx(
         "inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 ring-2 shadow-sm",
         config.className,
         config.ring,
       )}
     >
-      <span className="price-display text-sm font-bold leading-none">{score}</span>
-      <span className="text-[10px] font-semibold uppercase tracking-wider opacity-80">{config.label}</span>
+      <span className="price-display text-sm font-bold leading-none" aria-hidden="true">{score}</span>
+      <span className="text-[10px] font-semibold uppercase tracking-wider opacity-80" aria-hidden="true">{config.label}</span>
     </motion.div>
   );
 }
