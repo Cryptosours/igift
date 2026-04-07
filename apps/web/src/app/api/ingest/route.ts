@@ -11,6 +11,7 @@
 
 import { NextResponse } from "next/server";
 import { runIngestion } from "@/lib/ingest/orchestrator";
+import { safeCompare } from "@/app/api/admin/auth";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 120; // 2 minutes max for full pipeline
@@ -18,11 +19,11 @@ export const maxDuration = 120; // 2 minutes max for full pipeline
 const INGEST_KEY = process.env.INGEST_API_KEY;
 
 export async function POST(request: Request) {
-  // Auth check
+  // Auth check (timing-safe)
   const authHeader = request.headers.get("authorization");
   const providedKey = authHeader?.replace("Bearer ", "");
 
-  if (!INGEST_KEY || providedKey !== INGEST_KEY) {
+  if (!INGEST_KEY || !providedKey || !safeCompare(providedKey, INGEST_KEY)) {
     return NextResponse.json(
       { error: "Unauthorized — provide valid INGEST_API_KEY" },
       { status: 401 },
@@ -66,9 +67,8 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Ingestion failed:", error);
-    const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
-      { error: "Ingestion pipeline failed", details: message },
+      { error: "Ingestion pipeline failed" },
       { status: 500 },
     );
   }
