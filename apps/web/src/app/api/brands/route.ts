@@ -1,11 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { brands, offers } from "@/db/schema";
 import { eq, count, avg } from "drizzle-orm";
+import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const limited = rateLimit(request, { limit: 60, windowMs: 60_000, route: "brands" });
+  if (limited) return limited;
+
   try {
     const results = await db
       .select({

@@ -4,11 +4,12 @@
  * DELETE /api/watchlist?slug=  — remove a brand from watchlist
  */
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { db } from "@/db";
 import { watchlistItems, brands } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
+import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -41,7 +42,10 @@ export async function GET() {
 }
 
 /** POST — add brand to watchlist */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const limited = rateLimit(request, { limit: 20, windowMs: 60_000, route: "watchlist" });
+  if (limited) return limited;
+
   const sessionId = await getSession();
   if (!sessionId) {
     return NextResponse.json({ error: "No session — please reload the page" }, { status: 400 });
@@ -79,7 +83,10 @@ export async function POST(request: Request) {
 }
 
 /** DELETE — remove brand from watchlist */
-export async function DELETE(request: Request) {
+export async function DELETE(request: NextRequest) {
+  const limited = rateLimit(request, { limit: 20, windowMs: 60_000, route: "watchlist" });
+  if (limited) return limited;
+
   const sessionId = await getSession();
   if (!sessionId) {
     return NextResponse.json({ error: "No session" }, { status: 400 });

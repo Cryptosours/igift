@@ -6,10 +6,11 @@
  * No auth required (public, email-based). Rate limiting via Cloudflare.
  */
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { userAlerts, brands } from "@/db/schema";
 import { eq, and, sql } from "drizzle-orm";
+import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +31,10 @@ const DISCOUNT_OPTIONS: Record<string, number | null> = {
 const FREE_TIER_ALERT_LIMIT = 5;
 
 /** POST — Create a new alert */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const limited = rateLimit(request, { limit: 10, windowMs: 60_000, route: "alerts" });
+  if (limited) return limited;
+
   let body: Record<string, unknown>;
   try {
     body = await request.json();
@@ -144,7 +148,10 @@ export async function POST(request: Request) {
 }
 
 /** GET — List alerts for an email */
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
+  const limited = rateLimit(request, { limit: 30, windowMs: 60_000, route: "alerts" });
+  if (limited) return limited;
+
   const { searchParams } = new URL(request.url);
   const email = searchParams.get("email")?.trim().toLowerCase();
 
@@ -173,7 +180,10 @@ export async function GET(request: Request) {
 }
 
 /** DELETE — Deactivate an alert */
-export async function DELETE(request: Request) {
+export async function DELETE(request: NextRequest) {
+  const limited = rateLimit(request, { limit: 10, windowMs: 60_000, route: "alerts" });
+  if (limited) return limited;
+
   const { searchParams } = new URL(request.url);
   const idStr = searchParams.get("id");
 

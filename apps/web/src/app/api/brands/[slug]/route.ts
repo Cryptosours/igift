@@ -1,14 +1,18 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { brands, offers, sources } from "@/db/schema";
 import { eq, and, desc } from "drizzle-orm";
+import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(
-  _request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ slug: string }> },
 ) {
+  const limited = rateLimit(request, { limit: 60, windowMs: 60_000, route: "brands" });
+  if (limited) return limited;
+
   const { slug } = await params;
 
   try {

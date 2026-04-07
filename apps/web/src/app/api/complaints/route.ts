@@ -14,10 +14,11 @@
  * - "other"             — catch-all
  */
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { moderationCases, offers } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +45,10 @@ const COMPLAINT_LABEL: Record<ComplaintType, string> = {
   other: "Other",
 };
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const limited = rateLimit(request, { limit: 5, windowMs: 60_000, route: "complaints" });
+  if (limited) return limited;
+
   let body: Record<string, unknown>;
   try {
     body = await request.json();

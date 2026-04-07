@@ -1,11 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { offers, brands, sources } from "@/db/schema";
 import { eq, desc, and } from "drizzle-orm";
+import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
+  const limited = rateLimit(request, { limit: 60, windowMs: 60_000, route: "deals" });
+  if (limited) return limited;
+
   const { searchParams } = new URL(request.url);
   const region = searchParams.get("region");
   const trustZone = searchParams.get("trustZone");

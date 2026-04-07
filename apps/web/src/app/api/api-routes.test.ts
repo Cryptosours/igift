@@ -111,6 +111,15 @@ vi.mock("drizzle-orm", () => ({
   max: vi.fn((col: unknown) => ({ op: "max", col })),
 }));
 
+// ── Mock: @/lib/rate-limit ─────────────────────────────────────────────
+// Rate limiting is tested independently; always allow in route tests.
+vi.mock("@/lib/rate-limit", () => ({
+  rateLimit: () => null,
+  checkRateLimit: () => ({ allowed: true, limit: 100, remaining: 99, resetUnix: 0 }),
+  getClientIp: () => "127.0.0.1",
+  withRateLimitHeaders: (res: unknown) => res,
+}));
+
 // ── Mock: @/lib/data ───────────────────────────────────────────────────
 const mockSearchDeals = vi.fn();
 vi.mock("@/lib/data", () => ({
