@@ -1,20 +1,22 @@
 # Stage 1: Dependencies
 FROM node:20-alpine AS deps
 WORKDIR /app
+# Disable Corepack early — it misinterprets "packageManager": "npm@10.8.0"
+# as a Yarn config, breaking lockfile patching and registry lookups.
+RUN corepack disable
 COPY package.json package-lock.json ./
 COPY apps/web/package.json ./apps/web/
-RUN npm ci --ignore-scripts
+# Use npm ci WITHOUT --ignore-scripts so native binaries (@parcel/watcher,
+# @next/swc for linux-x64-musl) are properly installed on Alpine.
+RUN npm ci
 
 # Stage 2: Build
 FROM node:20-alpine AS builder
 WORKDIR /app
+RUN corepack disable
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-# Disable Corepack — it misinterprets "packageManager": "npm@10.8.0" as a
-# Yarn config, causing Next.js lockfile patching to fail with "Failed to get
-# registry from yarn".
-RUN corepack disable
 RUN npx turbo build --filter=@igift/web
 
 # Stage 3: Production
