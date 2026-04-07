@@ -6,6 +6,7 @@ import { DealFilters } from "@/components/deals/deal-filters";
 import { FeaturedSection } from "@/components/deals/featured-section";
 import { FadeIn } from "@/components/ui/fade-in";
 import { AdUnit } from "@/components/ads/adsense";
+import { ShareButton } from "@/components/ui/share-button";
 import { LOCALE_TO_REGION } from "@/lib/regions";
 
 export const metadata: Metadata = {
@@ -76,6 +77,12 @@ export default async function DealsPage() {
           <p className="mt-2 text-sm text-surface-500">
             {deals.length} deals from verified sources, updated continuously.
           </p>
+          <ShareButton
+            title="All Verified Gift Card Deals — iGift"
+            text="Browse verified gift card deals ranked by deal quality and confidence scoring."
+            url="https://igift.app/en/deals"
+            className="mt-3"
+          />
         </div>
       </FadeIn>
 

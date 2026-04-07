@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { ArrowLeft, Globe, ShieldCheck, TrendingUp } from "lucide-react";
 import { DealCard } from "@/components/deals/deal-card";
 import { WatchButton } from "@/components/ui/watch-button";
+import { ShareButton, SocialShareLinks } from "@/components/ui/share-button";
 import { BrandAvatar } from "@/components/ui/brand-avatar";
 import { getBrandBySlug, getWatchedSlugs, getPriceHistory } from "@/lib/data";
 import { PriceHistoryChart } from "@/components/analytics/price-history-chart";
@@ -115,6 +116,11 @@ export default async function BrandDetailPage({ params }: Props) {
               <div className="text-xs text-surface-400">Avg. Discount</div>
             </div>
             <WatchButton brandSlug={slug} initialWatched={isWatched} />
+            <ShareButton
+              title={`${brand.name} Gift Card Deals — iGift`}
+              text={`Check out ${brand.name} gift card deals with up to ~${brand.avgDiscount}% off from verified sources.`}
+              url={`https://igift.app/en/brands/${slug}`}
+            />
           </div>
         </div>
 
@@ -130,6 +136,12 @@ export default async function BrandDetailPage({ params }: Props) {
           <div className="flex items-center gap-1.5 text-xs text-surface-500">
             <TrendingUp className="h-3.5 w-3.5" />
             {brand.deals.length} active deals
+          </div>
+          <div className="ml-auto">
+            <SocialShareLinks
+              title={`${brand.name} Gift Card Deals — iGift`}
+              url={`https://igift.app/en/brands/${slug}`}
+            />
           </div>
         </div>
       </div>
