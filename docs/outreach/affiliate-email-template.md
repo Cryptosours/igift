@@ -50,27 +50,45 @@ https://igift.app
 
 ---
 
-## Source-Specific Notes
+## Source-Specific Notes (Researched 2026-04-07)
 
-| Source | Status | Affiliate URL | Notes |
-|--------|--------|--------------|-------|
-| Bitrefill | TODO | bitrefill.com/affiliate | Largest, easiest to join |
-| Dundle | TODO | Check site footer | |
-| Raise | TODO | raise.com/affiliates | |
-| Gift Card Granny | TODO | Check site | Owned by RetailMeNot |
-| Gameflip | TODO | Check site | |
-| BuySellVouchers | TODO | Check site | |
-| CDKeys | TODO | Check site | |
-| Eneba | TODO | eneba.com/affiliates | |
-| OffGamers | TODO | offgamers.com/affiliates | |
-| G2A | TODO | g2a.com/goldmine | Well-known program |
-| Kinguin | TODO | kinguin.net/affiliates | |
-| eGifter | TODO | Check site | |
-| CardCash | TODO | Check site | |
-| Best Buy | TODO | bestbuy.affiliatetechnology.com | Large program |
-| Target | TODO | target.com/affiliate | Via Impact |
-| Walmart | TODO | walmart.com/affiliate | Via Impact |
-| Newegg | TODO | newegg.com/affiliate | |
-| GameStop | TODO | Check site | |
+### Priority 1: Self-Service Portals (apply directly)
 
-*Update this table as you apply and get responses.*
+| Source | Commission | Apply URL | Cookie | Notes |
+|--------|-----------|-----------|--------|-------|
+| Eneba | 5% (2% w/ coupon) | https://www.eneba.com/become-affiliate | 30 days | Best overall. $50 min payout, monthly on 15th |
+| CDKeys | 5% (up to 10%) | https://affiliates.cdkeys.com/ | 24 hrs | In-house. PayPal required |
+| Kinguin | 5% new / 2.5% returning | https://www.kinguin.net/affiliate-program | 30 days | Also on Awin, Admitad. $100 min payout |
+| G2A | Multi-level (100%/60%/40%) | https://www.g2a.com/goldmine | 24 hrs | Self-managed portal. Bank/G2A payout |
+
+### Priority 2: Via Affiliate Networks (join network first)
+
+| Source | Commission | Network | Apply URL | Notes |
+|--------|-----------|---------|-----------|-------|
+| Gift Card Granny | 1% | Rakuten | https://www.giftcardgranny.com/affiliate/ | 4.7% conversion rate! 30-day cookie |
+| eGifter | 1% | ShareASale | Search "eGifter" on ShareASale | 10% conversion rate! 30-day cookie |
+| Raise | 0.8-1.6% | FlexOffers | https://www.flexoffers.com/affiliate-programs/raise-com-affiliate-program/ | 1-day cookie |
+| CardCash | 2% | FlexOffers | https://refer.cardcash.com/ | 0% on Apple/Walmart/BestBuy cards |
+
+### Priority 3: Direct Outreach Required
+
+| Source | Commission | Contact | Notes |
+|--------|-----------|---------|-------|
+| BuySellVouchers | 50 USDT referral | partnership@buysellvouchers.com | Also: buysellvouchers.com/en/site/workWithUs/ |
+| Bitrefill | 1% lifetime (store credit) | Apply form on bitrefill.com/affiliate/ | Professional affiliates apply separately |
+| Dundle | Unknown | Contact via site | Listed on Sovrn/VigLink, rates not public |
+| OffGamers | Historical: 5-6% | support@offgamers.com | Program may be inactive |
+
+### Not Worth Pursuing (0% on gift cards)
+
+| Source | Why Skip |
+|--------|---------|
+| Costco | Only pays for membership signups ($3-6), $0 on products |
+| Best Buy | 0.5% products only, 0% on gift cards/POSA cards |
+| Target | 0% on gift cards, digital products |
+| Newegg | 0% on gift cards/gaming |
+| GameStop | $0 on gift cards |
+| Gameflip | No affiliate program, $5 referral only |
+| PayPal Gifts | No program (route through eBay Partner Network for 3%) |
+
+*Update Status column as you apply and get responses.*
