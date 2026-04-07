@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.4.0] — 2026-04-07
+
+### Added
+- **Sentry error tracking** — full `@sentry/nextjs` v10 integration (client, server, edge)
+- Instrumentation hook for automatic error capture at server startup
+- Error boundaries now report to Sentry alongside console.error
+- DSN-ready: all code wired, conditional on `SENTRY_DSN` env var
+- Docker Compose passes `SENTRY_DSN` to web container
+- CSP updated with `*.ingest.sentry.io` in connect-src
+
+---
+
 ## [4.3.0] — 2026-04-07
 
 ### Added

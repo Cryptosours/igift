@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
@@ -25,7 +26,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: https:",
       "font-src 'self' data:",
-      "connect-src 'self' https:",
+      "connect-src 'self' https: https://*.ingest.sentry.io",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
@@ -48,4 +49,25 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withNextIntl(nextConfig);
+// Wrap with Sentry (no-ops if SENTRY_DSN is not set)
+export default withSentryConfig(withNextIntl(nextConfig), {
+  // Suppress source map upload warnings when SENTRY_AUTH_TOKEN is not set
+  silent: !process.env.SENTRY_AUTH_TOKEN,
+
+  // Don't upload source maps unless auth token is provided
+  sourcemaps: {
+    disable: !process.env.SENTRY_AUTH_TOKEN,
+  },
+
+  // Automatically tree-shake Sentry logger in production
+  disableLogger: true,
+
+  // Don't create a Sentry release unless auth token is provided
+  release: {
+    create: !!process.env.SENTRY_AUTH_TOKEN,
+  },
+
+  // Tunnel Sentry events through our own domain to avoid ad blockers
+  // (only if we set up the tunnel route later)
+  tunnelRoute: undefined,
+});

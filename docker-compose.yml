@@ -30,6 +30,8 @@ services:
       - DATABASE_URL=postgres://${POSTGRES_USER:-igift}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-igift}
       - ADMIN_API_KEY=${ADMIN_API_KEY}
       - INGEST_API_KEY=${INGEST_API_KEY}
+      - SENTRY_DSN=${SENTRY_DSN:-}
+      - NEXT_PUBLIC_SENTRY_DSN=${SENTRY_DSN:-}
     depends_on:
       db:
         condition: service_healthy

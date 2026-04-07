@@ -1,5 +1,27 @@
 # iGift — Session Log
 
+## Session 26 — 2026-04-07 — Phase 5 cont.: Sentry error tracking integration
+
+### What Was Done
+- **Task 5.11**: Sentry error tracking — full `@sentry/nextjs` v10 integration
+  - `sentry.client.config.ts` — browser SDK with replay, tracing, privacy-safe defaults
+  - `sentry.server.config.ts` — Node.js SDK for API routes/SSR, breadcrumb sanitization
+  - `sentry.edge.config.ts` — Edge runtime for middleware (low sample rate)
+  - `src/instrumentation.ts` — Next.js instrumentation hook loading Sentry at startup
+  - `next.config.ts` — wrapped with `withSentryConfig()`, source map upload conditional
+  - Error boundaries — both `global-error.tsx` and `[locale]/error.tsx` now call `Sentry.captureException()`
+  - `docker-compose.yml` — added `SENTRY_DSN` env var pass-through
+  - CSP updated — added `*.ingest.sentry.io` to `connect-src`
+- **Architecture**: DSN-ready pattern — all code wired, conditional on `SENTRY_DSN` env var. No-ops when absent.
+- **Action required**: Create Sentry project at sentry.io → get DSN → set in VPS `.env` → redeploy
+
+### Build Status
+- All 189 tests passing
+- Build clean (bundle increased ~115KB from Sentry SDK — acceptable)
+- Lint clean
+
+---
+
 ## Session 25 — 2026-04-07 — Phase 5 cont.: Clustering + Alert matcher tests
 
 ### What Was Done
