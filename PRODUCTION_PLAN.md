@@ -140,13 +140,13 @@
 
 | # | Task | Status | Specialist | Priority |
 |---|------|--------|------------|----------|
-| 6.1 | JSON-LD structured data for deals, categories, home (brands done) | TODO | SEO | High |
-| 6.2 | Dynamic OG image generation (Next.js ImageResponse) | TODO | Builder | High |
+| 6.1 | JSON-LD structured data for deals, categories, home (brands done) | DONE | SEO | High |
+| 6.2 | Dynamic OG image generation (Next.js ImageResponse) | DONE | Builder | High |
 | 6.3 | Frontend component tests (DealCard, Header, filters) | TODO | Builder | High |
 | 6.4 | Dark mode (CSS variables + toggle) | TODO | Designer | Medium |
-| 6.5 | Deploy latest code to VPS (4 commits pending) | TODO | Operator | Critical |
+| 6.5 | Deploy latest code to VPS | DONE | Operator | Critical |
 | 6.6 | Create Sentry project + set SENTRY_DSN on VPS | TODO | Operator | High |
-| 6.7 | Verify VPS env vars (ADMIN_API_KEY, INGEST_API_KEY) after auth hardening | TODO | Operator | Critical |
+| 6.7 | Verify VPS env vars (ADMIN_API_KEY, INGEST_API_KEY) after auth hardening | DONE | Operator | Critical |
 | 6.8 | npm audit fix (1 moderate Dependabot vulnerability) | TODO | Builder | Medium |
 | 6.9 | Automated deploy pipeline (GitHub → VPS on push) | TODO | Operator | Medium |
 | 6.10 | Rate limiter for public API routes (anti-abuse) | TODO | Builder | Medium |

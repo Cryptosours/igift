@@ -1,5 +1,38 @@
 # iGift — Session Log
 
+## Session 29 — 2026-04-07 — JSON-LD structured data, dynamic OG images, VPS deploy
+
+### What Was Done
+- **Task 6.5 (Deploy)**: Pulled 5 pending commits to VPS, rebuilt Docker container with `--force-recreate --no-deps`. Fixed Docker network isolation (connected `igift-db` to `igift_default` network with alias). Verified all endpoints responding.
+- **Task 6.7 (Env vars)**: Verified `ADMIN_API_KEY` and `INGEST_API_KEY` are set on VPS after auth hardening removed fallback keys. Confirmed fail-closed behavior works.
+- **Task 6.1 (JSON-LD)**: Added schema.org structured data to 4 page types:
+  - Home: `WebSite` (with SearchAction) + `Organization`
+  - Deals: `ItemList` with `Offer` items (top 20 deals, correct USD pricing)
+  - Categories index: `CollectionPage` with `ItemList` of categories
+  - Category detail: `CollectionPage` with `ItemList` of category-scoped offers
+- **Task 6.2 (OG images)**: Created dynamic `opengraph-image.tsx` files using Next.js `ImageResponse`:
+  - Site-wide default: indigo gradient, "iG" logo, tagline, feature pills (edge runtime)
+  - Brand detail: shows brand name, category, best/avg discount stats, deal count (nodejs runtime)
+  - Category detail: shows category icon, name, description (nodejs runtime)
+  - Fixed Satori layout errors: `display: "flex"` on multi-child divs, template literals for single text nodes
+
+### Key Metrics
+- Tests: **199** (unchanged, no new test files)
+- Commits: 4 pushed (2348568 JSON-LD, 6d1daf9 OG images, 47f393d Satori fix, + docs commit)
+- Tasks completed: 6.1, 6.2, 6.5, 6.7
+
+### Architecture Notes
+- OG images use `runtime = "nodejs"` (not edge) when importing from `@/lib/data.ts` because the postgres driver (`net`, `tls`) is incompatible with edge runtime — even for pure functions, webpack bundles all top-level imports
+- JSON-LD `priceCurrency` is hardcoded `"USD"` because `deal.currency` is the display symbol `"$"` not ISO 4217
+- `effectivePrice` is already in dollars (via `centsToDollars()`), not cents — don't divide by 100
+
+### Wrong Roads
+- Initially used `runtime = "edge"` for all OG images — failed build due to postgres driver imports
+- Initially divided `effectivePrice` by 100 in JSON-LD — already in dollars, caused wrong prices
+- Satori `{var} text` pattern creates multiple child nodes — need template literals or `display: "flex"`
+
+---
+
 ## Session 28 — 2026-04-07 — Flight audit + security hardening + live FX rates
 
 ### What Was Done
