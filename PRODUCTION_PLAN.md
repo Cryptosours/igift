@@ -142,7 +142,7 @@
 |---|------|--------|------------|----------|
 | 6.1 | JSON-LD structured data for deals, categories, home (brands done) | DONE | SEO | High |
 | 6.2 | Dynamic OG image generation (Next.js ImageResponse) | DONE | Builder | High |
-| 6.3 | Frontend component tests (DealCard, Header, filters) | TODO | Builder | High |
+| 6.3 | Frontend component tests (DealCard, DealScore, TrustBadge, DealFilters) | DONE | Builder | High |
 | 6.4 | Dark mode (CSS variables + toggle) | TODO | Designer | Medium |
 | 6.5 | Deploy latest code to VPS | DONE | Operator | Critical |
 | 6.6 | Create Sentry project + set SENTRY_DSN on VPS | TODO | Operator | High |

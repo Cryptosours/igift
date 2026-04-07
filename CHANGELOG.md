@@ -6,6 +6,7 @@
 - **JSON-LD structured data** (Task 6.1): WebSite + Organization on home, ItemList on deals, CollectionPage on categories index and detail pages
 - **Dynamic OG images** (Task 6.2): `opengraph-image.tsx` for site-wide, brand detail, and category detail using Next.js ImageResponse
 - **VPS deploy** (Task 6.5): All pending commits deployed, Docker container rebuilt
+- **Frontend component tests** (Task 6.3): 43 tests for DealCard, DealScore, TrustBadge, DealFilters. Shared motion/react mock factory, jsdom + React Testing Library infrastructure
 
 ### Fixed
 - **OG image Satori layout**: Added `display: "flex"` on multi-child divs, converted `{var} text` patterns to template literals for Satori compatibility

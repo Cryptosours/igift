@@ -16,10 +16,17 @@
   - Category detail: shows category icon, name, description (nodejs runtime)
   - Fixed Satori layout errors: `display: "flex"` on multi-child divs, template literals for single text nodes
 
+- **Task 6.3 (Component tests)**: 43 new frontend tests across 4 test files:
+  - `deal-card.test.tsx` (16 tests): price formatting, discount calc, affiliate compliance, brand link, historical low badge
+  - `deal-score.test.tsx` (8 tests): score bands (Excellent/Good/Fair/Weak), boundary values, aria-label
+  - `trust-badge.test.tsx` (6 tests): zone labels (Verified/Marketplace/Caution), CSS classes
+  - `deal-filters.test.tsx` (13 tests): region filtering, global inclusion, green-only/historical toggles, combined filters, empty state, aria-pressed
+  - Infra: shared `test-mocks.tsx` (motion/react factory mock), `test-setup.ts` (jest-dom matchers), vitest config updated for jsdom + React plugin
+
 ### Key Metrics
-- Tests: **199** (unchanged, no new test files)
-- Commits: 4 pushed (2348568 JSON-LD, 6d1daf9 OG images, 47f393d Satori fix, + docs commit)
-- Tasks completed: 6.1, 6.2, 6.5, 6.7
+- Tests: **242** (199 existing + 43 new component tests)
+- Commits: 5 pushed (2348568 JSON-LD, 6d1daf9 OG images, 47f393d Satori fix, 05e9399 docs, ee05ef2 component tests)
+- Tasks completed: 6.1, 6.2, 6.3, 6.5, 6.7
 
 ### Architecture Notes
 - OG images use `runtime = "nodejs"` (not edge) when importing from `@/lib/data.ts` because the postgres driver (`net`, `tls`) is incompatible with edge runtime — even for pure functions, webpack bundles all top-level imports
