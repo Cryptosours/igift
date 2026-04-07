@@ -1,5 +1,25 @@
 # Changelog
 
+## [5.0.0] — 2026-04-08
+
+### Added
+- **AdSense infrastructure** (Task 7.1, 7.2): CSP whitelist for Google Analytics + AdSense. Consent-aware `AdSenseScript` + `AdUnit` components gated behind env var AND marketing cookie consent
+- **Ad placements** (Task 7.4): Horizontal and rectangle ad slots on deals page
+- **Enhanced sitemap** (Task 7.6): All URLs now include i18n hreflang alternates (en, de, x-default) using `localizedEntry()` helper. Dynamic brand, category, and source pages included
+- **Social sharing** (Task 7.7): `ShareButton` (Web Share API + clipboard fallback), `SocialShareLinks` (X, WhatsApp, Reddit). Integrated into brand detail and deals pages
+- **Newsletter deal digest** (Task 7.8): `newsletterSubscribers` DB table with double opt-in support and GDPR unsubscribe tokens. POST/DELETE `/api/newsletter` API. `NewsletterForm` component on home + deals pages
+
+### Changed
+- **Performance** (Task 7.5): Dynamic imports for PriceHistoryChart (Recharts), AlertManager, CookieBanner. Thin client wrappers for `ssr: false` in Server Component pages
+- **CookieBanner**: Moved to dynamic import in locale layout for smaller initial JS
+
+### Fixed
+- **Vitest 4 → 3.x pin** (Task 7.3): Rolldown (Vite 8) cannot parse JSX in scan phase. Pinned vitest ~3.2.4 which uses esbuild. Removed `@vitejs/plugin-react` v6, configured `esbuild.jsx: "automatic"` directly
+- **Auth mock timing**: `@/app/api/admin/auth` module-scope env var reads before vitest env applies. Added explicit mock
+- **Monorepo hoisting**: Added vitest to root devDependencies for `@testing-library/jest-dom` resolution
+- **CI pipeline**: Regenerated lockfile with cross-platform esbuild binaries. Added `corepack disable` step for npm/yarn packageManager confusion
+- 250/250 tests passing, CI pipeline green
+
 ## [4.7.0] — 2026-04-07
 
 ### Added

@@ -1,5 +1,56 @@
 # iGift — Session Log
 
+## Session 30 — 2026-04-08 — Phase 7 Revenue & Growth: test fixes, AdSense, social sharing, perf, newsletter
+
+### What Was Done
+
+**Test suite / CI fixes (critical):**
+- Pinned vitest to ~3.2.4 (Vitest 4 + Vite 8 Rolldown JSX incompatibility)
+- Removed `@vitejs/plugin-react` v6, configured esbuild `jsx: "automatic"` directly
+- Fixed `@/app/api/admin/auth` mock for module-scope env var timing
+- Added vitest to root package.json for monorepo hoisting
+- Regenerated lockfile with cross-platform esbuild binaries (CI on ubuntu-latest)
+- Added `corepack disable` step in CI to fix npm/yarn packageManager confusion
+- Result: **250/250 tests green**, CI pipeline passing
+
+**Phase 7 tasks completed:**
+- **7.1 CSP update**: Whitelisted Google Analytics + AdSense domains in Content-Security-Policy
+- **7.2 AdSense components**: Consent-aware `AdSenseScript` + `AdUnit` — gated behind env var AND marketing cookie consent
+- **7.3 Vitest pin**: Documented as separate task (see test fixes above)
+- **7.4 Ad placement**: `AdUnit` slots on deals page (horizontal top, rectangle bottom)
+- **7.5 Performance**: Dynamic imports for PriceHistoryChart (Recharts), AlertManager, CookieBanner via thin client wrappers (ssr:false not allowed in Server Components)
+- **7.6 Enhanced sitemap**: i18n localized URLs with hreflang alternates (en, de, x-default) for all static + dynamic pages
+- **7.7 Social sharing**: `ShareButton` (Web Share API + clipboard fallback) + `SocialShareLinks` (X, WhatsApp, Reddit) — integrated into brand detail and deals pages
+- **7.8 Newsletter**: `newsletterSubscribers` DB table, POST/DELETE `/api/newsletter` API, `NewsletterForm` component on home + deals pages
+
+### Commits
+1. `344ba31` — fix: resolve test suite regressions — pin vitest 3.x, fix JSX and auth mocks
+2. `308138d` — fix: regenerate lockfile with cross-platform esbuild binaries
+3. `3070ecc` — feat: Phase 7 — AdSense infrastructure, CSP update, CI fix
+4. `cbbc4f6` — feat: i18n sitemap with hreflang + social share buttons (Phase 7.6, 7.7)
+5. `8abdb08` — perf: dynamic imports for PriceHistoryChart, AlertManager, CookieBanner (7.5)
+6. `ceac8a5` — feat: newsletter deal digest signup with DB schema and API (Phase 7.4, 7.8)
+
+### Phase 7 Status
+| Task | Status |
+|------|--------|
+| 7.1 CSP for GA + AdSense | DONE |
+| 7.2 AdSense components | DONE |
+| 7.3 Pin vitest 3.x | DONE |
+| 7.4 Ad placement | DONE |
+| 7.5 Performance (dynamic imports) | DONE |
+| 7.6 Enhanced sitemap (i18n) | DONE |
+| 7.7 Social sharing | DONE |
+| 7.8 Newsletter signup | DONE |
+| 7.9–7.12 | HUMAN (GSC, GA ID, AdSense app, affiliates) |
+
+### Remaining
+- VPS deployment needed for latest commits
+- Run `drizzle-kit push` on VPS for newsletter_subscribers table
+- HUMAN tasks: 7.9 (Google Search Console), 7.10 (GA measurement ID), 7.11 (AdSense application), 7.12 (Affiliate signups)
+
+---
+
 ## Session 29 — 2026-04-07 — JSON-LD structured data, dynamic OG images, VPS deploy
 
 ### What Was Done
