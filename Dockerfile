@@ -11,6 +11,10 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# Disable Corepack — it misinterprets "packageManager": "npm@10.8.0" as a
+# Yarn config, causing Next.js lockfile patching to fail with "Failed to get
+# registry from yarn".
+RUN corepack disable
 RUN npx turbo build --filter=@igift/web
 
 # Stage 3: Production
