@@ -32,15 +32,27 @@
   - complaints: 5/min (abuse-sensitive)
   - Returns 429 with `X-RateLimit-*` headers and `Retry-After`
 
+- **Task 6.4 (Dark mode)**: CSS variable remap pattern — `.dark` selector overrides `--color-surface-*` scale so all 565+ component references switch automatically without adding `dark:` variants.
+  - `ThemeProvider` with localStorage persistence + system preference listener (light/dark/system)
+  - `ThemeToggle` button in header, cycles modes with animated icon swap (Sun/Moon/Monitor)
+  - FOUC prevention: inline `<script>` in `<head>` reads localStorage before first paint
+  - Brand, deal, alert palettes adjusted for dark backgrounds (brighter on dark)
+  - Glass, card-hover, bg-grid, bg-dots overrides for dark context
+
 ### Key Metrics
 - Tests: **250** (199 backend + 43 component + 8 rate-limit)
-- Commits: 8 pushed this session
-- Tasks completed: 6.1, 6.2, 6.3, 6.5, 6.7, 6.8, 6.10
+- Commits: 9 pushed this session
+- Tasks completed: 6.1, 6.2, 6.3, 6.4, 6.5, 6.7, 6.8, 6.10
 
 ### Architecture Notes
 - OG images use `runtime = "nodejs"` (not edge) when importing from `@/lib/data.ts` because the postgres driver (`net`, `tls`) is incompatible with edge runtime — even for pure functions, webpack bundles all top-level imports
 - JSON-LD `priceCurrency` is hardcoded `"USD"` because `deal.currency` is the display symbol `"$"` not ISO 4217
 - `effectivePrice` is already in dollars (via `centsToDollars()`), not cents — don't divide by 100
+
+### Architecture Notes (Dark Mode)
+- Surface scale remap avoids Tailwind `dark:` prefix on 565+ class references — single `.dark` block in globals.css flips the entire palette
+- FOUC prevention script must run before React hydration — inline `<head>` script with `suppressHydrationWarning` on `<html>`
+- ThemeProvider detects `prefers-color-scheme` changes for system mode via `matchMedia` listener
 
 ### Wrong Roads
 - Initially used `runtime = "edge"` for all OG images — failed build due to postgres driver imports
