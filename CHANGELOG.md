@@ -9,9 +9,13 @@
 - **Frontend component tests** (Task 6.3): 43 tests for DealCard, DealScore, TrustBadge, DealFilters. Shared motion/react mock factory, jsdom + React Testing Library infrastructure
 - **Rate limiter** (Task 6.10): In-memory sliding-window rate limiter for 7 public API routes. Per-IP per-route bucketing, 429 responses with `X-RateLimit-*` headers
 - **Dark mode** (Task 6.4): CSS variable remap pattern — `.dark` overrides surface scale so all components switch automatically. ThemeProvider (light/dark/system), ThemeToggle in header, FOUC prevention script, dark palette adjustments for brand/deal/alert colors
-- **Deploy pipeline** (Task 6.9): `.github/workflows/deploy.yml` — CI gate (lint/test/build) → SSH deploy to VPS → health check. Concurrency group prevents overlapping deploys. Manual trigger via `workflow_dispatch`. *Needs GitHub Secrets configured.*
+- **Deploy pipeline** (Task 6.9): `.github/workflows/deploy.yml` — CI gate (lint/test/build) → SSH deploy to VPS → health check. Concurrency group prevents overlapping deploys. Manual trigger via `workflow_dispatch`.
+- **Sentry activated** (Task 6.6): DSN set on VPS (`SENTRY_DSN` + `NEXT_PUBLIC_SENTRY_DSN`). Client, server, and edge error tracking now live. Session replay enabled (1% normal, 100% on error).
+- **Cookie consent banner**: GDPR-compliant 3-tier consent (necessary/analytics/marketing). Animated banner with Accept All, Reject Optional, and Customize settings panel. Cookie Settings button in footer.
+- **Google Analytics integration**: Consent-aware `GoogleAnalytics` component. Only loads gtag after user accepts analytics cookies. Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` env var to activate.
 
 ### Fixed
+- **GitHub Actions Node.js 20 deprecation**: Added `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` to CI and deploy workflows
 - **npm audit** (Task 6.8): esbuild override to 0.25.12 eliminates GHSA-67mh-4wv8-2f99 (moderate). Removed duplicate root-level `next-intl` that caused next@16 vs next@15 type conflict
 - **OG image Satori layout**: Added `display: "flex"` on multi-child divs, converted `{var} text` patterns to template literals for Satori compatibility
 - **JSON-LD pricing**: `effectivePrice` is already in dollars (not cents), `priceCurrency` hardcoded to ISO 4217 `"USD"` (not display symbol `"$"`)
