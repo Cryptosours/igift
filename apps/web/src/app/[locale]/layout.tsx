@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { MotionProvider } from "@/components/layout/motion-provider";
 import { PageTransition } from "@/components/layout/page-transition";
+import { ThemeProvider } from "@/components/layout/theme-provider";
 import type { Metadata } from "next";
 
 interface LocaleLayoutProps {
@@ -80,13 +81,15 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
 
   return (
     <NextIntlClientProvider messages={messages}>
-      <MotionProvider>
-        <Header />
-        <main id="main-content" className="flex-1">
-          <PageTransition>{children}</PageTransition>
-        </main>
-        <Footer />
-      </MotionProvider>
+      <ThemeProvider>
+        <MotionProvider>
+          <Header />
+          <main id="main-content" className="flex-1">
+            <PageTransition>{children}</PageTransition>
+          </main>
+          <Footer />
+        </MotionProvider>
+      </ThemeProvider>
     </NextIntlClientProvider>
   );
 }

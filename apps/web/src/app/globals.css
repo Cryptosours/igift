@@ -83,6 +83,46 @@
 }
 
 /* ══════════════════════════════════════════════
+   Dark Mode — Surface Scale Remap
+   Flips the surface palette so light values map to dark equivalents.
+   Components using bg-surface-50 get dark backgrounds automatically.
+   ══════════════════════════════════════════════ */
+.dark {
+  --color-surface-0: #0f172a;
+  --color-surface-50: #0f172a;
+  --color-surface-100: #1e293b;
+  --color-surface-200: #334155;
+  --color-surface-300: #475569;
+  --color-surface-400: #94a3b8;
+  --color-surface-500: #94a3b8;
+  --color-surface-600: #cbd5e1;
+  --color-surface-700: #e2e8f0;
+  --color-surface-800: #f1f5f9;
+  --color-surface-900: #f8fafc;
+  --color-surface-950: #ffffff;
+
+  /* Brand colors — slightly brighter for dark backgrounds */
+  --color-brand-50: rgba(99, 102, 241, 0.1);
+  --color-brand-100: rgba(99, 102, 241, 0.15);
+  --color-brand-600: #818cf8;
+  --color-brand-700: #a5b4fc;
+
+  /* Deal green — slightly brighter */
+  --color-deal-50: rgba(16, 185, 129, 0.1);
+  --color-deal-100: rgba(16, 185, 129, 0.15);
+
+  /* Alert amber — slightly brighter */
+  --color-alert-50: rgba(245, 158, 11, 0.1);
+
+  color-scheme: dark;
+}
+
+/* bg-white cards/sections → dark surface in dark mode */
+.dark .bg-white {
+  background-color: var(--color-surface-100);
+}
+
+/* ══════════════════════════════════════════════
    Base Styles
    ══════════════════════════════════════════════ */
 html {
@@ -163,12 +203,21 @@ body {
     0 10px 15px -3px rgba(0, 0, 0, 0.08),
     0 0 0 1px rgba(79, 70, 229, 0.08);
 }
+.dark .card-hover:hover {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.3),
+    0 10px 15px -3px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(129, 140, 248, 0.15);
+}
 
 /* Glass surface for overlays */
 .glass {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+.dark .glass {
+  background: rgba(15, 23, 42, 0.8);
 }
 
 .glass-dark {
@@ -208,11 +257,19 @@ body {
     linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
   background-size: 32px 32px;
 }
+.dark .bg-grid {
+  background-image:
+    linear-gradient(rgba(129, 140, 248, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(129, 140, 248, 0.05) 1px, transparent 1px);
+}
 
 /* Dot pattern */
 .bg-dots {
   background-image: radial-gradient(circle, rgba(99, 102, 241, 0.08) 1px, transparent 1px);
   background-size: 24px 24px;
+}
+.dark .bg-dots {
+  background-image: radial-gradient(circle, rgba(129, 140, 248, 0.1) 1px, transparent 1px);
 }
 
 /* ══════════════════════════════════════════════

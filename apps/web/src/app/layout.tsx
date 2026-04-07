@@ -25,11 +25,21 @@ export default async function RootLayout({
 }) {
   const locale = await getLocale();
 
+  /* eslint-disable @next/next/no-sync-scripts -- FOUC prevention: static script sets .dark before paint */
   return (
     <html
       lang={locale}
       className={`${inter.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
     >
+      <head>
+        {/* Static inline script — no user input, prevents dark mode FOUC */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("igift-theme");var d=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches);if(d)document.documentElement.classList.add("dark")}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body className="min-h-screen flex flex-col bg-surface-50 text-surface-900 font-sans">
         <a
           href="#main-content"

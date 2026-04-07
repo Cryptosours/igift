@@ -21,6 +21,7 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import { SearchBar } from "@/components/ui/search-bar";
 import { Logo } from "@/components/ui/logo";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export function Header() {
   const t = useTranslations("Navigation");
@@ -113,6 +114,7 @@ export function Header() {
             >
               <LayoutDashboard className="h-4.5 w-4.5" />
             </Link>
+            <ThemeToggle />
             <Link
               href="/alerts"
               className="hidden sm:inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-brand-700 hover:shadow-md active:scale-[0.98]"
