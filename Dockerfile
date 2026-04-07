@@ -1,14 +1,16 @@
 # Stage 1: Dependencies
 FROM node:20-alpine AS deps
 WORKDIR /app
-# Disable Corepack early — it misinterprets "packageManager": "npm@10.8.0"
+# Disable Corepack — it misinterprets "packageManager": "npm@10.8.0"
 # as a Yarn config, breaking lockfile patching and registry lookups.
 RUN corepack disable
 COPY package.json package-lock.json ./
 COPY apps/web/package.json ./apps/web/
-# Use npm ci WITHOUT --ignore-scripts so native binaries (@parcel/watcher,
-# @next/swc for linux-x64-musl) are properly installed on Alpine.
+# npm ci installs what the lockfile specifies. The lockfile was generated
+# on macOS so it's missing linux-musl optional deps. We install them
+# explicitly afterwards.
 RUN npm ci
+RUN npm install --no-save @parcel/watcher-linux-x64-musl @next/swc-linux-x64-musl 2>/dev/null || true
 
 # Stage 2: Build
 FROM node:20-alpine AS builder
