@@ -7,6 +7,7 @@ import { FeaturedSection } from "@/components/deals/featured-section";
 import { FadeIn } from "@/components/ui/fade-in";
 import { AdUnit } from "@/components/ads/adsense";
 import { ShareButton } from "@/components/ui/share-button";
+import { NewsletterForm } from "@/components/newsletter/newsletter-form";
 import { LOCALE_TO_REGION } from "@/lib/regions";
 
 export const metadata: Metadata = {
@@ -99,6 +100,11 @@ export default async function DealsPage() {
 
       {/* Ad: rectangle after grid (AdSense slot TBD) */}
       <AdUnit slot="deals-bottom" format="rectangle" className="mt-8 flex justify-center" />
+
+      {/* Newsletter signup */}
+      <div className="mx-auto mt-12 max-w-md">
+        <NewsletterForm variant="compact" />
+      </div>
     </div>
   );
 }

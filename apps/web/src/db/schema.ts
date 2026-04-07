@@ -322,6 +322,36 @@ export const apiKeys = pgTable(
   ],
 );
 
+// ── Newsletter Subscribers ──
+// Weekly deal digest email. Double opt-in: verifiedAt set after clicking
+// confirmation link. GDPR: store consent timestamp; unsubscribe via token.
+
+export const digestFrequencyEnum = pgEnum("digest_frequency", [
+  "daily",
+  "weekly",
+]);
+
+export const newsletterSubscribers = pgTable(
+  "newsletter_subscribers",
+  {
+    id: serial("id").primaryKey(),
+    email: text("email").notNull(),
+    frequency: digestFrequencyEnum("frequency").notNull().default("weekly"),
+    // Categories of interest (empty = all categories)
+    categories: jsonb("categories").$type<string[]>().default([]),
+    // Double opt-in: null until email confirmed
+    verifiedAt: timestamp("verified_at", { withTimezone: true }),
+    // Unsubscribe token (random UUID, sent in emails)
+    unsubscribeToken: text("unsubscribe_token").notNull(),
+    isActive: boolean("is_active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("idx_newsletter_email").on(table.email),
+    index("idx_newsletter_unsub_token").on(table.unsubscribeToken),
+  ],
+);
+
 // ── Type exports for application use ──
 
 export type Source = typeof sources.$inferSelect;
@@ -338,4 +368,6 @@ export type AffiliateClick = typeof affiliateClicks.$inferSelect;
 export type WatchlistItem = typeof watchlistItems.$inferSelect;
 export type SponsoredPlacement = typeof sponsoredPlacements.$inferSelect;
 export type ApiKey = typeof apiKeys.$inferSelect;
+export type NewsletterSubscriber = typeof newsletterSubscribers.$inferSelect;
+export type NewNewsletterSubscriber = typeof newsletterSubscribers.$inferInsert;
 export type NewApiKey = typeof apiKeys.$inferInsert;

@@ -15,6 +15,7 @@ import { DealCard } from "@/components/deals/deal-card";
 import { getDeals, getCategories, getHeroStats } from "@/lib/data";
 import { HeroSearch } from "@/components/ui/hero-search";
 import { HomeAlertForm } from "@/components/alerts/home-alert-form";
+import { NewsletterForm } from "@/components/newsletter/newsletter-form";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
 export const dynamic = "force-dynamic";
@@ -423,6 +424,17 @@ export default async function HomePage() {
               </div>
             </FadeIn>
           </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════
+          NEWSLETTER — Deal Digest signup
+          ══════════════════════════════════════ */}
+      <section className="border-t border-surface-100 bg-surface-50 py-14">
+        <div className="mx-auto max-w-lg px-4 sm:px-6">
+          <FadeIn>
+            <NewsletterForm />
+          </FadeIn>
         </div>
       </section>
     </>

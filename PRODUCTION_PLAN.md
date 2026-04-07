@@ -161,11 +161,11 @@
 | 7.1 | CSP update for Google Analytics + AdSense domains | DONE | Builder | Critical |
 | 7.2 | AdSense ad components (consent-aware, env-gated) | DONE | Builder | Critical |
 | 7.3 | Pin vitest 3.x — fix Vite 8 JSX regression (250 tests green) | DONE | Builder | Critical |
-| 7.4 | Ad placement integration (deals page sidebar, between listings) | TODO | Builder | High |
-| 7.5 | Performance optimization (dynamic imports, bundle splitting) | TODO | Builder | High |
+| 7.4 | Ad placement integration (deals page, between listings) | DONE | Builder | High |
+| 7.5 | Performance optimization (dynamic imports, bundle splitting) | DONE | Builder | High |
 | 7.6 | Enhanced sitemap (i18n hreflang, dynamic brand/source pages, lastmod) | DONE | SEO | High |
 | 7.7 | Social sharing (share buttons, copy-link, WhatsApp/X/Reddit) | DONE | Builder | Medium |
-| 7.8 | Newsletter / email capture (deal digest signup) | TODO | Builder | Medium |
+| 7.8 | Newsletter / email capture (deal digest signup) | DONE | Builder | Medium |
 | 7.9 | Google Search Console verification + sitemap submission | HUMAN | Operator | Critical |
 | 7.10 | Google Analytics property creation + measurement ID setup | HUMAN | Operator | Critical |
 | 7.11 | Google AdSense application (after traffic data exists) | HUMAN | Operator | High |
