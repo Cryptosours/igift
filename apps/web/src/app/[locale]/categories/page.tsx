@@ -19,8 +19,34 @@ export default async function CategoriesPage() {
     // DB unavailable — render with empty category list
   }
 
+  const categoriesJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Gift Card Deal Categories",
+    description: "Browse verified digital value deals by category — gaming, streaming, app stores, retail, food, and travel.",
+    url: "https://igift.app/en/categories",
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: categories.length,
+      itemListElement: categories.map((cat, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: {
+          "@type": "Thing",
+          name: cat.name,
+          description: cat.description,
+          url: `https://igift.app/en/categories/${cat.slug}`,
+        },
+      })),
+    },
+  };
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(categoriesJsonLd) }}
+      />
       <FadeIn>
         <span className="data-label text-brand-600">Categories</span>
         <h1 className="mt-1 heading-display text-3xl text-surface-900">

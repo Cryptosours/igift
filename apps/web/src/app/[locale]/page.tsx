@@ -19,6 +19,46 @@ import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
 export const dynamic = "force-dynamic";
 
+function HomeJsonLd({ stats }: { stats: { activeOffers: number; verifiedSources: number; trackedBrands: number } }) {
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "iGift",
+      url: "https://igift.app",
+      description:
+        "Trust-scored deal intelligence for digital gift cards, credits, and vouchers. Compare verified prices across trusted sources.",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: "https://igift.app/en/deals?q={search_term_string}",
+        },
+        "query-input": "required name=search_term_string",
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "iGift",
+      url: "https://igift.app",
+      logo: "https://igift.app/icon.svg",
+      description: `Deal intelligence platform tracking ${stats.activeOffers} offers across ${stats.verifiedSources} verified sources and ${stats.trackedBrands} brands.`,
+    },
+  ];
+  return (
+    <>
+      {jsonLd.map((item, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(item) }}
+        />
+      ))}
+    </>
+  );
+}
+
 export default async function HomePage() {
   let deals: Awaited<ReturnType<typeof getDeals>> = [];
   let categories: Awaited<ReturnType<typeof getCategories>> = [];
@@ -36,6 +76,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <HomeJsonLd stats={heroStats} />
       {/* ══════════════════════════════════════
           HERO — Editorial, data-forward
           ══════════════════════════════════════ */}

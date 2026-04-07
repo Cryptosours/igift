@@ -39,8 +39,32 @@ export default async function DealsPage() {
   // Suggest a region filter based on the active locale (e.g. German → EU)
   const defaultRegion = LOCALE_TO_REGION[locale];
 
+  const dealsJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Verified Gift Card Deals",
+    description: "Trust-scored gift card and digital credit deals from verified sources.",
+    numberOfItems: deals.length,
+    itemListElement: deals.slice(0, 20).map((deal, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Offer",
+        name: deal.title,
+        price: deal.effectivePrice.toFixed(2),
+        priceCurrency: "USD",
+        seller: { "@type": "Organization", name: deal.sourceName },
+        url: `https://igift.app/en/brands/${deal.brandSlug}`,
+      },
+    })),
+  };
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(dealsJsonLd) }}
+      />
       {/* Page Header */}
       <FadeIn>
         <div>

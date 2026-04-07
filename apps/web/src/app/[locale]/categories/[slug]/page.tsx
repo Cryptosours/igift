@@ -35,8 +35,36 @@ export default async function CategoryDetailPage({ params }: Props) {
     // DB unavailable
   }
 
+  const categoryJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `${cat.name} Gift Card Deals`,
+    description: cat.description,
+    url: `https://igift.app/en/categories/${slug}`,
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: deals.length,
+      itemListElement: deals.slice(0, 20).map((deal, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: {
+          "@type": "Offer",
+          name: deal.title,
+          price: deal.effectivePrice.toFixed(2),
+          priceCurrency: "USD",
+          seller: { "@type": "Organization", name: deal.sourceName },
+          url: `https://igift.app/en/brands/${deal.brandSlug}`,
+        },
+      })),
+    },
+  };
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryJsonLd) }}
+      />
       <Link
         href="/categories"
         className="inline-flex items-center gap-1 text-sm text-surface-500 hover:text-brand-600"
