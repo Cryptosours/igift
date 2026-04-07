@@ -6,6 +6,10 @@ export default defineConfig({
     globals: true,
     environment: "node",
     include: ["src/**/*.test.ts"],
+    env: {
+      ADMIN_API_KEY: "dev-admin-key",
+      INGEST_API_KEY: "dev-ingest-key",
+    },
   },
   resolve: {
     alias: {

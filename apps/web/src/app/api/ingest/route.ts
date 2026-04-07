@@ -15,14 +15,14 @@ import { runIngestion } from "@/lib/ingest/orchestrator";
 export const dynamic = "force-dynamic";
 export const maxDuration = 120; // 2 minutes max for full pipeline
 
-const INGEST_KEY = process.env.INGEST_API_KEY ?? "dev-ingest-key";
+const INGEST_KEY = process.env.INGEST_API_KEY;
 
 export async function POST(request: Request) {
   // Auth check
   const authHeader = request.headers.get("authorization");
   const providedKey = authHeader?.replace("Bearer ", "");
 
-  if (providedKey !== INGEST_KEY) {
+  if (!INGEST_KEY || providedKey !== INGEST_KEY) {
     return NextResponse.json(
       { error: "Unauthorized — provide valid INGEST_API_KEY" },
       { status: 401 },
