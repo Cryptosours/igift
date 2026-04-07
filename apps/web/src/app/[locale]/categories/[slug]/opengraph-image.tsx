@@ -61,8 +61,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           }}
         >
           <div style={{ fontSize: "72px" }}>{icon}</div>
-          <div style={{ fontSize: "48px", fontWeight: 700, color: "white", lineHeight: 1.1 }}>
-            {name} Deals
+          <div style={{ fontSize: "48px", fontWeight: 700, color: "white", lineHeight: 1.1, display: "flex" }}>
+            {`${name} Deals`}
           </div>
           <div style={{ fontSize: "22px", color: "#c7d2fe", lineHeight: 1.4, maxWidth: "700px" }}>
             {description}
@@ -91,7 +91,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             Trust-scored &amp; verified
           </div>
           <div style={{ fontSize: "16px", color: "#818cf8", fontWeight: 500 }}>
-            igift.app/categories/{slug}
+            {`igift.app/categories/${slug}`}
           </div>
         </div>
       </div>
