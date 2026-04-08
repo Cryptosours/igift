@@ -17,6 +17,7 @@ import { getDeals, getCategories, getHeroStats } from "@/lib/data";
 import { HeroSearch } from "@/components/ui/hero-search";
 import { HomeAlertForm } from "@/components/alerts/home-alert-form";
 import { NewsletterForm } from "@/components/newsletter/newsletter-form";
+import { NewOffersFound } from "@/components/offers/new-offers-found";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
 export const dynamic = "force-dynamic";
@@ -330,6 +331,11 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ══════════════════════════════════════
+          NEW OFFERS FOUND — Live rolling discovery feed
+          ══════════════════════════════════════ */}
+      <NewOffersFound />
 
       {/* ══════════════════════════════════════
           CATEGORIES — Visual cards with gradients
