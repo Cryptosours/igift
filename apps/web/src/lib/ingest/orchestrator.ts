@@ -51,12 +51,12 @@ function getRegisteredAdapters(): SourceAdapter[] {
     giftCardGrannyAdapter,
     gameflipAdapter,
     buySellVouchersAdapter,
-    // Phase 4.2 live adapters
-    cdkeysAdapter,
-    enebaAdapter,
-    offgamersAdapter,
-    g2aAdapter,
-    kinguinAdapter,
+    // Phase 4.2 live adapters — disabled pending affiliate API access:
+    // cdkeysAdapter,   // CDKeys rebranded to Loaded.com; 403 behind Cloudflare
+    // enebaAdapter,    // SPA — prices loaded client-side, no server-side data
+    // offgamersAdapter,// All product fetches failing (anti-bot)
+    // g2aAdapter,      // 177s timeout, all fetches failing (anti-bot)
+    // kinguinAdapter,  // All product fetches failing (anti-bot)
     ...getAllCatalogAdapters(),
   ];
 }

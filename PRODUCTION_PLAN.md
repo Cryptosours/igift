@@ -181,12 +181,13 @@
 | 8.1 | Fix Raise adapter sourceSlug mismatch (gcx → raise) | DONE | Builder | Critical |
 | 8.2 | Add missing Uber brand to seed + production DB | DONE | Builder | High |
 | 8.3 | Add health check API endpoint (/api/health) | DONE | Builder | Critical |
-| 8.4 | Fix CDKeys adapter (anti-bot 403s, URL pattern changes) | TODO | Builder | High |
-| 8.5 | Fix Eneba adapter (fetch failures on all products) | TODO | Builder | High |
-| 8.6 | Fix G2A adapter (177s timeout, all fetches failing) | TODO | Builder | Medium |
-| 8.7 | Fix Kinguin adapter (all product fetches failing) | TODO | Builder | Medium |
-| 8.8 | Fix OffGamers adapter (all product fetches failing) | TODO | Builder | Medium |
-| 8.9 | Investigate GiftCardGranny 403s (all pages blocked) | TODO | Builder | Low |
+| 8.4 | CDKeys adapter — rebranded to Loaded.com, disabled (needs API) | BLOCKED | Builder | High |
+| 8.5 | Eneba adapter — SPA, no server-side prices, disabled (needs API) | BLOCKED | Builder | High |
+| 8.6 | G2A adapter — anti-bot, disabled (needs affiliate API) | BLOCKED | Builder | Medium |
+| 8.7 | Kinguin adapter — anti-bot, disabled (needs affiliate API) | BLOCKED | Builder | Medium |
+| 8.8 | OffGamers adapter — anti-bot, disabled (needs affiliate API) | BLOCKED | Builder | Medium |
+| 8.9 | GiftCardGranny — 403 on all pages, disabled (anti-bot) | BLOCKED | Builder | Low |
+| 8.14 | Disable broken adapters in orchestrator (stop noisy logs) | DONE | Builder | High |
 | 8.10 | Automated cron ingestion (every 2h via scripts/ingest-cron.sh) | DONE | Operator | Critical |
 | 8.11 | Ingest health dashboard (last run time, success rate, offer counts) | TODO | Builder | High |
 | 8.12 | Add catalog source entries to DB (costco, egifter, cardcash, etc.) | TODO | Builder | Medium |
