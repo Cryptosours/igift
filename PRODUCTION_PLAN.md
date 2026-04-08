@@ -191,4 +191,4 @@
 | 8.10 | Automated cron ingestion (every 2h via scripts/ingest-cron.sh) | DONE | Operator | Critical |
 | 8.11 | Ingest health dashboard (last run time, success rate, offer counts) | TODO | Builder | High |
 | 8.12 | Add catalog source entries to DB (costco, egifter, cardcash, etc.) | TODO | Builder | Medium |
-| 8.13 | Trust-badge pre-existing test fix (React import in vitest JSX) | TODO | Builder | Low |
+| 8.13 | Trust-badge pre-existing test fix (React import in vitest JSX) | DONE | Builder | Low |
