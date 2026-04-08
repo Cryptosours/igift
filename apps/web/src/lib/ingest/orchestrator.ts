@@ -57,7 +57,7 @@ function getRegisteredAdapters(): SourceAdapter[] {
     // offgamersAdapter,// All product fetches failing (anti-bot)
     // g2aAdapter,      // 177s timeout, all fetches failing (anti-bot)
     // kinguinAdapter,  // All product fetches failing (anti-bot)
-    // ...getAllCatalogAdapters(), // No DB source entries yet (task 8.12)
+    ...getAllCatalogAdapters(),
   ];
 }
 

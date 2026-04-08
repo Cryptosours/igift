@@ -189,6 +189,6 @@
 | 8.9 | GiftCardGranny — 403 on all pages, disabled (anti-bot) | BLOCKED | Builder | Low |
 | 8.14 | Disable broken adapters in orchestrator (stop noisy logs) | DONE | Builder | High |
 | 8.10 | Automated cron ingestion (every 2h via scripts/ingest-cron.sh) | DONE | Operator | Critical |
-| 8.11 | Ingest health dashboard (last run time, success rate, offer counts) | TODO | Builder | High |
-| 8.12 | Add catalog source entries to DB (costco, egifter, cardcash, etc.) | TODO | Builder | Medium |
+| 8.11 | Ingest health dashboard (last run time, success rate, offer counts) | DONE | Builder | High |
+| 8.12 | Add catalog source entries to DB (costco, egifter, cardcash, etc.) | DONE | Builder | Medium |
 | 8.13 | Trust-badge pre-existing test fix (React import in vitest JSX) | DONE | Builder | Low |

@@ -13,7 +13,7 @@ import {
   brands,
   sponsoredPlacements,
 } from "@/db/schema";
-import { eq, desc, count } from "drizzle-orm";
+import { eq, desc, count, max, sql } from "drizzle-orm";
 import { getHealthReport, type HealthStatus } from "@/lib/health";
 import { getRevalidationReport, type RevalidationReport } from "@/lib/revalidation";
 import { getClickStats } from "@/lib/affiliate";
@@ -138,6 +138,46 @@ function healthStatusStyle(status: HealthStatus): string {
   }
 }
 
+async function getPipelineOverview() {
+  // Derive pipeline stats from source metadata
+  const [activeSourceStats] = await db
+    .select({
+      count: count(sources.id),
+      lastRun: max(sources.lastFetchedAt),
+      lastSuccess: max(sources.lastSuccessAt),
+    })
+    .from(sources)
+    .where(eq(sources.isActive, true));
+
+  const [offerStats] = await db
+    .select({
+      active: sql<number>`count(*) filter (where ${offers.status} = 'active')`,
+      stale: sql<number>`count(*) filter (where ${offers.status} = 'stale')`,
+      expired: sql<number>`count(*) filter (where ${offers.status} = 'expired')`,
+      total: count(offers.id),
+    })
+    .from(offers);
+
+  const lastRun = activeSourceStats?.lastRun ? new Date(activeSourceStats.lastRun) : null;
+  const cronIntervalMs = 2 * 60 * 60 * 1000; // 2 hours
+  const nextExpected = lastRun ? new Date(lastRun.getTime() + cronIntervalMs) : null;
+  const isOverdue = nextExpected ? new Date() > new Date(nextExpected.getTime() + 30 * 60 * 1000) : false;
+
+  return {
+    activeSources: Number(activeSourceStats?.count ?? 0),
+    lastRun,
+    lastSuccess: activeSourceStats?.lastSuccess ? new Date(activeSourceStats.lastSuccess) : null,
+    nextExpected,
+    isOverdue,
+    offers: {
+      active: Number(offerStats?.active ?? 0),
+      stale: Number(offerStats?.stale ?? 0),
+      expired: Number(offerStats?.expired ?? 0),
+      total: Number(offerStats?.total ?? 0),
+    },
+  };
+}
+
 async function getSponsorships() {
   return db
     .select({
@@ -167,9 +207,10 @@ export default async function AdminModerationPage() {
   let revalidationReport: RevalidationReport | null = null;
   let clickStats: Awaited<ReturnType<typeof getClickStats>> | null = null;
   let sponsorships: Awaited<ReturnType<typeof getSponsorships>> = [];
+  let pipeline: Awaited<ReturnType<typeof getPipelineOverview>> | null = null;
 
   try {
-    [summary, openCases, flaggedOffers, recentResolved, healthReport, revalidationReport, clickStats, sponsorships] = await Promise.all([
+    [summary, openCases, flaggedOffers, recentResolved, healthReport, revalidationReport, clickStats, sponsorships, pipeline] = await Promise.all([
       getStatusSummary(),
       getOpenCases(),
       getFlaggedOffers(),
@@ -178,6 +219,7 @@ export default async function AdminModerationPage() {
       getRevalidationReport(),
       getClickStats(),
       getSponsorships(),
+      getPipelineOverview(),
     ]);
   } catch {
     return (
@@ -200,6 +242,46 @@ export default async function AdminModerationPage() {
           Review flagged offers, resolve cases, and manage data quality.
         </p>
       </div>
+
+      {/* Pipeline Overview */}
+      {pipeline && (
+        <section>
+          <h2 className="text-lg font-semibold text-surface-800 mb-4">Pipeline Overview</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {/* Last Run */}
+            <div className="rounded-xl border border-surface-200 bg-white p-4">
+              <div className="text-xs text-surface-500 mb-1">Last Pipeline Run</div>
+              <div className="text-lg font-bold text-surface-900">{timeAgo(pipeline.lastRun)}</div>
+              {pipeline.lastRun && (
+                <div className="text-xs text-surface-400 mt-1">{pipeline.lastRun.toLocaleString()}</div>
+              )}
+            </div>
+            {/* Next Expected */}
+            <div className={`rounded-xl border p-4 ${pipeline.isOverdue ? "border-red-300 bg-red-50" : "border-surface-200 bg-white"}`}>
+              <div className="text-xs text-surface-500 mb-1">Next Expected</div>
+              <div className={`text-lg font-bold ${pipeline.isOverdue ? "text-red-700" : "text-surface-900"}`}>
+                {pipeline.nextExpected ? pipeline.nextExpected.toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }) : "—"}
+              </div>
+              {pipeline.isOverdue && (
+                <div className="text-xs text-red-600 font-medium mt-1">OVERDUE</div>
+              )}
+            </div>
+            {/* Active Sources */}
+            <div className="rounded-xl border border-surface-200 bg-white p-4">
+              <div className="text-xs text-surface-500 mb-1">Active Sources</div>
+              <div className="text-2xl font-bold text-brand-600">{pipeline.activeSources}</div>
+            </div>
+            {/* Active Offers */}
+            <div className="rounded-xl border border-surface-200 bg-white p-4">
+              <div className="text-xs text-surface-500 mb-1">Active Offers</div>
+              <div className="text-2xl font-bold text-deal-600">{pipeline.offers.active}</div>
+              <div className="text-xs text-surface-400 mt-1">
+                {pipeline.offers.stale} stale · {pipeline.offers.expired} expired · {pipeline.offers.total} total
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Click Attribution Stats */}
       {clickStats && (
