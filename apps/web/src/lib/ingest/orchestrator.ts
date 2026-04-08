@@ -48,7 +48,7 @@ function getRegisteredAdapters(): SourceAdapter[] {
     bitrefillAdapter,
     dundleAdapter,
     raiseAdapter,
-    giftCardGrannyAdapter,
+    // giftCardGrannyAdapter, // All pages 403 (aggressive anti-bot)
     gameflipAdapter,
     buySellVouchersAdapter,
     // Phase 4.2 live adapters — disabled pending affiliate API access:
@@ -57,7 +57,7 @@ function getRegisteredAdapters(): SourceAdapter[] {
     // offgamersAdapter,// All product fetches failing (anti-bot)
     // g2aAdapter,      // 177s timeout, all fetches failing (anti-bot)
     // kinguinAdapter,  // All product fetches failing (anti-bot)
-    ...getAllCatalogAdapters(),
+    // ...getAllCatalogAdapters(), // No DB source entries yet (task 8.12)
   ];
 }
 
