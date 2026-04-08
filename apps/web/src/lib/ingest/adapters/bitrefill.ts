@@ -19,6 +19,7 @@ interface BitrefillProduct {
 }
 
 const TRACKED_PRODUCTS: BitrefillProduct[] = [
+  // Core brands (US)
   { slug: "steam-usa", brandName: "Steam", countries: ["US"] },
   { slug: "amazon_com-usa", brandName: "Amazon", countries: ["US"] },
   { slug: "uber-usa", brandName: "Uber", countries: ["US"] },
@@ -31,6 +32,28 @@ const TRACKED_PRODUCTS: BitrefillProduct[] = [
   { slug: "nintendo-eshop-usa", brandName: "Nintendo", countries: ["US"] },
   { slug: "doordash-usa", brandName: "DoorDash", countries: ["US"] },
   { slug: "disney-plus-usa", brandName: "Disney+", countries: ["US"] },
+  // Gaming
+  { slug: "roblox-usa", brandName: "Roblox", countries: ["US"] },
+  { slug: "valorant-usa", brandName: "Valorant", countries: ["US"] },
+  { slug: "ea-play-usa", brandName: "EA Play", countries: ["US"] },
+  { slug: "razer-gold-usa", brandName: "Razer Gold", countries: ["US"] },
+  { slug: "twitch-usa", brandName: "Twitch", countries: ["US"] },
+  { slug: "fortnite-usa", brandName: "Fortnite", countries: ["US"] },
+  { slug: "pubg-mobile-usa", brandName: "PUBG", countries: ["US"] },
+  { slug: "riot-access-usa", brandName: "Riot Access", countries: ["US"] },
+  { slug: "free-fire-usa", brandName: "Free Fire", countries: ["US"] },
+  // EU / Global variants
+  { slug: "steam-europe", brandName: "Steam", countries: ["EU"] },
+  { slug: "playstation-store-europe", brandName: "PlayStation", countries: ["EU"] },
+  { slug: "xbox-europe", brandName: "Xbox", countries: ["EU"] },
+  { slug: "nintendo-eshop-europe", brandName: "Nintendo", countries: ["EU"] },
+  { slug: "google-play-europe", brandName: "Google Play", countries: ["EU"] },
+  { slug: "apple-europe", brandName: "Apple", countries: ["EU"] },
+  { slug: "spotify-europe", brandName: "Spotify", countries: ["EU"] },
+  // UK
+  { slug: "steam-uk", brandName: "Steam", countries: ["UK"] },
+  { slug: "apple-uk", brandName: "Apple", countries: ["UK"] },
+  { slug: "playstation-store-uk", brandName: "PlayStation", countries: ["UK"] },
 ];
 
 const BASE_URL = "https://www.bitrefill.com/us/en/gift-cards";

@@ -282,11 +282,16 @@ async function seed() {
       { name: "EA Play",          slug: "ea-play",          category: "gaming",    description: "EA Play membership gift cards", regionsSupported: ["US", "EU", "Global"] },
       { name: "PlayStation Plus", slug: "playstation-plus", category: "gaming",    description: "PlayStation Plus membership cards", regionsSupported: ["US", "EU", "JP"] },
       { name: "Razer Gold",       slug: "razer-gold",       category: "gaming",    description: "Razer Gold in-game currency cards", regionsSupported: ["US", "Global"] },
+      // Phase 11 — Data Pipeline Scale-Up
+      { name: "Fortnite",         slug: "fortnite",         category: "gaming",    description: "Fortnite V-Bucks gift cards", regionsSupported: ["US", "EU", "Global"] },
+      { name: "PUBG",             slug: "pubg",             category: "gaming",    description: "PUBG Mobile UC gift cards", regionsSupported: ["US", "Global"] },
+      { name: "Free Fire",        slug: "free-fire",        category: "gaming",    description: "Free Fire Diamonds top-up cards", regionsSupported: ["US", "Global"] },
+      { name: "Riot Access",      slug: "riot-access",      category: "gaming",    description: "Riot Access codes for League of Legends, Valorant, etc.", regionsSupported: ["US", "EU", "Global"] },
     ])
     .onConflictDoNothing()
     .returning();
 
-  console.log(`  Seeded ${newBrandRows.length} new brands (Phase 4.2)`);
+  console.log(`  Seeded ${newBrandRows.length} new brands (Phase 4.2 + Phase 11)`);
 
   // ── Offers ──
   // Realistic deals with scoring

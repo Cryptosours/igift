@@ -19,117 +19,54 @@ interface TrackedProduct {
 }
 
 const TRACKED_PRODUCTS: TrackedProduct[] = [
-  // Steam
-  {
-    slug: "steam-5",
-    brandSlug: "steam",
-    faceValueCents: 500,
-    currency: "USD",
-    url: "https://www.eneba.com/us/steam-steam-5-usd-gift-card-united-states",
-  },
-  {
-    slug: "steam-10",
-    brandSlug: "steam",
-    faceValueCents: 1000,
-    currency: "USD",
-    url: "https://www.eneba.com/us/steam-steam-10-usd-gift-card-united-states",
-  },
-  {
-    slug: "steam-20",
-    brandSlug: "steam",
-    faceValueCents: 2000,
-    currency: "USD",
-    url: "https://www.eneba.com/us/steam-steam-20-usd-gift-card-united-states",
-  },
-  {
-    slug: "steam-50",
-    brandSlug: "steam",
-    faceValueCents: 5000,
-    currency: "USD",
-    url: "https://www.eneba.com/us/steam-steam-50-usd-gift-card-united-states",
-  },
+  // Steam (USD)
+  { slug: "steam-5", brandSlug: "steam", faceValueCents: 500, currency: "USD", url: "https://www.eneba.com/us/steam-steam-5-usd-gift-card-united-states" },
+  { slug: "steam-10", brandSlug: "steam", faceValueCents: 1000, currency: "USD", url: "https://www.eneba.com/us/steam-steam-10-usd-gift-card-united-states" },
+  { slug: "steam-20", brandSlug: "steam", faceValueCents: 2000, currency: "USD", url: "https://www.eneba.com/us/steam-steam-20-usd-gift-card-united-states" },
+  { slug: "steam-50", brandSlug: "steam", faceValueCents: 5000, currency: "USD", url: "https://www.eneba.com/us/steam-steam-50-usd-gift-card-united-states" },
+  { slug: "steam-100", brandSlug: "steam", faceValueCents: 10000, currency: "USD", url: "https://www.eneba.com/us/steam-steam-100-usd-gift-card-united-states" },
+  // Steam (EUR)
+  { slug: "steam-10-eur", brandSlug: "steam", faceValueCents: 1000, currency: "EUR", url: "https://www.eneba.com/steam-steam-10-eur-gift-card-europe" },
+  { slug: "steam-20-eur", brandSlug: "steam", faceValueCents: 2000, currency: "EUR", url: "https://www.eneba.com/steam-steam-20-eur-gift-card-europe" },
+  { slug: "steam-50-eur", brandSlug: "steam", faceValueCents: 5000, currency: "EUR", url: "https://www.eneba.com/steam-steam-50-eur-gift-card-europe" },
   // Xbox
-  {
-    slug: "xbox-15",
-    brandSlug: "xbox",
-    faceValueCents: 1500,
-    currency: "USD",
-    url: "https://www.eneba.com/us/xbox-xbox-15-usd-gift-card-united-states",
-  },
-  {
-    slug: "xbox-25",
-    brandSlug: "xbox",
-    faceValueCents: 2500,
-    currency: "USD",
-    url: "https://www.eneba.com/us/xbox-xbox-25-usd-gift-card-united-states",
-  },
-  {
-    slug: "xbox-50",
-    brandSlug: "xbox",
-    faceValueCents: 5000,
-    currency: "USD",
-    url: "https://www.eneba.com/us/xbox-xbox-50-usd-gift-card-united-states",
-  },
+  { slug: "xbox-15", brandSlug: "xbox", faceValueCents: 1500, currency: "USD", url: "https://www.eneba.com/us/xbox-xbox-15-usd-gift-card-united-states" },
+  { slug: "xbox-25", brandSlug: "xbox", faceValueCents: 2500, currency: "USD", url: "https://www.eneba.com/us/xbox-xbox-25-usd-gift-card-united-states" },
+  { slug: "xbox-50", brandSlug: "xbox", faceValueCents: 5000, currency: "USD", url: "https://www.eneba.com/us/xbox-xbox-50-usd-gift-card-united-states" },
+  { slug: "xbox-100", brandSlug: "xbox", faceValueCents: 10000, currency: "USD", url: "https://www.eneba.com/us/xbox-xbox-100-usd-gift-card-united-states" },
   // PlayStation
-  {
-    slug: "psn-10",
-    brandSlug: "playstation",
-    faceValueCents: 1000,
-    currency: "USD",
-    url: "https://www.eneba.com/us/playstation-psn-10-usd-gift-card-usa",
-  },
-  {
-    slug: "psn-25",
-    brandSlug: "playstation",
-    faceValueCents: 2500,
-    currency: "USD",
-    url: "https://www.eneba.com/us/playstation-psn-25-usd-gift-card-usa",
-  },
-  {
-    slug: "psn-50",
-    brandSlug: "playstation",
-    faceValueCents: 5000,
-    currency: "USD",
-    url: "https://www.eneba.com/us/playstation-psn-50-usd-gift-card-usa",
-  },
+  { slug: "psn-10", brandSlug: "playstation", faceValueCents: 1000, currency: "USD", url: "https://www.eneba.com/us/playstation-psn-10-usd-gift-card-usa" },
+  { slug: "psn-25", brandSlug: "playstation", faceValueCents: 2500, currency: "USD", url: "https://www.eneba.com/us/playstation-psn-25-usd-gift-card-usa" },
+  { slug: "psn-50", brandSlug: "playstation", faceValueCents: 5000, currency: "USD", url: "https://www.eneba.com/us/playstation-psn-50-usd-gift-card-usa" },
+  { slug: "psn-100", brandSlug: "playstation", faceValueCents: 10000, currency: "USD", url: "https://www.eneba.com/us/playstation-psn-100-usd-gift-card-usa" },
   // Nintendo
-  {
-    slug: "nintendo-20",
-    brandSlug: "nintendo",
-    faceValueCents: 2000,
-    currency: "USD",
-    url: "https://www.eneba.com/us/nintendo-nintendo-eshop-20-usd-gift-card-united-states",
-  },
-  {
-    slug: "nintendo-50",
-    brandSlug: "nintendo",
-    faceValueCents: 5000,
-    currency: "USD",
-    url: "https://www.eneba.com/us/nintendo-nintendo-eshop-50-usd-gift-card-united-states",
-  },
+  { slug: "nintendo-10", brandSlug: "nintendo", faceValueCents: 1000, currency: "USD", url: "https://www.eneba.com/us/nintendo-nintendo-eshop-10-usd-gift-card-united-states" },
+  { slug: "nintendo-20", brandSlug: "nintendo", faceValueCents: 2000, currency: "USD", url: "https://www.eneba.com/us/nintendo-nintendo-eshop-20-usd-gift-card-united-states" },
+  { slug: "nintendo-50", brandSlug: "nintendo", faceValueCents: 5000, currency: "USD", url: "https://www.eneba.com/us/nintendo-nintendo-eshop-50-usd-gift-card-united-states" },
   // Google Play
-  {
-    slug: "google-play-25",
-    brandSlug: "google-play",
-    faceValueCents: 2500,
-    currency: "USD",
-    url: "https://www.eneba.com/us/google-play-google-play-25-usd-gift-card-united-states",
-  },
+  { slug: "google-play-10", brandSlug: "google-play", faceValueCents: 1000, currency: "USD", url: "https://www.eneba.com/us/google-play-google-play-10-usd-gift-card-united-states" },
+  { slug: "google-play-25", brandSlug: "google-play", faceValueCents: 2500, currency: "USD", url: "https://www.eneba.com/us/google-play-google-play-25-usd-gift-card-united-states" },
+  { slug: "google-play-50", brandSlug: "google-play", faceValueCents: 5000, currency: "USD", url: "https://www.eneba.com/us/google-play-google-play-50-usd-gift-card-united-states" },
+  // Apple / iTunes
+  { slug: "apple-10", brandSlug: "apple", faceValueCents: 1000, currency: "USD", url: "https://www.eneba.com/us/apple-itunes-10-usd-gift-card-united-states" },
+  { slug: "apple-25", brandSlug: "apple", faceValueCents: 2500, currency: "USD", url: "https://www.eneba.com/us/apple-itunes-25-usd-gift-card-united-states" },
+  { slug: "apple-50", brandSlug: "apple", faceValueCents: 5000, currency: "USD", url: "https://www.eneba.com/us/apple-itunes-50-usd-gift-card-united-states" },
+  { slug: "apple-100", brandSlug: "apple", faceValueCents: 10000, currency: "USD", url: "https://www.eneba.com/us/apple-itunes-100-usd-gift-card-united-states" },
   // Roblox
-  {
-    slug: "roblox-10",
-    brandSlug: "roblox",
-    faceValueCents: 1000,
-    currency: "USD",
-    url: "https://www.eneba.com/us/roblox-roblox-10-usd-gift-card-united-states",
-  },
-  {
-    slug: "roblox-25",
-    brandSlug: "roblox",
-    faceValueCents: 2500,
-    currency: "USD",
-    url: "https://www.eneba.com/us/roblox-roblox-25-usd-gift-card-united-states",
-  },
+  { slug: "roblox-10", brandSlug: "roblox", faceValueCents: 1000, currency: "USD", url: "https://www.eneba.com/us/roblox-roblox-10-usd-gift-card-united-states" },
+  { slug: "roblox-25", brandSlug: "roblox", faceValueCents: 2500, currency: "USD", url: "https://www.eneba.com/us/roblox-roblox-25-usd-gift-card-united-states" },
+  { slug: "roblox-50", brandSlug: "roblox", faceValueCents: 5000, currency: "USD", url: "https://www.eneba.com/us/roblox-roblox-50-usd-gift-card-united-states" },
+  // Spotify
+  { slug: "spotify-10", brandSlug: "spotify", faceValueCents: 1000, currency: "USD", url: "https://www.eneba.com/us/spotify-spotify-10-usd-gift-card-united-states" },
+  { slug: "spotify-30", brandSlug: "spotify", faceValueCents: 3000, currency: "USD", url: "https://www.eneba.com/us/spotify-spotify-30-usd-gift-card-united-states" },
+  // Netflix
+  { slug: "netflix-25", brandSlug: "netflix", faceValueCents: 2500, currency: "USD", url: "https://www.eneba.com/us/netflix-netflix-25-usd-gift-card-united-states" },
+  { slug: "netflix-50", brandSlug: "netflix", faceValueCents: 5000, currency: "USD", url: "https://www.eneba.com/us/netflix-netflix-50-usd-gift-card-united-states" },
+  // EA Play
+  { slug: "ea-play-1m", brandSlug: "ea-play", faceValueCents: 499, currency: "USD", url: "https://www.eneba.com/us/ea-play-1-month-subscription-united-states" },
+  // Razer Gold
+  { slug: "razer-gold-10", brandSlug: "razer-gold", faceValueCents: 1000, currency: "USD", url: "https://www.eneba.com/us/razer-gold-razer-gold-10-usd" },
+  { slug: "razer-gold-25", brandSlug: "razer-gold", faceValueCents: 2500, currency: "USD", url: "https://www.eneba.com/us/razer-gold-razer-gold-25-usd" },
 ];
 
 function delay(ms: number): Promise<void> {

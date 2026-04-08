@@ -228,3 +228,22 @@
 | 10.6 | Update global-error.tsx fallback colors for dark theme | DONE | Builder | Medium |
 | 10.7 | Update PRODUCT_VISION.md with new color system | DONE | Architect | Medium |
 | 10.8 | Deploy latest code to VPS | DONE | Operator | High |
+
+---
+
+## Phase 11: Data Pipeline Scale-Up (V1.7)
+> Goal: Maximize live deal data coverage. Expand all adapter product lists, add new brands, re-enable blocked adapters, and move toward 1,000+ offers from 7+ working sources. Target: every seeded brand tracked by every relevant adapter.
+
+| # | Task | Status | Specialist | Priority |
+|---|------|--------|------------|----------|
+| 11.1 | BuySellVouchers V2 — 48 products, 7 currencies, pagination, 1% fee fix | DONE | Builder | Critical |
+| 11.2 | Eneba adapter — expand from 15 to 35 tracked products | DONE | Builder | High |
+| 11.3 | Kinguin adapter — expand from 17 to 40 tracked products | DONE | Builder | High |
+| 11.4 | Bitrefill adapter — expand from 12 to 31 products (gaming + EU/UK) | DONE | Builder | High |
+| 11.5 | Dundle adapter — expand from 11 to 27 products (gaming + EU/UK) | DONE | Builder | High |
+| 11.6 | Raise adapter — expand from 12 to 18 products (gaming + retail) | DONE | Builder | High |
+| 11.7 | Re-enable Eneba + Kinguin in orchestrator (fault-tolerant) | DONE | Builder | High |
+| 11.8 | Add 4 new brands to DB seed: Fortnite, PUBG, Free Fire, Riot Access | DONE | Builder | Medium |
+| 11.9 | Research API/affiliate access for blocked adapters (G2A, CDKeys, OffGamers) | TODO | Operator | Medium |
+| 11.10 | Deploy + run full ingestion pipeline | TODO | Operator | Critical |
+| 11.11 | Update VENDORS_LIST.md with expanded coverage | TODO | Architect | Medium |

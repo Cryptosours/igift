@@ -18,6 +18,7 @@ interface RaiseProduct {
 }
 
 const TRACKED_PRODUCTS: RaiseProduct[] = [
+  // Core brands (US)
   { slug: "apple", brandName: "Apple", countries: ["US"] },
   { slug: "steam", brandName: "Steam", countries: ["US", "Global"] },
   { slug: "amazon-com", brandName: "Amazon", countries: ["US"] },
@@ -30,6 +31,14 @@ const TRACKED_PRODUCTS: RaiseProduct[] = [
   { slug: "nintendo-eshop", brandName: "Nintendo", countries: ["US"] },
   { slug: "spotify", brandName: "Spotify", countries: ["US", "Global"] },
   { slug: "disney-plus", brandName: "Disney+", countries: ["US", "Global"] },
+  // Gaming / Digital
+  { slug: "roblox", brandName: "Roblox", countries: ["US"] },
+  { slug: "ea-play", brandName: "EA Play", countries: ["US"] },
+  { slug: "razer-gold", brandName: "Razer Gold", countries: ["US"] },
+  { slug: "fortnite", brandName: "Fortnite", countries: ["US"] },
+  { slug: "twitch", brandName: "Twitch", countries: ["US"] },
+  // Retail / Dining
+  { slug: "ebay", brandName: "eBay", countries: ["US"] },
 ];
 
 const BASE_URL = "https://www.raise.com/buy";

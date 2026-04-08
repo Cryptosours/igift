@@ -18,6 +18,7 @@ interface DundleProduct {
 }
 
 const TRACKED_PRODUCTS: DundleProduct[] = [
+  // Core brands (US)
   { slug: "steam", brandName: "Steam", countries: ["US", "Global"] },
   { slug: "apple-gift-card", brandName: "Apple", countries: ["US"] },
   { slug: "google-play", brandName: "Google Play", countries: ["US"] },
@@ -29,6 +30,24 @@ const TRACKED_PRODUCTS: DundleProduct[] = [
   { slug: "uber", brandName: "Uber", countries: ["US"] },
   { slug: "doordash", brandName: "DoorDash", countries: ["US"] },
   { slug: "disney-plus", brandName: "Disney+", countries: ["US", "Global"] },
+  // Gaming
+  { slug: "roblox", brandName: "Roblox", countries: ["US", "Global"] },
+  { slug: "valorant", brandName: "Valorant", countries: ["US", "EU", "Global"] },
+  { slug: "ea-play", brandName: "EA Play", countries: ["US", "Global"] },
+  { slug: "razer-gold", brandName: "Razer Gold", countries: ["US", "Global"] },
+  { slug: "twitch", brandName: "Twitch", countries: ["US", "Global"] },
+  { slug: "fortnite", brandName: "Fortnite", countries: ["US", "Global"] },
+  { slug: "riot-access", brandName: "Riot Access", countries: ["US", "EU", "Global"] },
+  { slug: "pubg-mobile", brandName: "PUBG", countries: ["US", "Global"] },
+  { slug: "free-fire", brandName: "Free Fire", countries: ["US", "Global"] },
+  // EU / UK
+  { slug: "steam-europe", brandName: "Steam", countries: ["EU"] },
+  { slug: "playstation-store-europe", brandName: "PlayStation", countries: ["EU"] },
+  { slug: "xbox-europe", brandName: "Xbox", countries: ["EU"] },
+  { slug: "nintendo-eshop-europe", brandName: "Nintendo", countries: ["EU"] },
+  { slug: "apple-gift-card-uk", brandName: "Apple", countries: ["UK"] },
+  { slug: "google-play-uk", brandName: "Google Play", countries: ["UK"] },
+  { slug: "spotify-uk", brandName: "Spotify", countries: ["UK"] },
 ];
 
 const BASE_URL = "https://www.dundle.com/us";
