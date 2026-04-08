@@ -1,10 +1,12 @@
-# Stage 1: Dependencies
-# The lockfile is generated on macOS ARM and lacks linux-x64-musl optional
-# deps needed by Alpine. After npm ci, we explicitly install the musl
-# native binaries that @parcel/watcher and Next.js SWC require.
-FROM node:20-alpine AS deps
+# Stage 1: Build
+# Single build stage to avoid cross-stage native binary resolution issues.
+# Alpine uses musl libc; macOS-generated lockfile lacks musl optional deps.
+FROM node:20-alpine AS builder
 WORKDIR /app
+
 RUN corepack disable
+
+# Install deps
 COPY package.json package-lock.json ./
 COPY apps/web/package.json ./apps/web/
 RUN npm ci
@@ -14,11 +16,7 @@ RUN npm install --no-save --force \
     @next/swc-linux-x64-musl \
     @next/swc-linux-x64-gnu
 
-# Stage 2: Build
-FROM node:20-alpine AS builder
-WORKDIR /app
-RUN corepack disable
-COPY --from=deps /app/node_modules ./node_modules
+# Copy source and build
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npx turbo build --filter=@igift/web
