@@ -98,7 +98,7 @@ export default async function BrandDetailPage({ params }: Props) {
       </Link>
 
       <FadeIn>
-        <div className="mt-4 rounded-xl border border-surface-200 bg-white p-6">
+        <div className="mt-4 rounded-xl border border-surface-200 bg-surface-100 p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-4">
               <BrandAvatar name={brand.name} slug={slug} size="lg" />
@@ -193,7 +193,7 @@ export default async function BrandDetailPage({ params }: Props) {
               </div>
             )}
           </div>
-          <div className="rounded-2xl border border-surface-200 bg-white p-5">
+          <div className="rounded-2xl border border-surface-200 bg-surface-100 p-5">
             <LazyPriceChart
               data={priceHistory}
               allTimeLowCents={allTimeLowCents}

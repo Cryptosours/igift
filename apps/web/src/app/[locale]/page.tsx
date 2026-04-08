@@ -134,7 +134,7 @@ export default async function HomePage() {
                 <div className="mt-5 flex flex-wrap items-center gap-3">
                   <Link
                     href="/deals"
-                    className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-surface-900 shadow-lg shadow-white/10 transition-all hover:shadow-xl hover:shadow-white/20 active:scale-[0.98]"
+                    className="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/20 transition-all hover:bg-brand-400 hover:shadow-xl hover:shadow-brand-500/30 active:scale-[0.98]"
                   >
                     <Search className="h-4 w-4" />
                     {t("ctaBrowse")}
@@ -226,7 +226,7 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════
           HOW IT WORKS — 3-step visual flow
           ══════════════════════════════════════ */}
-      <section className="relative border-b border-surface-200 bg-white py-20">
+      <section className="relative border-b border-surface-200 bg-surface-100 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center">
@@ -268,7 +268,7 @@ export default async function HomePage() {
               },
             ].map((feature) => (
               <StaggerItem key={feature.title}>
-                <div className="group relative rounded-2xl border border-surface-200 bg-surface-50/50 p-6 transition-colors hover:border-surface-300 hover:bg-white hover:shadow-lg hover:shadow-surface-200/50">
+                <div className="group relative rounded-2xl border border-surface-200 bg-surface-0/50 p-6 transition-colors hover:border-surface-300 hover:bg-surface-100 hover:shadow-lg hover:shadow-surface-200/50">
                   <div className={`inline-flex rounded-xl bg-gradient-to-br ${feature.accent} p-2.5 shadow-sm`}>
                     <feature.icon className="h-5 w-5 text-white" />
                   </div>
@@ -334,7 +334,7 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════
           CATEGORIES — Visual cards with gradients
           ══════════════════════════════════════ */}
-      <section className="border-t border-surface-200 bg-white py-20">
+      <section className="border-t border-surface-200 bg-surface-100 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div>
@@ -353,7 +353,7 @@ export default async function HomePage() {
               <StaggerItem key={cat.slug}>
                 <Link
                   href={`/categories/${cat.slug}`}
-                  className="group flex items-center gap-4 rounded-xl border border-surface-200 bg-surface-50/50 p-5 transition-colors hover:border-brand-200 hover:bg-white hover:shadow-lg hover:shadow-surface-200/50"
+                  className="group flex items-center gap-4 rounded-xl border border-surface-200 bg-surface-0/50 p-5 transition-colors hover:border-brand-200 hover:bg-surface-100 hover:shadow-lg hover:shadow-surface-200/50"
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-2xl transition-transform group-hover:scale-110">
                     {cat.icon}

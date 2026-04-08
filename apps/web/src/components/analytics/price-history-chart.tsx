@@ -67,7 +67,7 @@ function ChartTooltip({
   const discountPayload = payload.find((p) => p.name === "Discount");
 
   return (
-    <div className="rounded-xl border border-surface-200 bg-white px-3.5 py-3 shadow-lg">
+    <div className="rounded-xl border border-surface-200 bg-surface-100 px-3.5 py-3 shadow-lg">
       <p className="mb-2 text-xs font-semibold text-surface-500">{formatDate(label)}</p>
       {pricePayload && (
         <p className="price-display text-sm font-bold text-surface-900">

@@ -249,7 +249,7 @@ export default async function AdminModerationPage() {
           <h2 className="text-lg font-semibold text-surface-800 mb-4">Pipeline Overview</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {/* Last Run */}
-            <div className="rounded-xl border border-surface-200 bg-white p-4">
+            <div className="rounded-xl border border-surface-200 bg-surface-100 p-4">
               <div className="text-xs text-surface-500 mb-1">Last Pipeline Run</div>
               <div className="text-lg font-bold text-surface-900">{timeAgo(pipeline.lastRun)}</div>
               {pipeline.lastRun && (
@@ -257,7 +257,7 @@ export default async function AdminModerationPage() {
               )}
             </div>
             {/* Next Expected */}
-            <div className={`rounded-xl border p-4 ${pipeline.isOverdue ? "border-red-300 bg-red-50" : "border-surface-200 bg-white"}`}>
+            <div className={`rounded-xl border p-4 ${pipeline.isOverdue ? "border-red-300 bg-red-50" : "border-surface-200 bg-surface-100"}`}>
               <div className="text-xs text-surface-500 mb-1">Next Expected</div>
               <div className={`text-lg font-bold ${pipeline.isOverdue ? "text-red-700" : "text-surface-900"}`}>
                 {pipeline.nextExpected ? pipeline.nextExpected.toLocaleString("en-US", { hour: "numeric", minute: "2-digit" }) : "—"}
@@ -267,12 +267,12 @@ export default async function AdminModerationPage() {
               )}
             </div>
             {/* Active Sources */}
-            <div className="rounded-xl border border-surface-200 bg-white p-4">
+            <div className="rounded-xl border border-surface-200 bg-surface-100 p-4">
               <div className="text-xs text-surface-500 mb-1">Active Sources</div>
               <div className="text-2xl font-bold text-brand-600">{pipeline.activeSources}</div>
             </div>
             {/* Active Offers */}
-            <div className="rounded-xl border border-surface-200 bg-white p-4">
+            <div className="rounded-xl border border-surface-200 bg-surface-100 p-4">
               <div className="text-xs text-surface-500 mb-1">Active Offers</div>
               <div className="text-2xl font-bold text-deal-600">{pipeline.offers.active}</div>
               <div className="text-xs text-surface-400 mt-1">
@@ -288,21 +288,21 @@ export default async function AdminModerationPage() {
         <section>
           <h2 className="text-lg font-semibold text-surface-800 mb-4">Click Attribution</h2>
           <div className="grid grid-cols-3 gap-4 mb-4">
-            <div className="rounded-xl border border-surface-200 bg-white p-4">
+            <div className="rounded-xl border border-surface-200 bg-surface-100 p-4">
               <div className="text-2xl font-bold text-surface-900">{clickStats.total.toLocaleString()}</div>
               <div className="text-xs text-surface-500 mt-1">Total Clicks</div>
             </div>
-            <div className="rounded-xl border border-surface-200 bg-white p-4">
+            <div className="rounded-xl border border-surface-200 bg-surface-100 p-4">
               <div className="text-2xl font-bold text-brand-600">{clickStats.last24h.toLocaleString()}</div>
               <div className="text-xs text-surface-500 mt-1">Last 24 Hours</div>
             </div>
-            <div className="rounded-xl border border-surface-200 bg-white p-4">
+            <div className="rounded-xl border border-surface-200 bg-surface-100 p-4">
               <div className="text-2xl font-bold text-deal-600">{clickStats.last7d.toLocaleString()}</div>
               <div className="text-xs text-surface-500 mt-1">Last 7 Days</div>
             </div>
           </div>
           {clickStats.topSources.length > 0 && (
-            <div className="rounded-xl border border-surface-200 bg-white overflow-hidden">
+            <div className="rounded-xl border border-surface-200 bg-surface-100 overflow-hidden">
               <div className="px-4 py-3 border-b border-surface-100">
                 <span className="text-sm font-medium text-surface-700">Top Sources (7d)</span>
               </div>
@@ -344,7 +344,7 @@ export default async function AdminModerationPage() {
               <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-gray-400" /> {healthReport.summary.unknown} unknown</span>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="bg-surface-100 rounded-lg shadow overflow-hidden">
             <table className="w-full text-sm">
               <thead className="bg-surface-50 text-surface-600 uppercase text-xs">
                 <tr>
@@ -409,24 +409,24 @@ export default async function AdminModerationPage() {
         <section>
           <h2 className="text-lg font-semibold text-surface-800 mb-4">Offer Lifecycle</h2>
           <div className="grid grid-cols-5 gap-4 mb-4">
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="bg-surface-100 rounded-lg shadow p-4">
               <div className="text-surface-500 text-xs uppercase tracking-wider">Active</div>
               <div className="text-3xl font-bold mt-1 text-green-600">{revalidationReport.statusCounts.active}</div>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="bg-surface-100 rounded-lg shadow p-4">
               <div className="text-surface-500 text-xs uppercase tracking-wider">Stale</div>
               <div className="text-3xl font-bold mt-1 text-yellow-600">{revalidationReport.statusCounts.stale}</div>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="bg-surface-100 rounded-lg shadow p-4">
               <div className="text-surface-500 text-xs uppercase tracking-wider">Expired</div>
               <div className="text-3xl font-bold mt-1 text-red-600">{revalidationReport.statusCounts.expired}</div>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="bg-surface-100 rounded-lg shadow p-4">
               <div className="text-surface-500 text-xs uppercase tracking-wider">At Risk</div>
               <div className="text-3xl font-bold mt-1 text-orange-600">{revalidationReport.atRiskCount}</div>
               <div className="text-xs text-surface-400 mt-1">&gt;50% through SLA</div>
             </div>
-            <div className="bg-white rounded-lg shadow p-4">
+            <div className="bg-surface-100 rounded-lg shadow p-4">
               <div className="text-surface-500 text-xs uppercase tracking-wider">Cleanup</div>
               <div className="text-3xl font-bold mt-1 text-surface-400">{revalidationReport.cleanupCandidates}</div>
               <div className="text-xs text-surface-400 mt-1">30+ days unseen</div>
@@ -434,7 +434,7 @@ export default async function AdminModerationPage() {
           </div>
 
           {/* Per-source staleness breakdown */}
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="bg-surface-100 rounded-lg shadow overflow-hidden">
             <table className="w-full text-sm">
               <thead className="bg-surface-50 text-surface-600 uppercase text-xs">
                 <tr>
@@ -492,7 +492,7 @@ export default async function AdminModerationPage() {
         {openCases.length === 0 ? (
           <EmptyState message="No open moderation cases. The queue is clean." />
         ) : (
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="bg-surface-100 rounded-lg shadow overflow-hidden">
             <table className="w-full text-sm">
               <thead className="bg-surface-50 text-surface-600 uppercase text-xs">
                 <tr>
@@ -558,7 +558,7 @@ export default async function AdminModerationPage() {
         {flaggedOffers.length === 0 ? (
           <EmptyState message="No offers pending review." />
         ) : (
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="bg-surface-100 rounded-lg shadow overflow-hidden">
             <table className="w-full text-sm">
               <thead className="bg-surface-50 text-surface-600 uppercase text-xs">
                 <tr>
@@ -611,7 +611,7 @@ export default async function AdminModerationPage() {
         {recentResolved.length === 0 ? (
           <EmptyState message="No resolved cases yet." />
         ) : (
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="bg-surface-100 rounded-lg shadow overflow-hidden">
             <table className="w-full text-sm">
               <thead className="bg-surface-50 text-surface-600 uppercase text-xs">
                 <tr>
@@ -660,7 +660,7 @@ export default async function AdminModerationPage() {
         {sponsorships.length === 0 ? (
           <EmptyState message="No sponsorships configured. Use POST /api/admin/sponsorships to create one." />
         ) : (
-          <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="bg-surface-100 rounded-lg shadow overflow-hidden">
             <table className="w-full text-sm">
               <thead className="bg-surface-50 text-surface-600 uppercase text-xs">
                 <tr>
@@ -773,7 +773,7 @@ function SummaryCard({
   color: string;
 }) {
   return (
-    <div className="bg-white rounded-lg shadow p-4">
+    <div className="bg-surface-100 rounded-lg shadow p-4">
       <div className="text-surface-500 text-xs uppercase tracking-wider">{label}</div>
       <div className={`text-3xl font-bold mt-1 ${color}`}>{value}</div>
     </div>
@@ -782,7 +782,7 @@ function SummaryCard({
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="bg-white rounded-lg shadow p-8 text-center text-surface-400">
+    <div className="bg-surface-100 rounded-lg shadow p-8 text-center text-surface-400">
       {message}
     </div>
   );

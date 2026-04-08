@@ -64,7 +64,7 @@ export default async function CategoriesPage() {
           <StaggerItem key={cat.slug}>
             <Link
               href={`/categories/${cat.slug}`}
-              className="group block rounded-2xl border border-surface-200 bg-white p-6 card-hover hover:border-brand-200"
+              className="group block rounded-2xl border border-surface-200 bg-surface-100 p-6 card-hover hover:border-brand-200"
             >
               <div className="flex items-start justify-between">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-2xl transition-transform group-hover:scale-110">

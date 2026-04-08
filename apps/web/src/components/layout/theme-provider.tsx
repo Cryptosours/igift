@@ -12,7 +12,7 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue>({
   theme: "system",
-  resolved: "light",
+  resolved: "dark",
   setTheme: () => {},
 });
 
@@ -23,7 +23,7 @@ export function useTheme() {
 const STORAGE_KEY = "igift-theme";
 
 function getSystemTheme(): "light" | "dark" {
-  if (typeof window === "undefined") return "light";
+  if (typeof window === "undefined") return "dark";
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
@@ -33,7 +33,7 @@ function resolveTheme(theme: Theme): "light" | "dark" {
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("system");
-  const [resolved, setResolved] = useState<"light" | "dark">("light");
+  const [resolved, setResolved] = useState<"light" | "dark">("dark");
 
   // Initialize from localStorage on mount
   useEffect(() => {

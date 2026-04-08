@@ -47,7 +47,7 @@ export async function Footer() {
   };
 
   return (
-    <footer className="border-t border-surface-200 bg-white">
+    <footer className="border-t border-surface-200 bg-surface-100">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {/* Brand */}

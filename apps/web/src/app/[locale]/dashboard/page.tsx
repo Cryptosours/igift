@@ -139,7 +139,7 @@ export default async function DashboardPage() {
       <StaggerContainer className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {/* Watched brands */}
         <StaggerItem>
-          <div className="rounded-2xl border border-surface-200 bg-white p-5">
+          <div className="rounded-2xl border border-surface-200 bg-surface-100 p-5">
             <div className="flex items-center gap-2.5">
               <div className="rounded-xl bg-brand-50 p-2">
                 <Heart className="h-4 w-4 text-brand-500" />
@@ -157,7 +157,7 @@ export default async function DashboardPage() {
 
         {/* Live deals */}
         <StaggerItem>
-          <div className="rounded-2xl border border-surface-200 bg-white p-5">
+          <div className="rounded-2xl border border-surface-200 bg-surface-100 p-5">
             <div className="flex items-center gap-2.5">
               <div className="rounded-xl bg-deal-50 p-2">
                 <TrendingUp className="h-4 w-4 text-deal-500" />
@@ -197,7 +197,7 @@ export default async function DashboardPage() {
 
         {/* Historical lows in watchlist */}
         <StaggerItem>
-          <div className="rounded-2xl border border-surface-200 bg-white p-5">
+          <div className="rounded-2xl border border-surface-200 bg-surface-100 p-5">
             <div className="flex items-center gap-2.5">
               <div className="rounded-xl bg-alert-50 p-2">
                 <Flame className="h-4 w-4 text-alert-500" />
@@ -315,7 +315,7 @@ export default async function DashboardPage() {
               <Bell className="h-4 w-4 text-alert-600" />
               <h2 className="text-base font-semibold text-surface-900">{t("priceAlerts")}</h2>
             </div>
-            <div className="rounded-2xl border border-surface-200 bg-white p-5">
+            <div className="rounded-2xl border border-surface-200 bg-surface-100 p-5">
               <AlertManager />
               <div className="mt-4 border-t border-surface-100 pt-4 text-center">
                 <Link href="/alerts" className="text-xs text-brand-600 hover:underline">
@@ -329,7 +329,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* Intelligence summary */}
-          <div className="rounded-2xl border border-surface-200 bg-white p-5">
+          <div className="rounded-2xl border border-surface-200 bg-surface-100 p-5">
             <div className="mb-3 flex items-center gap-2">
               <BarChart3 className="h-4 w-4 text-surface-400" />
               <h3 className="text-sm font-semibold text-surface-900">{t("watchlistSnapshot")}</h3>
@@ -361,7 +361,7 @@ export default async function DashboardPage() {
                 <Link
                   key={href}
                   href={href}
-                  className="flex items-center justify-between rounded-lg px-3 py-2 text-xs text-surface-600 transition-colors hover:bg-white hover:text-brand-600"
+                  className="flex items-center justify-between rounded-lg px-3 py-2 text-xs text-surface-600 transition-colors hover:bg-surface-100 hover:text-brand-600"
                 >
                   {label}
                   <ArrowRight className="h-3 w-3 text-surface-300" />

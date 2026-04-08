@@ -75,7 +75,7 @@ export function NewsletterForm({
 
   return (
     <div
-      className={`rounded-xl border border-surface-200 bg-white p-5 ${className}`}
+      className={`rounded-xl border border-surface-200 bg-surface-100 p-5 ${className}`}
     >
       {variant === "default" && (
         <div className="mb-4 text-center">

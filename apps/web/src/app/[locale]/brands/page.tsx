@@ -76,7 +76,7 @@ export default async function BrandsPage() {
               <Link
                 key={p.placementId}
                 href={`/brands/${p.brandSlug}`}
-                className="group relative rounded-2xl border border-alert-200 bg-white p-5 card-hover hover:border-alert-300 ring-1 ring-alert-100"
+                className="group relative rounded-2xl border border-alert-200 bg-surface-100 p-5 card-hover hover:border-alert-300 ring-1 ring-alert-100"
               >
                 <div className="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-alert-400 to-alert-300" />
                 <div className="flex items-start justify-between">
@@ -112,7 +112,7 @@ export default async function BrandsPage() {
           <StaggerItem key={brand.slug}>
             <Link
               href={`/brands/${brand.slug}`}
-              className="group block rounded-2xl border border-surface-200 bg-white p-5 card-hover hover:border-brand-200"
+              className="group block rounded-2xl border border-surface-200 bg-surface-100 p-5 card-hover hover:border-brand-200"
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">

@@ -88,7 +88,7 @@ function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
           className={`rounded-full border px-3.5 py-1 text-xs font-medium transition-all ${
             activeRegion === allRegionsLabel
               ? "border-brand-300 bg-brand-50 text-brand-700"
-              : "border-surface-200 bg-white text-surface-500 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
+              : "border-surface-200 bg-surface-100 text-surface-500 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
           }`}
         >
           {allRegionsLabel}
@@ -105,7 +105,7 @@ function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
               className={`rounded-full border px-3.5 py-1 text-xs font-medium transition-all ${
                 activeRegion === code
                   ? "border-brand-300 bg-brand-50 text-brand-700"
-                  : "border-surface-200 bg-white text-surface-500 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
+                  : "border-surface-200 bg-surface-100 text-surface-500 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
               }`}
             >
               <span className="mr-1">{r.flag}</span>
@@ -125,7 +125,7 @@ function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
             className={`rounded-full border px-3.5 py-1 text-xs font-medium transition-all ${
               toggles[key]
                 ? "border-brand-300 bg-brand-50 text-brand-700"
-                : "border-surface-200 bg-white text-surface-500 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
+                : "border-surface-200 bg-surface-100 text-surface-500 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
             }`}
           >
             {label}

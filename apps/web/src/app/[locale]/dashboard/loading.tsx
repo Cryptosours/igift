@@ -2,7 +2,7 @@ import { PageHeaderSkeleton } from "@/components/skeletons/page-header-skeleton"
 
 function StatSkeleton() {
   return (
-    <div className="rounded-2xl border border-surface-200 bg-white p-5">
+    <div className="rounded-2xl border border-surface-200 bg-surface-100 p-5">
       <div
         className="h-3 w-20 rounded-md bg-surface-200"
         style={{
@@ -48,8 +48,8 @@ export default function DashboardLoading() {
 
       {/* Content area placeholder */}
       <div className="mt-8 grid gap-4 lg:grid-cols-2">
-        <div className="h-64 rounded-2xl border border-surface-200 bg-white" />
-        <div className="h-64 rounded-2xl border border-surface-200 bg-white" />
+        <div className="h-64 rounded-2xl border border-surface-200 bg-surface-100" />
+        <div className="h-64 rounded-2xl border border-surface-200 bg-surface-100" />
       </div>
     </div>
   );

@@ -49,22 +49,22 @@ export default async function SourcesPage() {
 
         {/* Summary stats */}
         <div className="mt-6 flex flex-wrap gap-4">
-          <div className="flex items-center gap-2 rounded-xl border border-surface-200 bg-white px-4 py-2.5 text-sm">
+          <div className="flex items-center gap-2 rounded-xl border border-surface-200 bg-surface-100 px-4 py-2.5 text-sm">
             <span className="h-2 w-2 rounded-full bg-deal-500" />
             <span className="font-semibold text-surface-900">{greenCount}</span>
             <span className="text-surface-500">{t("greenZoneSources")}</span>
           </div>
-          <div className="flex items-center gap-2 rounded-xl border border-surface-200 bg-white px-4 py-2.5 text-sm">
+          <div className="flex items-center gap-2 rounded-xl border border-surface-200 bg-surface-100 px-4 py-2.5 text-sm">
             <span className="h-2 w-2 rounded-full bg-alert-500" />
             <span className="font-semibold text-surface-900">{yellowCount}</span>
             <span className="text-surface-500">{t("yellowZoneSources")}</span>
           </div>
-          <div className="flex items-center gap-2 rounded-xl border border-surface-200 bg-white px-4 py-2.5 text-sm">
+          <div className="flex items-center gap-2 rounded-xl border border-surface-200 bg-surface-100 px-4 py-2.5 text-sm">
             <TrendingUp className="h-3.5 w-3.5 text-brand-500" />
             <span className="font-semibold text-surface-900">{totalOffers.toLocaleString()}</span>
             <span className="text-surface-500">{t("activeOffers")}</span>
           </div>
-          <div className="flex items-center gap-2 rounded-xl border border-surface-200 bg-white px-4 py-2.5 text-sm">
+          <div className="flex items-center gap-2 rounded-xl border border-surface-200 bg-surface-100 px-4 py-2.5 text-sm">
             <ShieldCheck className="h-3.5 w-3.5 text-deal-500" />
             <span className="font-semibold text-surface-900">
               {ranked.filter((s) => s.hasBuyerProtection).length}

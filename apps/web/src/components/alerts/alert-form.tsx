@@ -59,7 +59,7 @@ export function AlertForm({ initialBrand = "" }: AlertFormProps) {
   }
 
   return (
-    <div className="rounded-xl border border-surface-200 bg-white p-6">
+    <div className="rounded-xl border border-surface-200 bg-surface-100 p-6">
       <h2 className="text-lg font-semibold text-surface-900">
         Create a new alert
       </h2>

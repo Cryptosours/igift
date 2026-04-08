@@ -66,7 +66,7 @@ export function SourceCard({ source, rank }: SourceCardProps) {
     >
       <Link
         href={`/sources/${source.slug}`}
-        className={`block rounded-2xl border bg-white p-5 transition-colors hover:border-brand-200 ${zone.border}`}
+        className={`block rounded-2xl border bg-surface-100 p-5 transition-colors hover:border-brand-200 ${zone.border}`}
       >
         {/* Header */}
         <div className="flex items-start justify-between gap-3">

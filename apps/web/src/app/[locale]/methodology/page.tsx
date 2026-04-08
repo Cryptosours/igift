@@ -25,7 +25,7 @@ export default async function MethodologyPage() {
 
       {/* Deal Quality Score */}
       <FadeIn delay={0.1}>
-        <section className="mt-12 rounded-2xl border border-surface-200 bg-white p-6 sm:p-8">
+        <section className="mt-12 rounded-2xl border border-surface-200 bg-surface-100 p-6 sm:p-8">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-deal-50">
               <BarChart3 className="h-5 w-5 text-deal-600" />
@@ -56,7 +56,7 @@ export default async function MethodologyPage() {
 
       {/* Confidence Score */}
       <FadeIn delay={0.15}>
-        <section className="mt-6 rounded-2xl border border-surface-200 bg-white p-6 sm:p-8">
+        <section className="mt-6 rounded-2xl border border-surface-200 bg-surface-100 p-6 sm:p-8">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50">
               <Calculator className="h-5 w-5 text-brand-600" />
@@ -98,7 +98,7 @@ export default async function MethodologyPage() {
       <StaggerContainer className="mt-5 space-y-4" stagger={0.08}>
         <StaggerItem>
           <div className="flex gap-4 rounded-2xl border border-deal-200 bg-deal-50 p-5">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/70">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-100/70">
               <ShieldCheck className="h-5 w-5 text-deal-600" />
             </div>
             <div>
@@ -111,7 +111,7 @@ export default async function MethodologyPage() {
         </StaggerItem>
         <StaggerItem>
           <div className="flex gap-4 rounded-2xl border border-alert-200 bg-alert-50 p-5">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/70">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-100/70">
               <ShieldAlert className="h-5 w-5 text-alert-600" />
             </div>
             <div>
@@ -124,7 +124,7 @@ export default async function MethodologyPage() {
         </StaggerItem>
         <StaggerItem>
           <div className="flex gap-4 rounded-2xl border border-red-200 bg-red-50 p-5">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/70">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-100/70">
               <ShieldX className="h-5 w-5 text-red-600" />
             </div>
             <div>
@@ -139,7 +139,7 @@ export default async function MethodologyPage() {
 
       {/* Effective Price */}
       <FadeIn delay={0.1}>
-        <section className="mt-12 rounded-2xl border border-surface-200 bg-white p-6 sm:p-8">
+        <section className="mt-12 rounded-2xl border border-surface-200 bg-surface-100 p-6 sm:p-8">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-alert-50">
               <DollarSign className="h-5 w-5 text-alert-600" />

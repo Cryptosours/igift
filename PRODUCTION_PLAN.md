@@ -212,3 +212,19 @@
 | 9.10 | Add PWA icons (192px, 512px PNG) + apple-touch-icon | DONE | Builder | High |
 | 9.11 | i18n: Components — DealCard, DealFilters, NewsletterForm, ShareButton | DONE | Builder | High |
 | 9.12 | Deploy latest code to VPS | TODO | Operator | High |
+
+---
+
+## Phase 10: Dark-First Theme Redesign (V1.6)
+> Goal: Eliminate harsh white backgrounds. Dark-first design system with deep navy-indigo base. Warm cream light mode. Meaningful visual difference between themes. Improved readability.
+
+| # | Task | Status | Specialist | Priority |
+|---|------|--------|------------|----------|
+| 10.1 | Redesign surface color scale — dark navy-indigo default, warm cream light mode | DONE | Designer | Critical |
+| 10.2 | Update ThemeProvider + FOUC script for dark-first default | DONE | Builder | Critical |
+| 10.3 | Replace all bg-white usage across 32+ files with surface tokens | DONE | Builder | Critical |
+| 10.4 | Update glass/card-hover/decorative patterns for dark-first | DONE | Builder | High |
+| 10.5 | Improve typography — body font-size 15px, line-height 1.6, heavier data labels | DONE | Designer | High |
+| 10.6 | Update global-error.tsx fallback colors for dark theme | DONE | Builder | Medium |
+| 10.7 | Update PRODUCT_VISION.md with new color system | DONE | Architect | Medium |
+| 10.8 | Deploy latest code to VPS | TODO | Operator | High |

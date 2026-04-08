@@ -28,7 +28,7 @@ export function SponsoredBadge() {
         <Info className="h-3 w-3" />
       </button>
       {showTip && (
-        <div className="absolute left-0 top-full z-20 mt-1.5 w-64 rounded-xl border border-surface-200 bg-white p-3 shadow-lg text-xs text-surface-600 leading-relaxed">
+        <div className="absolute left-0 top-full z-20 mt-1.5 w-64 rounded-xl border border-surface-200 bg-surface-100 p-3 shadow-lg text-xs text-surface-600 leading-relaxed">
           This brand paid for a featured position on iGift. All deal data —
           prices, scores, and trust ratings — remain unaltered. Sponsored
           placement only affects listing order.

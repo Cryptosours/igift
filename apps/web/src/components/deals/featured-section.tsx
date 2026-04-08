@@ -41,7 +41,7 @@ export function FeaturedSection({ placements }: FeaturedSectionProps) {
         {withDeals.map((p) => (
           <div
             key={p.placementId}
-            className="relative rounded-2xl border border-alert-200 bg-white ring-1 ring-alert-100"
+            className="relative rounded-2xl border border-alert-200 bg-surface-100 ring-1 ring-alert-100"
           >
             {/* Amber top accent line */}
             <div className="absolute inset-x-0 top-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-alert-400 to-alert-300" />

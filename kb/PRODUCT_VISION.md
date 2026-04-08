@@ -19,8 +19,9 @@ The closest analog in feel: a Bloomberg terminal crossed with Wirecutter — rig
 - **Deal/savings:** Emerald green (deal-500 #10b981) — money, value, go
 - **Alert/premium:** Amber (alert-500 #f59e0b) — attention, premium, urgency
 - **Trust zones:** Green (#22c55e), Yellow (#eab308), Red (#ef4444) — traffic-light UX
-- **Backgrounds:** Cool slate grays (surface-50 #f8fafc base)
-- **Cards:** White with subtle borders, elevated on hover
+- **Dark mode (default):** Deep navy-indigo surface scale (#0B0F1A → #F8F9FB)
+- **Light mode:** Warm cream paper — no harsh #ffffff (#F5F3EE → #0D0B08)
+- **Cards:** Surface-100 with subtle borders, elevated on hover — never harsh white
 
 ### Typography
 - **Display/Headings:** Inter — clean, modern, professional, excellent number rendering

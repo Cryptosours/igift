@@ -18,7 +18,7 @@ function Bone({ className = "" }: { className?: string }) {
 
 export function BrandCardSkeleton() {
   return (
-    <div className="rounded-2xl border border-surface-200 bg-white p-5">
+    <div className="rounded-2xl border border-surface-200 bg-surface-100 p-5">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           {/* Avatar circle */}

@@ -73,7 +73,7 @@ export function AlertManager() {
   }
 
   return (
-    <div className="rounded-xl border border-surface-200 bg-white p-6">
+    <div className="rounded-xl border border-surface-200 bg-surface-100 p-6">
       <h2 className="text-lg font-semibold text-surface-900">Manage your alerts</h2>
       <p className="mt-1 text-sm text-surface-500">
         Enter your email to see and delete your active alerts.

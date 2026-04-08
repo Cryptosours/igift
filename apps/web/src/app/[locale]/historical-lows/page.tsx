@@ -86,7 +86,7 @@ export default async function HistoricalLowsPage() {
           {brands.map((brand) => (
             <StaggerItem key={brand.id}>
               <Link href={`/brands/${brand.slug}`} className="group block">
-                <div className="rounded-2xl border border-surface-200 bg-white p-5 transition-all duration-200 hover:border-deal-300 hover:shadow-md">
+                <div className="rounded-2xl border border-surface-200 bg-surface-100 p-5 transition-all duration-200 hover:border-deal-300 hover:shadow-md">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <BrandAvatar name={brand.name} slug={brand.slug} size="md" />

@@ -26,8 +26,8 @@ export default function GlobalError({
           margin: 0,
           fontFamily:
             'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-          backgroundColor: "#f8fafc",
-          color: "#0f172a",
+          backgroundColor: "#111827",
+          color: "#EEF1F5",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -40,7 +40,7 @@ export default function GlobalError({
               width: "5rem",
               height: "5rem",
               margin: "0 auto",
-              backgroundColor: "#fef2f2",
+              backgroundColor: "rgba(239, 68, 68, 0.15)",
               borderRadius: "1rem",
               display: "flex",
               alignItems: "center",
@@ -65,7 +65,7 @@ export default function GlobalError({
             style={{
               marginTop: "0.75rem",
               fontSize: "0.875rem",
-              color: "#64748b",
+              color: "#8B99B0",
               lineHeight: 1.6,
             }}
           >
@@ -77,7 +77,7 @@ export default function GlobalError({
               style={{
                 marginTop: "0.5rem",
                 fontSize: "0.75rem",
-                color: "#cbd5e1",
+                color: "#6B7A94",
                 fontFamily: "monospace",
               }}
             >

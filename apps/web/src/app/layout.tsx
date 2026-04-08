@@ -32,10 +32,11 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Static inline script — no user input, prevents dark mode FOUC */}
+        {/* Static inline script — hardcoded string, no user input, prevents theme FOUC.
+            Dark-first: .dark is the default. Only remove if user explicitly chose light. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("igift-theme");var d=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches);if(d)document.documentElement.classList.add("dark")}catch(e){}})()`,
+            __html: `(function(){try{var t=localStorage.getItem("igift-theme");var isLight=t==="light"||(t!=="dark"&&t==="system"&&!matchMedia("(prefers-color-scheme:dark)").matches);if(!isLight)document.documentElement.classList.add("dark")}catch(e){document.documentElement.classList.add("dark")}})()`,
           }}
         />
       </head>

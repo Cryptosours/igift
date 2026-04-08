@@ -89,7 +89,7 @@ export default async function AlertsPage({ searchParams }: Props) {
       {/* Features */}
       <div className="mt-12 grid gap-4 sm:grid-cols-3">
         {features.map((f) => (
-          <div key={f.title} className="rounded-xl border border-surface-200 bg-white p-5 text-center card-hover">
+          <div key={f.title} className="rounded-xl border border-surface-200 bg-surface-100 p-5 text-center card-hover">
             <div className={`mx-auto inline-flex rounded-xl bg-gradient-to-br ${f.accent} p-2.5 shadow-sm`}>
               <f.icon className="h-5 w-5 text-white" />
             </div>

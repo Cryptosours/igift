@@ -2,7 +2,7 @@ import { PageHeaderSkeleton } from "@/components/skeletons/page-header-skeleton"
 
 function CategoryCardSkeleton() {
   return (
-    <div className="rounded-2xl border border-surface-200 bg-white p-6">
+    <div className="rounded-2xl border border-surface-200 bg-surface-100 p-6">
       <div className="flex items-start justify-between">
         <div
           className="h-12 w-12 rounded-xl bg-surface-200"

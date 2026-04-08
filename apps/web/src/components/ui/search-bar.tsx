@@ -87,7 +87,7 @@ export function SearchBar({
         className={`flex items-center rounded-lg border transition-colors focus-within:border-brand-400 focus-within:ring-2 focus-within:ring-brand-100 ${
           isCompact
             ? "border-surface-200 bg-surface-50 px-2.5 py-1.5"
-            : "border-surface-300 bg-white px-3 py-2.5 shadow-sm"
+            : "border-surface-300 bg-surface-100 px-3 py-2.5 shadow-sm"
         }`}
       >
         {isSearching ? (

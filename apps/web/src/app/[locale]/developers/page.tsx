@@ -105,7 +105,7 @@ export default async function DevelopersPage() {
             </a>
             <a
               href="#endpoints"
-              className="inline-flex items-center gap-2 rounded-xl border border-surface-200 bg-white px-5 py-2.5 text-sm font-semibold text-surface-700 transition-colors hover:border-brand-300 hover:text-brand-700"
+              className="inline-flex items-center gap-2 rounded-xl border border-surface-200 bg-surface-100 px-5 py-2.5 text-sm font-semibold text-surface-700 transition-colors hover:border-brand-300 hover:text-brand-700"
             >
               <BookOpen className="h-4 w-4" />
               {t("viewEndpoints")}
@@ -139,7 +139,7 @@ export default async function DevelopersPage() {
       <StaggerContainer className="mb-14 grid gap-4 sm:grid-cols-3">
         {FEATURES.map(({ icon: Icon, title, body }) => (
           <StaggerItem key={title}>
-            <div className="rounded-2xl border border-surface-200 bg-white p-5">
+            <div className="rounded-2xl border border-surface-200 bg-surface-100 p-5">
               <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50">
                 <Icon className="h-4.5 w-4.5 text-brand-600" />
               </div>
@@ -154,7 +154,7 @@ export default async function DevelopersPage() {
       <FadeIn delay={0.1}>
         <section className="mb-14">
           <h2 className="mb-4 text-xl font-bold text-surface-900">{t("authHeading")}</h2>
-          <div className="rounded-2xl border border-surface-200 bg-white p-6 text-sm">
+          <div className="rounded-2xl border border-surface-200 bg-surface-100 p-6 text-sm">
             <p className="text-surface-600 mb-4">
               {t("authDescription", {
                 xApiKeyHeader: "X-API-Key",
@@ -184,7 +184,7 @@ Authorization: Bearer igift_live_<your_key>`}</pre>
           <h2 className="mb-6 text-xl font-bold text-surface-900">{t("endpointsHeading")}</h2>
           <div className="space-y-4">
             {ENDPOINTS.map((ep) => (
-              <div key={ep.path} className="rounded-2xl border border-surface-200 bg-white">
+              <div key={ep.path} className="rounded-2xl border border-surface-200 bg-surface-100">
                 <div className="flex items-center gap-3 border-b border-surface-100 px-5 py-3.5">
                   <span className="rounded-lg bg-deal-100 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-deal-700">
                     {ep.method}
@@ -239,7 +239,7 @@ Authorization: Bearer igift_live_<your_key>`}</pre>
                   "rounded-2xl border p-6",
                   tier.highlight
                     ? "border-brand-300 bg-gradient-to-br from-brand-50 to-white"
-                    : "border-surface-200 bg-white",
+                    : "border-surface-200 bg-surface-100",
                 ].join(" ")}
               >
                 <div className="mb-1 flex items-center justify-between">
@@ -266,7 +266,7 @@ Authorization: Bearer igift_live_<your_key>`}</pre>
                     "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors",
                     tier.highlight
                       ? "bg-brand-600 text-white hover:bg-brand-700"
-                      : "border border-surface-200 bg-surface-50 text-surface-700 hover:bg-white hover:border-brand-300 hover:text-brand-700",
+                      : "border border-surface-200 bg-surface-50 text-surface-700 hover:bg-surface-100 hover:border-brand-300 hover:text-brand-700",
                   ].join(" ")}
                 >
                   {tier.cta}

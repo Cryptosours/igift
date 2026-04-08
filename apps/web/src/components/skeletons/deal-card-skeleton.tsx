@@ -19,7 +19,7 @@ function Bone({ className = "" }: { className?: string }) {
 
 export function DealCardSkeleton() {
   return (
-    <div className="rounded-2xl border border-surface-200 bg-white p-5">
+    <div className="rounded-2xl border border-surface-200 bg-surface-100 p-5">
       <div className="flex items-start justify-between gap-4">
         {/* Left column */}
         <div className="min-w-0 flex-1">
