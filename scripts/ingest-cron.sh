@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 # iGift — Automated Ingestion Cron
 # Runs the ingestion pipeline and logs results.
-# Install on VPS: (crontab -l; echo '0 */6 * * * /bin/bash /opt/realdeal/scripts/ingest-cron.sh >> /opt/realdeal/logs/ingest.log 2>&1') | crontab -
+# Install on VPS:
+#   mkdir -p /opt/igift/logs
+#   (crontab -l 2>/dev/null; echo '0 */2 * * * /bin/bash /opt/igift/scripts/ingest-cron.sh') | crontab -
+# Runs every 2 hours to stay within 60-min source SLAs (2x buffer).
 
 set -euo pipefail
 
-LOG_FILE="/opt/realdeal/logs/ingest.log"
+LOG_FILE="/opt/igift/logs/ingest.log"
 API_URL="http://127.0.0.1:3200/api/ingest"
 
 # Load env vars from project
-if [ -f /opt/realdeal/.env ]; then
+if [ -f /opt/igift/.env ]; then
   set -a
-  source /opt/realdeal/.env
+  source /opt/igift/.env
   set +a
 fi
 
