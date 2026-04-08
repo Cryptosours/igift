@@ -1,16 +1,13 @@
 # Stage 1: Dependencies
+# Lockfile generated on macOS lacks linux-x64-musl optional deps.
+# Using `npm install` (not `npm ci`) lets npm resolve the correct
+# platform-specific optional packages for Alpine/musl.
 FROM node:20-alpine AS deps
 WORKDIR /app
-# Disable Corepack — it misinterprets "packageManager": "npm@10.8.0"
-# as a Yarn config, breaking lockfile patching and registry lookups.
 RUN corepack disable
 COPY package.json package-lock.json ./
 COPY apps/web/package.json ./apps/web/
-# npm ci installs what the lockfile specifies. The lockfile was generated
-# on macOS so it's missing linux-musl optional deps. We install them
-# explicitly afterwards.
-RUN npm ci
-RUN npm install --no-save @parcel/watcher-linux-x64-musl @next/swc-linux-x64-musl 2>/dev/null || true
+RUN npm install --prefer-offline
 
 # Stage 2: Build
 FROM node:20-alpine AS builder
