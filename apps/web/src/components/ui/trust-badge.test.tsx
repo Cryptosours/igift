@@ -1,6 +1,13 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { TrustBadge } from "./trust-badge";
+
+// Mock lucide-react icons as simple span elements
+vi.mock("lucide-react", () => ({
+  ShieldCheck: () => null,
+  ShieldAlert: () => null,
+  ShieldX: () => null,
+}));
 
 describe("TrustBadge", () => {
   it("renders 'Verified' for green zone", () => {
