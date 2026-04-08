@@ -10,11 +10,16 @@ RUN corepack disable
 COPY package.json package-lock.json ./
 COPY apps/web/package.json ./apps/web/
 RUN npm ci
-# Force-install Alpine/musl native binaries not in the macOS lockfile
+# Force-install Alpine/musl native binaries not in the macOS lockfile.
+# @parcel/watcher: needed by next-intl for file watching
+# @next/swc: Next.js SWC compiler
+# @swc/core: next-intl bundles its own @swc/core that needs musl native binding
 RUN npm install --no-save --force \
     @parcel/watcher-linux-x64-musl \
     @next/swc-linux-x64-musl \
-    @next/swc-linux-x64-gnu
+    @next/swc-linux-x64-gnu \
+    @swc/core-linux-x64-musl \
+    @swc/core-linux-x64-gnu
 
 # Copy source and build
 COPY . .
