@@ -261,3 +261,17 @@
 | 12.4 | Research API access: Kinguin REST API, Eneba GraphQL, G2A Integration API | TODO | Operator | High |
 | 12.5 | Apply for affiliate programs: Awin (CDKeys/Loaded), Rakuten (GiftCardGranny) | TODO | Operator | Medium |
 | 12.6 | Deploy + verify live feed works in production | TODO | Operator | Critical |
+
+---
+
+## Phase 13: Core Engine Hardening + Visual Identity (V1.9)
+> Goal: Remove artificial scraping restrictions, enforce real-discount pricing logic, harden FX engine as core immutable feature, and apply the definitive dark+orange visual identity. The platform exists to index every public deal and show ONLY real discounts — "iGift, the real discount."
+
+| # | Task | Status | Specialist | Priority |
+|---|------|--------|------------|----------|
+| 13.1 | Update PROJECT_RULES.md + CLAUDE.md — allow aggressive public-page scraping with proxy/UA rotation | DONE | Architect | Critical |
+| 13.2 | Implement overpriced offer filter — suppress offers where effectivePrice > faceValue | DONE | Builder | Critical |
+| 13.3 | Verify + harden FX engine — ensure currency conversion is immutable in normalize pipeline | DONE | Builder | Critical |
+| 13.4 | Apply FreeX dark palette (bg #1a1815, accent #c15f3c/#d97757) + force dark default | DONE | Designer | Critical |
+| 13.5 | Audit all components for remaining indigo / hardcoded color issues | DONE | Builder | High |
+| 13.6 | Build + verify all changes | DONE | Operator | Critical |

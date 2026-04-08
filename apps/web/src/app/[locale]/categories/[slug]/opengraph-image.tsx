@@ -18,7 +18,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
     (
       <div
         style={{
-          background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)",
+          background: "linear-gradient(135deg, #141210 0%, #1a1815 50%, #2d2a26 100%)",
           width: "100%",
           height: "100%",
           display: "flex",
@@ -34,7 +34,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               width: "40px",
               height: "40px",
               borderRadius: "10px",
-              background: "linear-gradient(135deg, #818cf8, #6366f1)",
+              background: "linear-gradient(135deg, #d97757, #c15f3c)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -45,7 +45,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           >
             iG
           </div>
-          <div style={{ fontSize: "24px", fontWeight: 600, color: "#a5b4fc" }}>
+          <div style={{ fontSize: "24px", fontWeight: 600, color: "#e8956e" }}>
             iGift
           </div>
         </div>
@@ -64,7 +64,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           <div style={{ fontSize: "48px", fontWeight: 700, color: "white", lineHeight: 1.1, display: "flex" }}>
             {`${name} Deals`}
           </div>
-          <div style={{ fontSize: "22px", color: "#c7d2fe", lineHeight: 1.4, maxWidth: "700px" }}>
+          <div style={{ fontSize: "22px", color: "#c4c0b8", lineHeight: 1.4, maxWidth: "700px" }}>
             {description}
           </div>
         </div>
@@ -83,14 +83,14 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               borderRadius: "999px",
               background: "rgba(255,255,255,0.1)",
               border: "1px solid rgba(255,255,255,0.2)",
-              color: "#e0e7ff",
+              color: "#dddad4",
               fontSize: "16px",
               fontWeight: 500,
             }}
           >
             Trust-scored &amp; verified
           </div>
-          <div style={{ fontSize: "16px", color: "#818cf8", fontWeight: 500 }}>
+          <div style={{ fontSize: "16px", color: "#d97757", fontWeight: 500 }}>
             {`igift.app/categories/${slug}`}
           </div>
         </div>

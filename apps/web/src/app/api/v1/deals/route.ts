@@ -16,7 +16,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { offers, brands } from "@/db/schema";
 import type { Brand } from "@/db/schema";
-import { eq, desc, and, gte, gt } from "drizzle-orm";
+import { eq, desc, and, gte, gt, lte } from "drizzle-orm";
 import { authenticateApiRequest } from "../auth";
 
 export const dynamic = "force-dynamic";
@@ -44,7 +44,11 @@ export async function GET(request: Request) {
   const effectiveTrustZone = auth.tier === "free" && !trustZone ? "green" : (trustZone ?? undefined);
 
   try {
-    const conditions = [eq(offers.status, "active")];
+    const conditions = [
+      eq(offers.status, "active"),
+      // Hard rule: never show overpriced offers
+      lte(offers.effectivePriceCents, offers.faceValueCents),
+    ];
 
     if (effectiveTrustZone) {
       conditions.push(eq(offers.trustZone, effectiveTrustZone as "green" | "yellow" | "red"));

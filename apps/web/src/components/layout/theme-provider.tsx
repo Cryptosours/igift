@@ -38,7 +38,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Initialize from localStorage on mount
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
-    const initial = stored === "light" || stored === "dark" ? stored : "system";
+    // Dark-first: default to "dark" when no explicit preference is stored
+    const initial = stored === "light" || stored === "dark" || stored === "system" ? stored : "dark";
     setThemeState(initial);
     setResolved(resolveTheme(initial));
   }, []);

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { offers, brands, sources } from "@/db/schema";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, lte } from "drizzle-orm";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +16,11 @@ export async function GET(request: NextRequest) {
   const limit = Math.min(parseInt(searchParams.get("limit") ?? "50"), 100);
 
   try {
-    const conditions = [eq(offers.status, "active")];
+    const conditions = [
+      eq(offers.status, "active"),
+      // Hard rule: never show overpriced offers
+      lte(offers.effectivePriceCents, offers.faceValueCents),
+    ];
     if (trustZone === "green") {
       conditions.push(eq(offers.trustZone, "green"));
     }

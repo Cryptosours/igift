@@ -82,17 +82,19 @@ Violation of these rules risks wiping another project's data and work. Treat thi
 1. **Green-zone only in V1.** Only authorized/official sellers and reputable resale marketplaces. No account resale, no credential listings, no open-loop prepaid cards.
 2. **Never store gift card codes.** Treat codes as toxic data.
 3. **Never hold funds or process payments.** We are a publisher/referral platform.
-4. **Never scrape behind login or bypass anti-bot.** Only public pages, APIs, and partner feeds.
+4. **Scrape public pages aggressively.** Use proxy rotation, UA rotation, header randomization, and CAPTCHA-solving on public product pages. Never scrape behind login walls or private content. See PROJECT_RULES.md for full scraping policy.
 5. **Two scores, not one.** Deal Quality Score + Confidence Score, always shown separately.
 6. **Region-fit is mandatory.** Never rank a deal highly if region compatibility is unknown.
 7. **Affiliate links must be `rel="noopener noreferrer nofollow"`.** Always.
 
 ## Design System
 
-- **Primary:** Indigo/brand scale (brand-50 through brand-950)
+- **Dark-first:** Default theme is dark. Background #1a1815 (warm charcoal), surface #24221f, elevated #2d2a26
+- **Accent:** Orange #c15f3c (primary), #d97757 (hover/strong), #e8956e (light)
 - **Deal/savings:** Emerald/green (deal-50 through deal-900)
 - **Alert/premium:** Amber (alert-50 through alert-700)
 - **Trust zones:** Green (#22c55e), Yellow (#eab308), Red (#ef4444)
+- **Text:** #e8e6e3 (primary), #8c8980 (muted), #33302b (borders)
 - **Font:** Inter (sans), JetBrains Mono (prices/scores)
 - **Spacing:** 4px grid
 - **Components:** See `apps/web/src/components/`

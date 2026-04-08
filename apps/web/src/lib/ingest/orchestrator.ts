@@ -399,6 +399,16 @@ export async function runIngestion(options?: {
           continue;
         }
 
+        // Hard rule: reject overpriced offers (effectivePrice > faceValue after FX conversion)
+        // "iGift, the real discount" — only genuine savings are displayed
+        if (normalized.faceValueCents > 0 && normalized.effectivePriceCents > normalized.faceValueCents) {
+          warnings.push(
+            `Overpriced: '${rawOffer.originalTitle}' — effective $${(normalized.effectivePriceCents / 100).toFixed(2)} > face $${(normalized.faceValueCents / 100).toFixed(2)}, skipped`,
+          );
+          skippedCount++;
+          continue;
+        }
+
         normalizedCount++;
 
         if (options?.dryRun) {

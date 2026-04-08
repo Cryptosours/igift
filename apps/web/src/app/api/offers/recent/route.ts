@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { offers, brands, sources } from "@/db/schema";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, lte } from "drizzle-orm";
 
 /**
  * GET /api/offers/recent
@@ -32,7 +32,11 @@ export async function GET() {
       .from(offers)
       .innerJoin(brands, eq(offers.brandId, brands.id))
       .innerJoin(sources, eq(offers.sourceId, sources.id))
-      .where(and(eq(offers.status, "active")))
+      .where(and(
+        eq(offers.status, "active"),
+        // Hard rule: never show overpriced offers (effectivePrice must be <= faceValue)
+        lte(offers.effectivePriceCents, offers.faceValueCents),
+      ))
       .orderBy(desc(offers.lastSeenAt))
       .limit(30);
 

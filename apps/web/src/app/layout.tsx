@@ -33,10 +33,11 @@ export default async function RootLayout({
     >
       <head>
         {/* Static inline script — hardcoded string, no user input, prevents theme FOUC.
-            Dark-first: .dark is the default. Only remove if user explicitly chose light. */}
+            Dark-first: .dark is the default. Only remove if user explicitly chose "light"
+            or explicitly chose "system" and OS prefers light. No stored value = dark. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("igift-theme");var isLight=t==="light"||(t!=="dark"&&t==="system"&&!matchMedia("(prefers-color-scheme:dark)").matches);if(!isLight)document.documentElement.classList.add("dark")}catch(e){document.documentElement.classList.add("dark")}})()`,
+            __html: `(function(){try{var t=localStorage.getItem("igift-theme");if(t==="light"||(t==="system"&&!matchMedia("(prefers-color-scheme:dark)").matches)){return}document.documentElement.classList.add("dark")}catch(e){document.documentElement.classList.add("dark")}})()`,
           }}
         />
       </head>

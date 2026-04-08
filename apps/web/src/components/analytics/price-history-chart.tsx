@@ -112,8 +112,8 @@ export function PriceHistoryChart({ data, currency = "USD", allTimeLowCents }: P
         <ComposedChart data={chartData} margin={{ top: 8, right: 36, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.15} />
-              <stop offset="95%" stopColor="#4f46e5" stopOpacity={0} />
+              <stop offset="5%" stopColor="#c15f3c" stopOpacity={0.15} />
+              <stop offset="95%" stopColor="#c15f3c" stopOpacity={0} />
             </linearGradient>
           </defs>
 
@@ -179,11 +179,11 @@ export function PriceHistoryChart({ data, currency = "USD", allTimeLowCents }: P
             type="monotone"
             dataKey="priceCents"
             name="Price"
-            stroke="#4f46e5"
+            stroke="#c15f3c"
             strokeWidth={2}
             fill="url(#priceGradient)"
             dot={false}
-            activeDot={{ r: 4, fill: "#4f46e5", strokeWidth: 0 }}
+            activeDot={{ r: 4, fill: "#c15f3c", strokeWidth: 0 }}
           />
 
           {/* Discount line — secondary series */}

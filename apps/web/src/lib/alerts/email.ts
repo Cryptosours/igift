@@ -83,15 +83,15 @@ function renderEmailHtml(match: AlertMatch): string {
         </div>
       </div>
 
-      <a href="${o.externalUrl}" rel="noopener noreferrer nofollow" style="display:block;text-align:center;background:#4f46e5;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">
+      <a href="${o.externalUrl}" rel="noopener noreferrer nofollow" style="display:block;text-align:center;background:#c15f3c;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">
         View Deal &rarr;
       </a>
     </div>
 
     <!-- Footer -->
     <div style="text-align:center;font-size:11px;color:#94a3b8;">
-      <p>You're receiving this because you set a price alert on <a href="${SITE_URL}" style="color:#6366f1;">iGift</a>.</p>
-      <p><a href="${SITE_URL}/alerts" style="color:#6366f1;">Manage alerts</a> &middot; <a href="${SITE_URL}/alerts?unsubscribe=${match.alertId}" style="color:#6366f1;">Unsubscribe</a></p>
+      <p>You're receiving this because you set a price alert on <a href="${SITE_URL}" style="color:#d97757;">iGift</a>.</p>
+      <p><a href="${SITE_URL}/alerts" style="color:#d97757;">Manage alerts</a> &middot; <a href="${SITE_URL}/alerts?unsubscribe=${match.alertId}" style="color:#d97757;">Unsubscribe</a></p>
     </div>
   </div>
 </body>

@@ -22,11 +22,29 @@
 
 ### Data Handling
 - NEVER store gift card codes, redemption codes, or credentials
-- NEVER scrape behind authentication walls
-- NEVER bypass CAPTCHA or anti-bot systems
+- NEVER scrape behind authentication walls or private/login-gated content
 - NEVER republish full catalogs (store minimal metadata + canonical links)
 - Raw fetch snapshots must be preserved for audit/dispute resolution
 - Every offer must have provenance (feed/API/manual/scrape) and last-verified timestamp
+
+### Public-Page Scraping Policy
+iGift is a price-comparison and deal-intelligence platform. Scraping publicly accessible product pages, price listings, and catalog data is core to the platform's mission. The following techniques are authorized for public-page data collection:
+- User-agent rotation to avoid fingerprinting
+- Proxy/IP rotation to distribute request load
+- Request throttling and polite crawl delays (respect rate limits)
+- Header randomization to mimic organic browser traffic
+- Retry with backoff on transient failures
+- CAPTCHA-solving services for public product pages when necessary
+- Tor or anonymizing proxies for IP diversity on public endpoints
+
+**Boundary:** This policy applies ONLY to publicly accessible pages (no login required). Never use these techniques to access private, authenticated, or login-gated content.
+
+### Pricing Integrity (Hard Rule)
+- Every offer MUST pass through FX conversion before pricing comparison
+- Offers where effectivePrice > faceValue (after FX conversion to USD) are NEVER shown to users
+- This filter is immutable and cannot be overridden by high scores or manual intervention
+- The FX engine is a core, non-removable component of the ingestion pipeline
+- Slogan: "iGift, the real discount" — only genuine savings are displayed
 
 ## Source Classification
 

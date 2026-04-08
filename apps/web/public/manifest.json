@@ -4,8 +4,8 @@
   "description": "Trust-scored deal intelligence for digital gift cards, credits, and vouchers.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#4f46e5",
+  "background_color": "#0f0e0c",
+  "theme_color": "#c15f3c",
   "icons": [
     {
       "src": "/favicon.svg",

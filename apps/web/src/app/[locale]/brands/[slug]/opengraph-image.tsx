@@ -34,7 +34,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
     (
       <div
         style={{
-          background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)",
+          background: "linear-gradient(135deg, #141210 0%, #1a1815 50%, #2d2a26 100%)",
           width: "100%",
           height: "100%",
           display: "flex",
@@ -57,7 +57,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                 width: "40px",
                 height: "40px",
                 borderRadius: "10px",
-                background: "linear-gradient(135deg, #818cf8, #6366f1)",
+                background: "linear-gradient(135deg, #d97757, #c15f3c)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -68,7 +68,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             >
               iG
             </div>
-            <div style={{ fontSize: "24px", fontWeight: 600, color: "#a5b4fc" }}>
+            <div style={{ fontSize: "24px", fontWeight: 600, color: "#e8956e" }}>
               iGift
             </div>
           </div>
@@ -100,7 +100,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           <div style={{ fontSize: "52px", fontWeight: 700, color: "white", lineHeight: 1.1, display: "flex" }}>
             {`${brandName} Gift Card Deals`}
           </div>
-          <div style={{ fontSize: "22px", color: "#c7d2fe", lineHeight: 1.4 }}>
+          <div style={{ fontSize: "22px", color: "#c4c0b8", lineHeight: 1.4 }}>
             Compare verified prices from trusted sources
           </div>
         </div>
@@ -111,7 +111,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             <div style={{ fontSize: "36px", fontWeight: 700, color: "#10b981", display: "flex" }}>
               {`${bestDiscount.toFixed(1)}%`}
             </div>
-            <div style={{ fontSize: "14px", color: "#a5b4fc", fontWeight: 500 }}>
+            <div style={{ fontSize: "14px", color: "#e8956e", fontWeight: 500 }}>
               Best Discount
             </div>
           </div>
@@ -119,7 +119,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             <div style={{ fontSize: "36px", fontWeight: 700, color: "#f59e0b", display: "flex" }}>
               {`${avgDiscount}%`}
             </div>
-            <div style={{ fontSize: "14px", color: "#a5b4fc", fontWeight: 500 }}>
+            <div style={{ fontSize: "14px", color: "#e8956e", fontWeight: 500 }}>
               Avg Discount
             </div>
           </div>
@@ -127,7 +127,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             <div style={{ fontSize: "36px", fontWeight: 700, color: "white" }}>
               {dealCount}
             </div>
-            <div style={{ fontSize: "14px", color: "#a5b4fc", fontWeight: 500 }}>
+            <div style={{ fontSize: "14px", color: "#e8956e", fontWeight: 500 }}>
               Active Deals
             </div>
           </div>
@@ -140,7 +140,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             bottom: "32px",
             right: "60px",
             fontSize: "16px",
-            color: "#818cf8",
+            color: "#d97757",
             fontWeight: 500,
           }}
         >
