@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -6,146 +7,129 @@ export const metadata: Metadata = {
     "iGift privacy policy. How we collect, use, and protect your data.",
 };
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const t = await getTranslations("PrivacyPage");
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-surface-900">Privacy Policy</h1>
+      <h1 className="text-3xl font-bold text-surface-900">{t("heading")}</h1>
       <p className="mt-2 text-sm text-surface-500">
-        Last updated: March 31, 2026
+        {t("lastUpdated")}
       </p>
 
       <div className="mt-8 space-y-8 text-sm leading-relaxed text-surface-600">
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            1. What We Collect
+            {t("section1Heading")}
           </h2>
-          <p className="mt-2">We collect minimal data:</p>
+          <p className="mt-2">{t("section1Intro")}</p>
           <ul className="mt-2 list-disc pl-5 space-y-1">
             <li>
-              <strong>Email address</strong> — only if you sign up for price
-              alerts
+              <strong>{t("section1Item1Label")}</strong> — {t("section1Item1Text")}
             </li>
             <li>
-              <strong>Alert preferences</strong> — brands, categories, regions,
-              and target prices you configure
+              <strong>{t("section1Item2Label")}</strong> — {t("section1Item2Text")}
             </li>
             <li>
-              <strong>Usage analytics</strong> — anonymous page views, click
-              patterns, and feature usage (via PostHog or similar)
+              <strong>{t("section1Item3Label")}</strong> — {t("section1Item3Text")}
             </li>
             <li>
-              <strong>Device and browser information</strong> — standard HTTP
-              headers for analytics and security
+              <strong>{t("section1Item4Label")}</strong> — {t("section1Item4Text")}
             </li>
           </ul>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            2. What We Do NOT Collect
+            {t("section2Heading")}
           </h2>
           <ul className="mt-2 list-disc pl-5 space-y-1">
-            <li>Gift card codes, redemption codes, or credentials</li>
-            <li>Payment information (we do not process payments)</li>
-            <li>
-              Account credentials for third-party platforms
-            </li>
-            <li>
-              Personal financial information beyond what you voluntarily provide
-            </li>
+            <li>{t("section2Item1")}</li>
+            <li>{t("section2Item2")}</li>
+            <li>{t("section2Item3")}</li>
+            <li>{t("section2Item4")}</li>
           </ul>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            3. How We Use Your Data
+            {t("section3Heading")}
           </h2>
           <ul className="mt-2 list-disc pl-5 space-y-1">
-            <li>To deliver price alerts you have configured</li>
-            <li>To improve our deal verification and ranking algorithms</li>
-            <li>To understand usage patterns and improve the product</li>
-            <li>To prevent abuse and maintain platform security</li>
+            <li>{t("section3Item1")}</li>
+            <li>{t("section3Item2")}</li>
+            <li>{t("section3Item3")}</li>
+            <li>{t("section3Item4")}</li>
           </ul>
           <p className="mt-2">
-            We do <strong>not</strong> sell your personal data to third parties.
-            We do <strong>not</strong> share your email address with advertisers
-            or deal sources.
+            {t.rich("section3Body", {
+              strong: (chunks) => <strong>{chunks}</strong>,
+            })}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            4. Cookies and Tracking
+            {t("section4Heading")}
           </h2>
           <p className="mt-2">
-            We use essential cookies for site functionality and analytics
-            cookies to understand usage patterns. We do not use advertising
-            tracking cookies. You can disable cookies in your browser settings.
+            {t("section4Body")}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            5. Third-Party Links
+            {t("section5Heading")}
           </h2>
           <p className="mt-2">
-            iGift contains affiliate links to third-party sellers. When you
-            click these links, you are subject to the privacy policies of those
-            third-party sites. We are not responsible for their data practices.
+            {t("section5Body")}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            6. Data Retention
+            {t("section6Heading")}
           </h2>
           <p className="mt-2">
-            Alert preferences are retained as long as your alerts are active.
-            You can delete your alerts and associated email at any time by
-            using the unsubscribe link in any alert email. Analytics data is
-            retained in aggregate form and is not linked to individual users
-            after 90 days.
+            {t("section6Body")}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            7. Your Rights
+            {t("section7Heading")}
           </h2>
-          <p className="mt-2">You have the right to:</p>
+          <p className="mt-2">{t("section7Intro")}</p>
           <ul className="mt-2 list-disc pl-5 space-y-1">
-            <li>Request a copy of any personal data we hold about you</li>
-            <li>Request deletion of your personal data</li>
-            <li>Opt out of analytics tracking</li>
-            <li>Unsubscribe from alerts at any time</li>
+            <li>{t("section7Item1")}</li>
+            <li>{t("section7Item2")}</li>
+            <li>{t("section7Item3")}</li>
+            <li>{t("section7Item4")}</li>
           </ul>
           <p className="mt-2">
-            Contact{" "}
-            <span className="font-medium text-brand-600">
-              privacy@igift.app
-            </span>{" "}
-            for any data requests.
+            {t.rich("section7ContactText", {
+              email: (chunks) => (
+                <span className="font-medium text-brand-600">{chunks}</span>
+              ),
+            })}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            8. Security
+            {t("section8Heading")}
           </h2>
           <p className="mt-2">
-            We use industry-standard security measures including HTTPS
-            encryption, secure hosting, and access controls. We never store
-            gift card codes or payment credentials.
+            {t("section8Body")}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            9. Changes
+            {t("section9Heading")}
           </h2>
           <p className="mt-2">
-            We may update this policy. We will notify alert subscribers of
-            material changes via email.
+            {t("section9Body")}
           </p>
         </section>
       </div>

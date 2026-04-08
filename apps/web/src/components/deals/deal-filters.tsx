@@ -2,17 +2,13 @@
 
 import { useState, useMemo, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Search } from "lucide-react";
 import { motion } from "motion/react";
 import { SearchBar } from "@/components/ui/search-bar";
 import { DealCard } from "@/components/deals/deal-card";
 import type { DealCardProps } from "@/components/deals/deal-card";
 import { REGIONS, SELECTABLE_REGIONS } from "@/lib/regions";
-
-const TOGGLE_FILTERS = [
-  { key: "greenOnly", label: "Green Sources Only" },
-  { key: "historicalLows", label: "Historical Lows" },
-] as const;
 
 interface DealFiltersProps {
   initialDeals: DealCardProps[];
@@ -21,11 +17,13 @@ interface DealFiltersProps {
 }
 
 function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
+  const t = useTranslations("DealFilters");
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") ?? "";
   const regionParam = searchParams.get("region");
 
-  const resolvedDefault = regionParam ?? defaultRegion ?? "All Regions";
+  const allRegionsLabel = t("allRegions");
+  const resolvedDefault = regionParam ?? defaultRegion ?? allRegionsLabel;
 
   const [searchResults, setSearchResults] = useState<DealCardProps[] | null>(null);
   const [activeQuery, setActiveQuery] = useState(initialQuery);
@@ -51,7 +49,7 @@ function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
   const filteredDeals = useMemo(() => {
     let result = baseDeals;
 
-    if (activeRegion !== "All Regions") {
+    if (activeRegion !== allRegionsLabel) {
       result = result.filter(
         (d) =>
           d.region.toLowerCase() === activeRegion.toLowerCase() ||
@@ -70,9 +68,14 @@ function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
     return result;
   }, [baseDeals, activeRegion, toggles]);
 
+  const toggleFilters = [
+    { key: "greenOnly", label: t("greenSourcesOnly") },
+    { key: "historicalLows", label: t("historicalLows") },
+  ] as const;
+
   const isSearching = activeQuery.length > 0;
   const hasActiveFilters =
-    activeRegion !== "All Regions" || Object.values(toggles).some(Boolean);
+    activeRegion !== allRegionsLabel || Object.values(toggles).some(Boolean);
 
   return (
     <>
@@ -80,15 +83,15 @@ function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
       <div className="mt-5 flex flex-wrap gap-2">
         {/* All Regions pill */}
         <button
-          onClick={() => setActiveRegion("All Regions")}
-          aria-pressed={activeRegion === "All Regions"}
+          onClick={() => setActiveRegion(allRegionsLabel)}
+          aria-pressed={activeRegion === allRegionsLabel}
           className={`rounded-full border px-3.5 py-1 text-xs font-medium transition-all ${
-            activeRegion === "All Regions"
+            activeRegion === allRegionsLabel
               ? "border-brand-300 bg-brand-50 text-brand-700"
               : "border-surface-200 bg-white text-surface-500 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700"
           }`}
         >
-          All Regions
+          {allRegionsLabel}
         </button>
 
         {/* Per-region pills with flag emoji */}
@@ -114,7 +117,7 @@ function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
         <span className="border-l border-surface-200 mx-1" />
 
         {/* Toggle filters */}
-        {TOGGLE_FILTERS.map(({ key, label }) => (
+        {toggleFilters.map(({ key, label }) => (
           <button
             key={key}
             onClick={() => handleToggle(key)}
@@ -146,26 +149,23 @@ function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
         <div className="mt-3 flex items-center gap-2 text-sm text-surface-500">
           <Search className="h-4 w-4" />
           <span>
-            {filteredDeals.length} result{filteredDeals.length !== 1 ? "s" : ""}
+            {t("resultCount", { count: filteredDeals.length })}
             {isSearching && (
               <>
-                {" "}for{" "}
-                <span className="font-medium text-surface-700">
-                  &quot;{activeQuery}&quot;
-                </span>
+                {" "}{t("forQuery", { query: activeQuery })}
               </>
             )}
-            {hasActiveFilters && !isSearching && " matching filters"}
+            {hasActiveFilters && !isSearching && ` ${t("matchingFilters")}`}
           </span>
           {hasActiveFilters && (
             <button
               onClick={() => {
-                setActiveRegion(defaultRegion ?? "All Regions");
+                setActiveRegion(defaultRegion ?? allRegionsLabel);
                 setToggles({});
               }}
               className="ml-1 text-xs text-brand-600 hover:text-brand-700 transition-colors"
             >
-              Clear filters
+              {t("clearFilters")}
             </button>
           )}
         </div>
@@ -185,13 +185,13 @@ function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
             <Search className="h-12 w-12 text-surface-300" />
             <p className="mt-4 text-lg font-medium text-surface-700">
               {isSearching
-                ? `No deals found for "${activeQuery}"`
-                : "No deals match your filters"}
+                ? t("noDealsSearch", { query: activeQuery })
+                : t("noDealsFilter")}
             </p>
             <p className="mt-1 text-sm text-surface-500">
               {isSearching
-                ? "Try a different search term, like a brand name or category."
-                : "Try adjusting your filters or clearing them."}
+                ? t("noDealsSearchHint")
+                : t("noDealsFilterHint")}
             </p>
           </motion.div>
         )}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { getCategories } from "@/lib/data";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function CategoriesPage() {
+  const t = await getTranslations("CategoriesPage");
   let categories: Awaited<ReturnType<typeof getCategories>> = [];
   try {
     categories = await getCategories();
@@ -48,12 +50,12 @@ export default async function CategoriesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(categoriesJsonLd) }}
       />
       <FadeIn>
-        <span className="data-label text-brand-600">Categories</span>
+        <span className="data-label text-brand-600">{t("label")}</span>
         <h1 className="mt-1 heading-display text-3xl text-surface-900">
-          Browse by category
+          {t("heading")}
         </h1>
         <p className="mt-2 text-sm text-surface-500">
-          Verified deals across all major digital value categories.
+          {t("description")}
         </p>
       </FadeIn>
 
@@ -75,7 +77,7 @@ export default async function CategoriesPage() {
               </h2>
               <p className="mt-1 text-sm text-surface-500">{cat.description}</p>
               <p className="mt-3 price-display text-sm font-semibold text-brand-600">
-                {cat.dealCount} verified deals
+                {t("verifiedDeals", { count: cat.dealCount })}
               </p>
             </Link>
           </StaggerItem>

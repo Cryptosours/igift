@@ -1,25 +1,25 @@
 import type { Metadata } from "next";
 import { ShieldCheck, ShieldAlert, ShieldX, Calculator, BarChart3, DollarSign } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
+import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Methodology",
   description: "How iGift verifies, scores, and ranks digital value deals. Our dual-score system, trust zones, and verification process explained.",
 };
 
-export default function MethodologyPage() {
+export default async function MethodologyPage() {
+  const t = await getTranslations("MethodologyPage");
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
       <FadeIn>
-        <span className="data-label text-brand-600">Methodology</span>
+        <span className="data-label text-brand-600">{t("label")}</span>
         <h1 className="mt-1 heading-display text-3xl text-surface-900">
-          How We Score Deals
+          {t("heading")}
         </h1>
         <p className="mt-3 max-w-2xl text-base leading-relaxed text-surface-600">
-          iGift uses a transparent, two-score verification system. We don&apos;t
-          just show discounts — we verify them against reference prices, check
-          region compatibility, account for fees, and assess source
-          trustworthiness.
+          {t("description")}
         </p>
       </FadeIn>
 
@@ -32,13 +32,13 @@ export default function MethodologyPage() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-surface-900">
-                Deal Quality Score
+                {t("dealQualityScore")}
               </h2>
-              <p className="text-xs text-surface-400">0–100 scale</p>
+              <p className="text-xs text-surface-400">{t("scale0100")}</p>
             </div>
           </div>
           <p className="mt-3 text-sm text-surface-600">
-            Measures how good the deal actually is, considering all costs and context.
+            {t("dealQualityDesc")}
           </p>
           <div className="mt-5 rounded-xl border border-surface-100 bg-surface-50 p-4 overflow-x-auto">
             <pre className="price-display text-xs text-surface-700 leading-relaxed">{`DealQuality =
@@ -63,14 +63,13 @@ export default function MethodologyPage() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-surface-900">
-                Confidence Score
+                {t("confidenceScore")}
               </h2>
-              <p className="text-xs text-surface-400">0–100 scale</p>
+              <p className="text-xs text-surface-400">{t("scale0100")}</p>
             </div>
           </div>
           <p className="mt-3 text-sm text-surface-600">
-            Measures how much we trust our own data about this deal. A high deal
-            score with low confidence means &quot;looks great but we&apos;re not sure.&quot;
+            {t("confidenceDesc")}
           </p>
           <div className="mt-5 rounded-xl border border-surface-100 bg-surface-50 p-4 overflow-x-auto">
             <pre className="price-display text-xs text-surface-700 leading-relaxed">{`Confidence =
@@ -86,13 +85,12 @@ export default function MethodologyPage() {
       {/* Trust Zones */}
       <FadeIn delay={0.2}>
         <section id="trust" className="mt-12">
-          <span className="data-label text-brand-600">Trust System</span>
+          <span className="data-label text-brand-600">{t("trustSystem")}</span>
           <h2 className="mt-1 text-xl font-bold text-surface-900">
-            Trust Zones
+            {t("trustZonesHeading")}
           </h2>
           <p className="mt-2 text-sm text-surface-600">
-            Every source is classified into a trust zone based on authorization,
-            buyer protection, and fraud signals.
+            {t("trustZonesDesc")}
           </p>
         </section>
       </FadeIn>
@@ -104,11 +102,9 @@ export default function MethodologyPage() {
               <ShieldCheck className="h-5 w-5 text-deal-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-deal-800">Green — Verified Source</h3>
+              <h3 className="font-semibold text-deal-800">{t("greenTitle")}</h3>
               <p className="mt-1 text-sm text-deal-700">
-                Authorized retailers, official promotional offers, and verified
-                B2B catalog integrations. Lowest fraud risk. Strongest buyer
-                protection.
+                {t("greenBody")}
               </p>
             </div>
           </div>
@@ -119,11 +115,9 @@ export default function MethodologyPage() {
               <ShieldAlert className="h-5 w-5 text-alert-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-alert-800">Yellow — Marketplace</h3>
+              <h3 className="font-semibold text-alert-800">{t("yellowTitle")}</h3>
               <p className="mt-1 text-sm text-alert-700">
-                Reputable secondary marketplaces with buyer protection. Higher
-                discount potential, but also higher risk of region-incompatible
-                or invalid codes. We apply enhanced scoring.
+                {t("yellowBody")}
               </p>
             </div>
           </div>
@@ -134,11 +128,9 @@ export default function MethodologyPage() {
               <ShieldX className="h-5 w-5 text-red-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-red-800">Red — Not Listed</h3>
+              <h3 className="font-semibold text-red-800">{t("redTitle")}</h3>
               <p className="mt-1 text-sm text-red-700">
-                Account resale, credential-linked products, and sources without
-                meaningful buyer protection are excluded from iGift entirely.
-                We do not list them.
+                {t("redBody")}
               </p>
             </div>
           </div>
@@ -153,33 +145,33 @@ export default function MethodologyPage() {
               <DollarSign className="h-5 w-5 text-alert-600" />
             </div>
             <h2 className="text-xl font-bold text-surface-900">
-              Effective Price Calculation
+              {t("effectivePriceHeading")}
             </h2>
           </div>
           <p className="mt-3 text-sm text-surface-600">
-            The &quot;effective price&quot; shown on every deal includes all known costs:
+            {t("effectivePriceDesc")}
           </p>
           <div className="mt-4 rounded-xl border border-surface-100 bg-surface-50 p-4">
             <ul className="space-y-2 text-sm text-surface-700">
               <li className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-surface-400" />
-                Listing price
+                {t("priceListingPrice")}
               </li>
               <li className="flex items-center gap-2">
                 <span className="price-display text-surface-400">+</span>
-                Platform / marketplace fees
+                {t("pricePlatformFees")}
               </li>
               <li className="flex items-center gap-2">
                 <span className="price-display text-surface-400">+</span>
-                Payment method surcharges
+                {t("pricePaymentSurcharges")}
               </li>
               <li className="flex items-center gap-2">
                 <span className="price-display text-surface-400">+</span>
-                Membership cost allocation (if applicable)
+                {t("priceMembershipCost")}
               </li>
               <li className="flex items-center gap-2 border-t border-surface-200 pt-2 font-semibold text-deal-700">
                 <span className="price-display text-deal-600">=</span>
-                Effective price, converted to your currency
+                {t("priceEffectiveResult")}
               </li>
             </ul>
           </div>
@@ -190,14 +182,10 @@ export default function MethodologyPage() {
       <FadeIn delay={0.15}>
         <section className="mt-8 rounded-2xl border border-brand-100 bg-brand-50/50 p-6">
           <h2 className="text-lg font-bold text-surface-900">
-            Affiliate Disclosure
+            {t("affiliateDisclosureHeading")}
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-surface-600">
-            iGift earns affiliate commissions when you click through to a
-            seller and make a purchase. This does not affect our scoring or
-            ranking — deals are ranked purely by their computed deal quality and
-            confidence scores. Sponsored placements, if any, are always clearly
-            labeled.
+            {t("affiliateDisclosureBody")}
           </p>
         </section>
       </FadeIn>

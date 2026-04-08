@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { getDeals, getWatchedSlugs, getFeaturedPlacements } from "@/lib/data";
 import { DealFilters } from "@/components/deals/deal-filters";
 import { FeaturedSection } from "@/components/deals/featured-section";
@@ -20,6 +20,7 @@ export const dynamic = "force-dynamic";
 
 export default async function DealsPage() {
   const locale = await getLocale();
+  const t = await getTranslations("DealsPage");
 
   let deals: Awaited<ReturnType<typeof getDeals>> = [];
   try {
@@ -71,17 +72,17 @@ export default async function DealsPage() {
       {/* Page Header */}
       <FadeIn>
         <div>
-          <span className="data-label text-brand-600">Deals</span>
+          <span className="data-label text-brand-600">{t("label")}</span>
           <h1 className="mt-1 heading-display text-3xl text-surface-900">
-            All verified deals
+            {t("heading")}
           </h1>
           <p className="mt-2 text-sm text-surface-500">
-            {deals.length} deals from verified sources, updated continuously.
+            {t("description", { count: deals.length })}
           </p>
           <ShareButton
-            title="All Verified Gift Card Deals — iGift"
-            text="Browse verified gift card deals ranked by deal quality and confidence scoring."
-            url="https://igift.app/en/deals"
+            title={t("shareTitle")}
+            text={t("shareText")}
+            url={`https://igift.app/${locale}/deals`}
             className="mt-3"
           />
         </div>

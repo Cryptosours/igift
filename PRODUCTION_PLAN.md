@@ -192,3 +192,23 @@
 | 8.11 | Ingest health dashboard (last run time, success rate, offer counts) | DONE | Builder | High |
 | 8.12 | Add catalog source entries to DB (costco, egifter, cardcash, etc.) | DONE | Builder | Medium |
 | 8.13 | Trust-badge pre-existing test fix (React import in vitest JSX) | DONE | Builder | Low |
+
+---
+
+## Phase 9: i18n Completeness & Launch Polish (V1.5)
+> Goal: All user-facing pages fully internationalized (en + de). Social sharing works with proper PNG OG images. PWA-ready with proper icon assets. Every page looks correct in both languages.
+
+| # | Task | Status | Specialist | Priority |
+|---|------|--------|------------|----------|
+| 9.1 | i18n: Home page — extract all hardcoded strings to message files | DONE | Builder | Critical |
+| 9.2 | i18n: Deals page — extract hardcoded strings | DONE | Builder | Critical |
+| 9.3 | i18n: Brands listing + brand detail pages | DONE | Builder | Critical |
+| 9.4 | i18n: Categories listing + category detail pages | DONE | Builder | High |
+| 9.5 | i18n: Sources listing + source detail pages | DONE | Builder | High |
+| 9.6 | i18n: About, Methodology, Developers pages | DONE | Builder | High |
+| 9.7 | i18n: Alerts, Dashboard, Watchlist, Historical Lows pages | DONE | Builder | High |
+| 9.8 | i18n: Legal pages (Terms, Privacy, Disclosure) | DONE | Builder | Medium |
+| 9.9 | Fix OG image fallback — PNG default for pages without opengraph-image.tsx | DONE | Builder | Critical |
+| 9.10 | Add PWA icons (192px, 512px PNG) + apple-touch-icon | DONE | Builder | High |
+| 9.11 | i18n: Components — DealCard, DealFilters, NewsletterForm, ShareButton | DONE | Builder | High |
+| 9.12 | Deploy latest code to VPS | TODO | Operator | High |

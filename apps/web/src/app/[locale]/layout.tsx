@@ -49,7 +49,11 @@ export async function generateMetadata({
       "gift card comparison",
     ],
     icons: {
-      icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+      icon: [
+        { url: "/favicon.svg", type: "image/svg+xml" },
+        { url: "/icon", type: "image/png", sizes: "32x32" },
+      ],
+      apple: [{ url: "/apple-icon", sizes: "180x180" }],
     },
     manifest: "/manifest.json",
     openGraph: {
@@ -58,20 +62,11 @@ export async function generateMetadata({
       siteName: "iGift",
       title: t("ogTitle"),
       description: t("ogDescription"),
-      images: [
-        {
-          url: "/og-image.svg",
-          width: 1200,
-          height: 630,
-          alt: "iGift — Trust-scored deal intelligence",
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: t("ogTitle"),
       description: t("ogDescription"),
-      images: ["/og-image.svg"],
     },
     robots: {
       index: true,

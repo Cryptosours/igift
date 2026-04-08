@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { DealCard } from "@/components/deals/deal-card";
 import { getDeals, getCategoryBySlug } from "@/lib/data";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
 export const dynamic = "force-dynamic";
@@ -21,6 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CategoryDetailPage({ params }: Props) {
+  const t = await getTranslations("CategoryDetail");
   const { slug } = await params;
   const cat = getCategoryBySlug(slug);
 
@@ -70,7 +72,7 @@ export default async function CategoryDetailPage({ params }: Props) {
         className="inline-flex items-center gap-1 text-sm text-surface-500 hover:text-brand-600"
       >
         <ArrowLeft className="h-4 w-4" />
-        All Categories
+        {t("allCategories")}
       </Link>
 
       <FadeIn>
@@ -83,7 +85,7 @@ export default async function CategoryDetailPage({ params }: Props) {
             </div>
           </div>
           <p className="mt-2 price-display text-sm text-surface-400">
-            {deals.length} verified deals across trusted sources
+            {t("verifiedDealsAcross", { count: deals.length })}
           </p>
         </div>
       </FadeIn>
@@ -99,9 +101,9 @@ export default async function CategoryDetailPage({ params }: Props) {
       ) : (
         <FadeIn delay={0.1}>
           <p className="mt-6 text-sm text-surface-500">
-            No active deals in this category right now. Check back soon or{" "}
+            {t("noDeals")}{" "}
             <Link href="/alerts" className="text-brand-600 hover:text-brand-700">
-              set up an alert
+              {t("setUpAlert")}
             </Link>
             .
           </p>

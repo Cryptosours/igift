@@ -11,6 +11,7 @@ import {
   Eye,
   Lock,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { DealCard } from "@/components/deals/deal-card";
 import { getDeals, getCategories, getHeroStats } from "@/lib/data";
 import { HeroSearch } from "@/components/ui/hero-search";
@@ -61,6 +62,7 @@ function HomeJsonLd({ stats }: { stats: { activeOffers: number; verifiedSources:
 }
 
 export default async function HomePage() {
+  const t = await getTranslations("Home");
   let deals: Awaited<ReturnType<typeof getDeals>> = [];
   let categories: Awaited<ReturnType<typeof getCategories>> = [];
   const [heroStats] = await Promise.all([getHeroStats()]);
@@ -100,25 +102,23 @@ export default async function HomePage() {
               <FadeIn>
                 <div className="inline-flex items-center gap-2 rounded-full border border-brand-400/20 bg-brand-500/10 px-3 py-1 text-xs font-medium text-brand-300">
                   <span className="flex h-1.5 w-1.5 rounded-full bg-deal-400 animate-pulse-soft" />
-                  Live price intelligence
+                  {t("eyebrow")}
                 </div>
               </FadeIn>
 
               <FadeIn delay={0.1}>
                 <h1 className="mt-6 heading-display text-4xl text-white sm:text-5xl lg:text-[3.5rem]">
-                  Stop guessing.
+                  {t("headlinePart1")}
                   <br />
                   <span className="bg-gradient-to-r from-deal-400 to-deal-300 bg-clip-text text-transparent">
-                    Start saving.
+                    {t("headlinePart2")}
                   </span>
                 </h1>
               </FadeIn>
 
               <FadeIn delay={0.2}>
                 <p className="mt-5 max-w-lg text-base leading-relaxed text-surface-400">
-                  We compute the real effective price on gift cards, credits, and
-                  vouchers — factoring in fees, region locks, and seller trust — so
-                  you never overpay.
+                  {t("subheadline")}
                 </p>
               </FadeIn>
 
@@ -137,14 +137,14 @@ export default async function HomePage() {
                     className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-surface-900 shadow-lg shadow-white/10 transition-all hover:shadow-xl hover:shadow-white/20 active:scale-[0.98]"
                   >
                     <Search className="h-4 w-4" />
-                    Browse All Deals
+                    {t("ctaBrowse")}
                   </Link>
                   <Link
                     href="/alerts"
                     className="inline-flex items-center gap-2 rounded-xl border border-surface-700 bg-surface-800/50 px-5 py-2.5 text-sm font-semibold text-surface-300 transition-all hover:border-surface-600 hover:bg-surface-800 hover:text-white"
                   >
                     <Bell className="h-4 w-4" />
-                    Set Price Alert
+                    {t("ctaAlerts")}
                   </Link>
                 </div>
               </FadeIn>
@@ -157,18 +157,18 @@ export default async function HomePage() {
                 <div className="flex items-center justify-between mb-5">
                   <div className="flex items-center gap-2">
                     <div className="flex h-2 w-2 rounded-full bg-deal-400 animate-pulse-soft" />
-                    <span className="data-label text-surface-500">Live Market Overview</span>
+                    <span className="data-label text-surface-500">{t("liveMarketOverview")}</span>
                   </div>
-                  <span className="data-label text-surface-600">Updated continuously</span>
+                  <span className="data-label text-surface-600">{t("updatedContinuously")}</span>
                 </div>
 
                 {/* Stats grid */}
                 <StaggerContainer className="grid grid-cols-2 gap-4" stagger={0.1}>
                   {[
-                    { value: `${heroStats.activeOffers}+`, label: "Active Offers", accent: "text-white" },
-                    { value: String(heroStats.verifiedSources), label: "Verified Sources", accent: "text-brand-400" },
-                    { value: `-${heroStats.avgDiscount}%`, label: "Avg. Discount", accent: "text-deal-400" },
-                    { value: "2-Score", label: "Trust System", accent: "text-alert-400" },
+                    { value: `${heroStats.activeOffers}+`, label: t("activeOffers"), accent: "text-white" },
+                    { value: String(heroStats.verifiedSources), label: t("verifiedSources"), accent: "text-brand-400" },
+                    { value: `-${heroStats.avgDiscount}%`, label: t("avgDiscount"), accent: "text-deal-400" },
+                    { value: t("twoScore"), label: t("trustSystem"), accent: "text-alert-400" },
                   ].map((stat) => (
                     <StaggerItem key={stat.label}>
                       <div className="rounded-xl bg-surface-800/60 p-4">
@@ -187,16 +187,16 @@ export default async function HomePage() {
                 <div className="mt-4 rounded-xl border border-surface-800 bg-surface-950/50 p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-xs text-surface-500">Top deal right now</div>
+                      <div className="text-xs text-surface-500">{t("topDealRightNow")}</div>
                       <div className="mt-0.5 text-sm font-semibold text-white">
-                        {deals[0]?.brand ?? "Steam"} Gift Card
+                        {deals[0]?.brand ?? "Steam"} {t("giftCard")}
                       </div>
                     </div>
                     <div className="text-right">
                       <div className="price-display text-lg font-bold text-deal-400">
                         -{Math.round((deals[0]?.effectiveDiscount ?? 0.08) * 100)}%
                       </div>
-                      <div className="data-label text-surface-500">verified</div>
+                      <div className="data-label text-surface-500">{t("verified")}</div>
                     </div>
                   </div>
                 </div>
@@ -207,10 +207,10 @@ export default async function HomePage() {
           {/* Trust bar — bottom of hero */}
           <StaggerContainer className="mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-surface-800 pt-8" stagger={0.06}>
             {[
-              { icon: ShieldCheck, text: "Trust-scored sources" },
-              { icon: Eye, text: "Fee transparency" },
-              { icon: Globe, text: "Region-aware" },
-              { icon: Lock, text: "No payment processing" },
+              { icon: ShieldCheck, text: t("trustScoredSources") },
+              { icon: Eye, text: t("feeTransparency") },
+              { icon: Globe, text: t("regionAware") },
+              { icon: Lock, text: t("noPaymentProcessing") },
             ].map((item) => (
               <StaggerItem key={item.text}>
                 <div className="flex items-center gap-2 text-sm text-surface-500">
@@ -230,13 +230,12 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center">
-              <span className="data-label text-brand-600">How it works</span>
+              <span className="data-label text-brand-600">{t("howItWorksLabel")}</span>
               <h2 className="mt-2 heading-display text-3xl text-surface-900 sm:text-4xl">
-                Deal intelligence, not just discounts
+                {t("howItWorksHeading")}
               </h2>
               <p className="mx-auto mt-3 max-w-lg text-sm text-surface-500">
-                We go beyond listing prices. Every deal is computed, verified,
-                and scored across four dimensions.
+                {t("howItWorksSub")}
               </p>
             </div>
           </FadeIn>
@@ -245,26 +244,26 @@ export default async function HomePage() {
             {[
               {
                 icon: TrendingUp,
-                title: "Effective Price",
-                body: "Fees, membership costs, payment surcharges, denomination constraints — all factored in. Not just the sticker price.",
+                title: t("featureEffectivePrice"),
+                body: t("featureEffectivePriceBody"),
                 accent: "from-brand-500 to-brand-600",
               },
               {
                 icon: BarChart3,
-                title: "Price History",
-                body: "Every deal scored against its own history. Know if today's price is actually good or just normal.",
+                title: t("featurePriceHistory"),
+                body: t("featurePriceHistoryBody"),
                 accent: "from-deal-500 to-deal-600",
               },
               {
                 icon: Globe,
-                title: "Region Fit",
-                body: "Region locks and account restrictions can make a cheap card useless. We check before you buy.",
+                title: t("featureRegionFit"),
+                body: t("featureRegionFitBody"),
                 accent: "from-alert-500 to-alert-600",
               },
               {
                 icon: ShieldCheck,
-                title: "Trust Score",
-                body: "Sources classified Green, Yellow, or Red. Authorization, buyer protection, and fraud signals — all visible.",
+                title: t("featureTrustScore"),
+                body: t("featureTrustScoreBody"),
                 accent: "from-brand-400 to-brand-600",
               },
             ].map((feature) => (
@@ -294,19 +293,19 @@ export default async function HomePage() {
           <FadeIn>
             <div className="flex items-end justify-between">
               <div>
-                <span className="data-label text-deal-600">Top picks</span>
+                <span className="data-label text-deal-600">{t("topPicksLabel")}</span>
                 <h2 className="mt-1 heading-display text-3xl text-surface-900">
-                  Best verified deals
+                  {t("topPicksHeading")}
                 </h2>
                 <p className="mt-2 text-sm text-surface-500">
-                  Ranked by deal quality and confidence. Updated continuously.
+                  {t("topPicksSub")}
                 </p>
               </div>
               <Link
                 href="/deals"
                 className="hidden items-center gap-1.5 text-sm font-semibold text-brand-600 transition-colors hover:text-brand-700 sm:inline-flex"
               >
-                View all deals
+                {t("viewAllDeals")}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -325,7 +324,7 @@ export default async function HomePage() {
               href="/deals"
               className="inline-flex items-center gap-1 text-sm font-semibold text-brand-600"
             >
-              View all deals
+              {t("viewAllDeals")}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -339,12 +338,12 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div>
-              <span className="data-label text-brand-600">Categories</span>
+              <span className="data-label text-brand-600">{t("categoriesLabel")}</span>
               <h2 className="mt-1 heading-display text-3xl text-surface-900">
-                Browse by category
+                {t("categoriesHeading")}
               </h2>
               <p className="mt-2 text-sm text-surface-500">
-                Find verified deals across all major digital value categories.
+                {t("categoriesSub")}
               </p>
             </div>
           </FadeIn>
@@ -388,23 +387,21 @@ export default async function HomePage() {
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <FadeIn>
               <div>
-                <span className="data-label text-brand-400">Our promise</span>
+                <span className="data-label text-brand-400">{t("promiseLabel")}</span>
                 <h2 className="mt-2 heading-display text-3xl text-white sm:text-4xl">
-                  Verification you can trust
+                  {t("promiseHeading")}
                 </h2>
                 <p className="mt-4 text-base leading-relaxed text-surface-400">
-                  Gift card markets are noisy. Discounts aren&apos;t always real.
-                  Region restrictions can make a deal worthless. We built iGift
-                  to be the verification layer the market is missing.
+                  {t("promiseSub")}
                 </p>
                 <ul className="mt-6 space-y-3">
                   {[
-                    "Two-score system: Deal Quality + Confidence, shown separately",
-                    "Green / Yellow / Red trust zones on every source",
-                    "Effective price includes all fees, not just listing price",
-                    "Region and account compatibility checked before ranking",
-                    "Open methodology — we explain every score",
-                    "We never hold funds, sell cards, or process payments",
+                    t("promiseBullet1"),
+                    t("promiseBullet2"),
+                    t("promiseBullet3"),
+                    t("promiseBullet4"),
+                    t("promiseBullet5"),
+                    t("promiseBullet6"),
                   ].map((item) => (
                     <li
                       key={item}

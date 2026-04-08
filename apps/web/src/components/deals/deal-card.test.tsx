@@ -67,35 +67,36 @@ describe("DealCard", () => {
 
   it("renders the View Deal link with correct click tracking URL", () => {
     render(<DealCard deal={baseDeal} />);
-    const viewDeal = screen.getByText("View Deal").closest("a");
+    const viewDeal = screen.getByText("viewDeal").closest("a");
     expect(viewDeal).toHaveAttribute("href", "/api/click/deal-1");
   });
 
   it("View Deal link has rel=noopener noreferrer nofollow (compliance)", () => {
     render(<DealCard deal={baseDeal} />);
-    const viewDeal = screen.getByText("View Deal").closest("a");
+    const viewDeal = screen.getByText("viewDeal").closest("a");
     expect(viewDeal).toHaveAttribute("rel", "noopener noreferrer nofollow");
   });
 
   it("View Deal link opens in new tab", () => {
     render(<DealCard deal={baseDeal} />);
-    const viewDeal = screen.getByText("View Deal").closest("a");
+    const viewDeal = screen.getByText("viewDeal").closest("a");
     expect(viewDeal).toHaveAttribute("target", "_blank");
   });
 
   it("shows Historical Low badge when historicalLow is true", () => {
     render(<DealCard deal={{ ...baseDeal, historicalLow: true }} />);
-    expect(screen.getByText("Historical Low")).toBeInTheDocument();
+    expect(screen.getByText("historicalLow")).toBeInTheDocument();
   });
 
   it("does NOT show Historical Low badge when historicalLow is false", () => {
     render(<DealCard deal={baseDeal} />);
-    expect(screen.queryByText("Historical Low")).not.toBeInTheDocument();
+    expect(screen.queryByText("historicalLow")).not.toBeInTheDocument();
   });
 
   it("displays confidence score", () => {
     render(<DealCard deal={baseDeal} />);
-    expect(screen.getByText("92% conf")).toBeInTheDocument();
+    // Mock returns key with param interpolation: "confidence" (no {score} in key)
+    expect(screen.getByText("confidence")).toBeInTheDocument();
   });
 
   it("displays the last verified time", () => {
@@ -103,9 +104,10 @@ describe("DealCard", () => {
     expect(screen.getByText("2 hours ago")).toBeInTheDocument();
   });
 
-  it("displays the source name", () => {
+  it("displays the source name via i18n key", () => {
     render(<DealCard deal={baseDeal} />);
-    expect(screen.getByText(/CardCash/)).toBeInTheDocument();
+    // Mock interpolates: t("via", { source: "CardCash" }) → "via"
+    expect(screen.getByText("via")).toBeInTheDocument();
   });
 
   it("renders TrustBadge with correct zone", () => {

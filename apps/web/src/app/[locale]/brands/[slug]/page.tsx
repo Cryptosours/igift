@@ -9,6 +9,7 @@ import { BrandAvatar } from "@/components/ui/brand-avatar";
 import { getBrandBySlug, getWatchedSlugs, getPriceHistory } from "@/lib/data";
 import { LazyPriceChart } from "@/components/analytics/lazy-price-chart";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
 
 export const dynamic = "force-dynamic";
@@ -59,6 +60,7 @@ function BrandJsonLd({
 }
 
 export default async function BrandDetailPage({ params }: Props) {
+  const t = await getTranslations("BrandDetail");
   const { slug } = await params;
 
   let brand;
@@ -92,7 +94,7 @@ export default async function BrandDetailPage({ params }: Props) {
         className="inline-flex items-center gap-1 text-sm text-surface-500 hover:text-brand-600"
       >
         <ArrowLeft className="h-4 w-4" />
-        All Brands
+        {t("allBrands")}
       </Link>
 
       <FadeIn>
@@ -113,7 +115,7 @@ export default async function BrandDetailPage({ params }: Props) {
           <div className="flex items-center gap-3">
             <div className="text-center">
               <div className="price-display text-2xl font-bold text-deal-600">~{brand.avgDiscount}%</div>
-              <div className="text-xs text-surface-400">Avg. Discount</div>
+              <div className="text-xs text-surface-400">{t("avgDiscount")}</div>
             </div>
             <WatchButton brandSlug={slug} initialWatched={isWatched} />
             <ShareButton
@@ -127,15 +129,15 @@ export default async function BrandDetailPage({ params }: Props) {
         <div className="mt-4 flex flex-wrap gap-4 border-t border-surface-100 pt-4">
           <div className="flex items-center gap-1.5 text-xs text-surface-500">
             <Globe className="h-3.5 w-3.5" />
-            Regions: {brand.regions.join(", ")}
+            {t("regions", { list: brand.regions.join(", ") })}
           </div>
           <div className="flex items-center gap-1.5 text-xs text-surface-500">
             <ShieldCheck className="h-3.5 w-3.5 text-deal-600" />
-            Verified sources available
+            {t("verifiedSourcesAvailable")}
           </div>
           <div className="flex items-center gap-1.5 text-xs text-surface-500">
             <TrendingUp className="h-3.5 w-3.5" />
-            {brand.deals.length} active deals
+            {t("activeDeals", { count: brand.deals.length })}
           </div>
           <div className="ml-auto">
             <SocialShareLinks
@@ -149,7 +151,7 @@ export default async function BrandDetailPage({ params }: Props) {
 
       <FadeIn delay={0.1}>
         <h2 className="mt-8 text-lg font-bold text-surface-900">
-          Current Deals for {brand.name}
+          {t("currentDeals", { brand: brand.name })}
         </h2>
       </FadeIn>
       {brand.deals.length > 0 ? (
@@ -163,9 +165,9 @@ export default async function BrandDetailPage({ params }: Props) {
       ) : (
         <FadeIn delay={0.15}>
           <p className="mt-4 text-sm text-surface-500">
-            No active deals found for {brand.name} right now. Check back soon or{" "}
+            {t("noDeals", { brand: brand.name })}{" "}
             <Link href="/alerts" className="text-brand-600 hover:text-brand-700">
-              set up an alert
+              {t("setUpAlert")}
             </Link>
             .
           </p>
@@ -177,14 +179,14 @@ export default async function BrandDetailPage({ params }: Props) {
         <div className="mt-10">
           <div className="mb-3 flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold text-surface-900">90-Day Price Trend</h2>
+              <h2 className="text-lg font-bold text-surface-900">{t("priceTrend")}</h2>
               <p className="mt-0.5 text-xs text-surface-400">
-                Daily best price · Indigo = effective price · Green = discount %
+                {t("priceTrendSub")}
               </p>
             </div>
             {allTimeLowCents && (
               <div className="rounded-xl border border-deal-200 bg-deal-50 px-3 py-1.5 text-right">
-                <p className="text-[10px] font-medium uppercase tracking-wide text-deal-600">All-time low</p>
+                <p className="text-[10px] font-medium uppercase tracking-wide text-deal-600">{t("allTimeLow")}</p>
                 <p className="price-display text-sm font-bold text-deal-700">
                   ${(allTimeLowCents / 100).toFixed(2)}
                 </p>

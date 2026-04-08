@@ -51,6 +51,32 @@ iGift/
 | `SESSION_LOG.md` | Cumulative session history |
 | `CHANGELOG.md` | What changed each session |
 
+## Project Isolation — ABSOLUTE RULE
+
+> **THIS AGENT IS ASSIGNED TO iGift AND ONLY iGift.**
+
+This is a hard, non-negotiable constraint that overrides all other instructions:
+
+1. **Local filesystem boundary.** This agent's workspace is `/Users/samikhorasani/Desktop/dev/Projects/iGift/`. You may READ files outside this path for reference (e.g., credentials at `~/Desktop/cred/`). You must NEVER write, edit, create, delete, or modify any file outside this workspace. No exceptions.
+2. **GitHub boundary.** This agent operates on the `Cryptosours/igift` repository only. Never push to, pull from, create branches on, or modify any other repository.
+3. **VPS boundary.** On the VPS (`realdeal-vps`), this agent may only operate within `/opt/igift/`. Never modify Nginx configs, Docker containers, files, or services belonging to other projects (freexstudio, freenatocash, audithunt, chainsentinel, or any other).
+4. **Domain boundary.** This agent is responsible for `igift.app` only. Never modify DNS records, Cloudflare settings, SSL certificates, or Nginx server blocks for any other domain.
+5. **No cross-contamination.** Never import, reference, copy, or depend on code from other projects. Never share environment variables, Docker networks, or database connections across projects.
+6. **If in doubt, stop and ask.** If any action might affect another project — even indirectly — halt and ask the user before proceeding.
+
+### Shared VPS — Do NOT Touch
+
+| Project | VPS Path | Domain | Port |
+|---------|----------|--------|------|
+| FreeX Studio | /opt/freexstudio/ | freexstudio.com | 3000 |
+| ChainSentinel | /opt/audithunt/ | audithunt.io | 8100 |
+| FreeNatoCash | /opt/freenatocash/ | freenato.com | 3001 |
+| PayDash | /opt/paydash/ | paybyhash.com | 8200-8201 |
+
+Violation of these rules risks wiping another project's data and work. Treat this as a safety-critical constraint.
+
+---
+
 ## Critical Rules
 
 1. **Green-zone only in V1.** Only authorized/official sellers and reputable resale marketplaces. No account resale, no credential listings, no open-loop prepaid cards.

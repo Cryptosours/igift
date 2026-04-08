@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -6,150 +7,115 @@ export const metadata: Metadata = {
     "iGift terms of service. We are a deal discovery and verification platform — not a marketplace or payment processor.",
 };
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const t = await getTranslations("TermsPage");
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-surface-900">Terms of Service</h1>
+      <h1 className="text-3xl font-bold text-surface-900">{t("heading")}</h1>
       <p className="mt-2 text-sm text-surface-500">
-        Last updated: March 31, 2026
+        {t("lastUpdated")}
       </p>
 
       <div className="mt-8 space-y-8 text-sm leading-relaxed text-surface-600">
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            1. What iGift Is
+            {t("section1Heading")}
           </h2>
           <p className="mt-2">
-            iGift (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) operates a
-            deal discovery, verification, and ranking platform for digital value
-            products including gift cards, digital credits, and vouchers. We are
-            a <strong>publisher and referral platform</strong>. We do not sell
-            gift cards, hold funds, process payments, or act as a marketplace
-            or escrow service.
+            {t.rich("section1Body", {
+              strong: (chunks) => <strong>{chunks}</strong>,
+            })}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            2. No Warranty on Third-Party Deals
+            {t("section2Heading")}
           </h2>
           <p className="mt-2">
-            Deals listed on iGift are sourced from third-party sellers,
-            marketplaces, and authorized retailers. We verify deal data to the
-            best of our ability using our scoring methodology, but we{" "}
-            <strong>do not guarantee</strong> the accuracy, availability,
-            validity, or usability of any deal, gift card code, or digital
-            credit listed on our platform. Prices, availability, and terms may
-            change without notice at the original seller&apos;s discretion.
+            {t.rich("section2Body", {
+              strong: (chunks) => <strong>{chunks}</strong>,
+            })}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            3. Affiliate Relationships
+            {t("section3Heading")}
           </h2>
           <p className="mt-2">
-            iGift earns affiliate commissions when you click through to a
-            third-party seller and make a purchase. These affiliate
-            relationships do not affect our deal scoring or ranking algorithms.
-            Deals are ranked by computed Deal Quality and Confidence scores.
-            Any sponsored or promoted placements are clearly labeled as such.
+            {t("section3Body")}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            4. User Responsibilities
+            {t("section4Heading")}
           </h2>
           <p className="mt-2">
-            You are responsible for verifying that any deal you pursue is
-            compatible with your region, account, and intended use. You are
-            responsible for understanding the terms, refund policies, and
-            restrictions of the third-party seller before completing a purchase.
-            iGift is not a party to any transaction between you and a
-            third-party seller.
+            {t("section4Body")}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            5. Trust Zone Classifications
+            {t("section5Heading")}
           </h2>
           <p className="mt-2">
-            Our Green, Yellow, and Red trust zone classifications are
-            operator-level assessments based on source authorization, buyer
-            protection, and fraud signals. They are not guarantees. A
-            &quot;Green&quot; classification means we believe the source is
-            authorized and reputable, not that every individual listing is free
-            of error or risk.
+            {t("section5Body")}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            6. Price Alerts
+            {t("section6Heading")}
           </h2>
           <p className="mt-2">
-            Price alerts are provided as a convenience. We do not guarantee
-            delivery timing, accuracy of alert triggers, or continued
-            availability of any deal referenced in an alert. Free tier alerts
-            are limited to 3 active alerts per email address.
+            {t("section6Body")}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            7. Prohibited Uses
+            {t("section7Heading")}
           </h2>
-          <p className="mt-2">You may not use iGift to:</p>
+          <p className="mt-2">{t("section7Body")}</p>
           <ul className="mt-2 list-disc pl-5 space-y-1">
-            <li>
-              Scrape, crawl, or systematically extract data from our platform
-            </li>
-            <li>Resell or redistribute our deal data or scores</li>
-            <li>Submit fraudulent deal reports or abuse our reporting system</li>
-            <li>
-              Circumvent rate limits or abuse our API (when available)
-            </li>
-            <li>
-              Use our platform to facilitate fraud, money laundering, or any
-              illegal activity
-            </li>
+            <li>{t("section7Item1")}</li>
+            <li>{t("section7Item2")}</li>
+            <li>{t("section7Item3")}</li>
+            <li>{t("section7Item4")}</li>
+            <li>{t("section7Item5")}</li>
           </ul>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            8. Limitation of Liability
+            {t("section8Heading")}
           </h2>
           <p className="mt-2">
-            iGift is provided &quot;as is&quot; without warranties of any
-            kind. We are not liable for any losses, damages, or disputes
-            arising from your use of our platform or your transactions with
-            third-party sellers. Our maximum liability is limited to the
-            amount you have paid us directly (if any) in the 12 months
-            preceding the claim.
+            {t("section8Body")}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            9. Changes to Terms
+            {t("section9Heading")}
           </h2>
           <p className="mt-2">
-            We may update these terms at any time. Continued use of iGift
-            after changes constitutes acceptance of the updated terms.
+            {t("section9Body")}
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-semibold text-surface-900">
-            10. Contact
+            {t("section10Heading")}
           </h2>
           <p className="mt-2">
-            Questions about these terms? Contact us at{" "}
+            {t("section10Body")}{" "}
             <span className="font-medium text-brand-600">
-              legal@igift.app
+              {t("contactEmail")}
             </span>
             .
           </p>

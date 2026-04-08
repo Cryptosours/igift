@@ -5,6 +5,7 @@ import { LazyAlertManager as AlertManager } from "@/components/alerts/lazy-alert
 import { db } from "@/db";
 import { userAlerts } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Price Alerts",
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export default async function AlertsPage({ searchParams }: Props) {
+  const t = await getTranslations("AlertsPage");
   const params = await searchParams;
   const initialBrand = params.brand?.trim().toLowerCase() ?? "";
   const unsubscribeId = params.unsubscribe ? Number(params.unsubscribe) : null;
@@ -33,6 +35,27 @@ export default async function AlertsPage({ searchParams }: Props) {
     unsubscribeResult = result.length > 0 ? "success" : "not_found";
   }
 
+  const features = [
+    {
+      icon: Zap,
+      title: t("instantAlerts"),
+      body: t("instantAlertsBody"),
+      accent: "from-alert-500 to-alert-600",
+    },
+    {
+      icon: Shield,
+      title: t("trustFiltered"),
+      body: t("trustFilteredBody"),
+      accent: "from-deal-500 to-deal-600",
+    },
+    {
+      icon: Mail,
+      title: t("noSpam"),
+      body: t("noSpamBody"),
+      accent: "from-brand-500 to-brand-600",
+    },
+  ];
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 lg:px-8">
       <div className="text-center">
@@ -40,11 +63,10 @@ export default async function AlertsPage({ searchParams }: Props) {
           <Bell className="h-7 w-7 text-white" />
         </div>
         <h1 className="mt-5 heading-display text-3xl text-surface-900">
-          Price Alerts
+          {t("heading")}
         </h1>
         <p className="mx-auto mt-3 max-w-md text-sm text-surface-500 leading-relaxed">
-          Get notified when verified deals drop to your target price.
-          Only deals that pass our trust and verification checks.
+          {t("description")}
         </p>
       </div>
 
@@ -53,39 +75,20 @@ export default async function AlertsPage({ searchParams }: Props) {
         <div className="mt-8 flex items-center gap-3 rounded-xl border border-deal-200 bg-deal-50 px-5 py-4">
           <CheckCircle className="h-5 w-5 flex-shrink-0 text-deal-600" />
           <div>
-            <p className="text-sm font-medium text-deal-800">Alert cancelled</p>
-            <p className="mt-0.5 text-xs text-deal-600">You won&apos;t receive any more notifications for this alert.</p>
+            <p className="text-sm font-medium text-deal-800">{t("alertCancelled")}</p>
+            <p className="mt-0.5 text-xs text-deal-600">{t("alertCancelledSub")}</p>
           </div>
         </div>
       )}
       {unsubscribeResult === "not_found" && (
         <div className="mt-8 rounded-xl border border-surface-200 bg-surface-50 px-5 py-4">
-          <p className="text-sm text-surface-500">Alert not found — it may have already been cancelled.</p>
+          <p className="text-sm text-surface-500">{t("alertNotFound")}</p>
         </div>
       )}
 
       {/* Features */}
       <div className="mt-12 grid gap-4 sm:grid-cols-3">
-        {[
-          {
-            icon: Zap,
-            title: "Instant Alerts",
-            body: "Email notification within minutes of a verified price drop.",
-            accent: "from-alert-500 to-alert-600",
-          },
-          {
-            icon: Shield,
-            title: "Trust-Filtered",
-            body: "Only Green and Yellow zone deals. No unverified sources.",
-            accent: "from-deal-500 to-deal-600",
-          },
-          {
-            icon: Mail,
-            title: "No Spam",
-            body: "Alerts only when your criteria are met. Unsubscribe anytime.",
-            accent: "from-brand-500 to-brand-600",
-          },
-        ].map((f) => (
+        {features.map((f) => (
           <div key={f.title} className="rounded-xl border border-surface-200 bg-white p-5 text-center card-hover">
             <div className={`mx-auto inline-flex rounded-xl bg-gradient-to-br ${f.accent} p-2.5 shadow-sm`}>
               <f.icon className="h-5 w-5 text-white" />
@@ -108,7 +111,7 @@ export default async function AlertsPage({ searchParams }: Props) {
 
       {/* Free tier note */}
       <p className="mt-6 text-center text-xs text-surface-400">
-        Free tier includes up to 5 active alerts · 24-hour delivery cooldown between repeat notifications
+        {t("freeTierNote")}
       </p>
     </div>
   );

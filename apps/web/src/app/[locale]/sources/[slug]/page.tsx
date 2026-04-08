@@ -12,6 +12,7 @@ import {
   TrendingUp,
   Clock,
 } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { getAllSourceScorecards, getSourceScorecardBySlug } from "@/lib/data";
 
 // Pre-generate paths for all known sources at build time
@@ -40,49 +41,28 @@ export async function generateMetadata({
 
 export const revalidate = 1800;
 
-const ZONE_CONFIG = {
-  green: {
-    label: "Green Zone",
-    description: "Official issuer or fully authorized reseller",
-    bg: "bg-deal-50",
-    text: "text-deal-700",
-    border: "border-deal-200",
-    badgeBg: "bg-deal-500",
-    bar: "bg-deal-500",
-  },
-  yellow: {
-    label: "Yellow Zone",
-    description: "Reputable marketplace — individual seller quality varies",
-    bg: "bg-alert-50",
-    text: "text-alert-700",
-    border: "border-alert-200",
-    badgeBg: "bg-alert-500",
-    bar: "bg-alert-500",
-  },
-  red: {
-    label: "Red Zone",
-    description: "High-risk source — not recommended",
-    bg: "bg-red-50",
-    text: "text-red-700",
-    border: "border-red-200",
-    badgeBg: "bg-red-500",
-    bar: "bg-red-500",
-  },
+const ZONE_STYLES = {
+  green: { bg: "bg-deal-50", text: "text-deal-700", border: "border-deal-200", badgeBg: "bg-deal-500", bar: "bg-deal-500" },
+  yellow: { bg: "bg-alert-50", text: "text-alert-700", border: "border-alert-200", badgeBg: "bg-alert-500", bar: "bg-alert-500" },
+  red: { bg: "bg-red-50", text: "text-red-700", border: "border-red-200", badgeBg: "bg-red-500", bar: "bg-red-500" },
 } as const;
 
-const HEALTH_CONFIG = {
-  healthy: { label: "Healthy", color: "text-deal-600", dot: "bg-deal-500" },
-  degraded: { label: "Degraded", color: "text-alert-600", dot: "bg-alert-500" },
-  unhealthy: { label: "Unhealthy", color: "text-red-600", dot: "bg-red-500" },
-  unknown: { label: "No Data Yet", color: "text-surface-400", dot: "bg-surface-300" },
+const HEALTH_STYLES = {
+  healthy: { color: "text-deal-600", dot: "bg-deal-500" },
+  degraded: { color: "text-alert-600", dot: "bg-alert-500" },
+  unhealthy: { color: "text-red-600", dot: "bg-red-500" },
+  unknown: { color: "text-surface-400", dot: "bg-surface-300" },
 } as const;
 
-const TYPE_LABELS: Record<string, string> = {
-  official_issuer: "Official Issuer",
-  authorized_reseller: "Authorized Reseller",
-  marketplace_resale: "Resale Marketplace",
-  aggregator: "Aggregator",
-  catalog_only: "Catalog Only",
+const ZONE_LABEL_KEYS = { green: "zoneGreen", yellow: "zoneYellow", red: "zoneRed" } as const;
+const ZONE_DESC_KEYS = { green: "zoneGreenDesc", yellow: "zoneYellowDesc", red: "zoneRedDesc" } as const;
+const HEALTH_LABEL_KEYS = { healthy: "healthHealthy", degraded: "healthDegraded", unhealthy: "healthUnhealthy", unknown: "healthUnknown" } as const;
+const TYPE_LABEL_KEYS: Record<string, string> = {
+  official_issuer: "typeOfficialIssuer",
+  authorized_reseller: "typeAuthorizedReseller",
+  marketplace_resale: "typeMarketplaceResale",
+  aggregator: "typeAggregator",
+  catalog_only: "typeCatalogOnly",
 };
 
 function ScoreRow({
@@ -121,12 +101,13 @@ export default async function SourceDetailPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  const t = await getTranslations("SourceDetail");
   const { slug } = await params;
   const source = await getSourceScorecardBySlug(slug);
   if (!source) notFound();
 
-  const zone = ZONE_CONFIG[source.trustZone];
-  const health = HEALTH_CONFIG[source.healthStatus];
+  const zone = ZONE_STYLES[source.trustZone];
+  const health = HEALTH_STYLES[source.healthStatus];
   const trustBarWidth = Math.min(100, Math.max(0, source.trustScore));
 
   // Score breakdown
@@ -141,7 +122,7 @@ export default async function SourceDetailPage({
         className="mb-6 inline-flex items-center gap-1.5 text-sm text-surface-500 hover:text-brand-600 transition-colors"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
-        Source Directory
+        {t("sourceDirectory")}
       </Link>
 
       {/* Hero card */}
@@ -154,21 +135,21 @@ export default async function SourceDetailPage({
                 className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold uppercase tracking-wider ${zone.bg} ${zone.text}`}
               >
                 <span className={`h-1.5 w-1.5 rounded-full ${zone.badgeBg}`} />
-                {zone.label}
+                {t(ZONE_LABEL_KEYS[source.trustZone])}
               </span>
             </div>
-            <p className="mt-1 text-sm text-surface-500">{zone.description}</p>
+            <p className="mt-1 text-sm text-surface-500">{t(ZONE_DESC_KEYS[source.trustZone])}</p>
             <div className="mt-2 flex items-center gap-2 flex-wrap">
               <span className="rounded-lg bg-surface-100 px-2.5 py-1 text-xs font-medium text-surface-600">
-                {TYPE_LABELS[source.sourceType] ?? source.sourceType}
+                {TYPE_LABEL_KEYS[source.sourceType] ? t(TYPE_LABEL_KEYS[source.sourceType]) : source.sourceType}
               </span>
               <span className={`flex items-center gap-1 text-sm font-medium ${health.color}`}>
                 <span className={`h-2 w-2 rounded-full ${health.dot}`} />
-                {health.label}
+                {t(HEALTH_LABEL_KEYS[source.healthStatus])}
               </span>
               {!source.isActive && (
                 <span className="rounded-lg bg-red-50 px-2.5 py-1 text-xs font-medium text-red-600">
-                  Inactive
+                  {t("inactive")}
                 </span>
               )}
             </div>
@@ -184,7 +165,7 @@ export default async function SourceDetailPage({
                 / 100
               </span>
             </div>
-            <span className="mt-1.5 text-xs text-surface-400 text-center">Trust Score</span>
+            <span className="mt-1.5 text-xs text-surface-400 text-center">{t("trustScore")}</span>
           </div>
         </div>
 
@@ -215,34 +196,34 @@ export default async function SourceDetailPage({
       <div className="mt-6 grid gap-6 sm:grid-cols-2">
         {/* Trust Score Breakdown */}
         <div className="rounded-2xl border border-surface-200 bg-white p-5">
-          <h2 className="mb-1 text-sm font-semibold text-surface-900">Score Breakdown</h2>
-          <p className="mb-4 text-xs text-surface-400">How the trust score is calculated</p>
+          <h2 className="mb-1 text-sm font-semibold text-surface-900">{t("scoreBreakdown")}</h2>
+          <p className="mb-4 text-xs text-surface-400">{t("scoreBreakdownSub")}</p>
           <ScoreRow
-            label="Trust Zone"
+            label={t("trustZone")}
             points={zonePoints}
             max={40}
             earned={zonePoints > 0}
           />
           <ScoreRow
-            label="Buyer Protection"
+            label={t("buyerProtection")}
             points={20}
             max={20}
             earned={source.hasBuyerProtection}
           />
           <ScoreRow
-            label="Refund Policy"
+            label={t("refundPolicy")}
             points={15}
             max={15}
             earned={source.hasRefundPolicy}
           />
           <ScoreRow
-            label={`Fetch Reliability (${Math.round(source.fetchSuccessRate * 100)}%)`}
+            label={t("fetchReliability", { pct: Math.round(source.fetchSuccessRate * 100) })}
             points={reliabilityPoints}
             max={25}
             earned={reliabilityPoints > 0}
           />
           <div className="mt-3 flex items-center justify-between rounded-lg bg-surface-50 px-3 py-2">
-            <span className="text-sm font-semibold text-surface-700">Total</span>
+            <span className="text-sm font-semibold text-surface-700">{t("total")}</span>
             <span className="font-mono text-base font-black text-surface-900">
               {source.trustScore} / 100
             </span>
@@ -251,39 +232,39 @@ export default async function SourceDetailPage({
 
         {/* Live Stats */}
         <div className="rounded-2xl border border-surface-200 bg-white p-5">
-          <h2 className="mb-1 text-sm font-semibold text-surface-900">Live Stats</h2>
-          <p className="mb-4 text-xs text-surface-400">Current offer performance</p>
+          <h2 className="mb-1 text-sm font-semibold text-surface-900">{t("liveStats")}</h2>
+          <p className="mb-4 text-xs text-surface-400">{t("liveStatsSub")}</p>
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-xl bg-surface-50 px-3 py-3">
               <div className="font-mono text-xl font-bold text-surface-900">
                 {source.activeOfferCount}
               </div>
-              <div className="mt-0.5 text-xs text-surface-400">Active Offers</div>
+              <div className="mt-0.5 text-xs text-surface-400">{t("activeOffers")}</div>
             </div>
             <div className="rounded-xl bg-surface-50 px-3 py-3">
               <div className="font-mono text-xl font-bold text-surface-900">
                 {source.uniqueBrandCount}
               </div>
-              <div className="mt-0.5 text-xs text-surface-400">Brands Covered</div>
+              <div className="mt-0.5 text-xs text-surface-400">{t("brandsCovered")}</div>
             </div>
             <div className="rounded-xl bg-deal-50 px-3 py-3">
               <div className="font-mono text-xl font-bold text-deal-700">
                 {source.avgDiscountPct > 0 ? `${source.avgDiscountPct}%` : "—"}
               </div>
-              <div className="mt-0.5 text-xs text-surface-400">Avg Discount</div>
+              <div className="mt-0.5 text-xs text-surface-400">{t("avgDiscount")}</div>
             </div>
             <div className="rounded-xl bg-brand-50 px-3 py-3">
               <div className="font-mono text-xl font-bold text-brand-700">
                 {source.bestDiscountPct > 0 ? `${source.bestDiscountPct}%` : "—"}
               </div>
-              <div className="mt-0.5 text-xs text-surface-400">Best Discount</div>
+              <div className="mt-0.5 text-xs text-surface-400">{t("bestDiscount")}</div>
             </div>
           </div>
           {source.historicalLowCount > 0 && (
             <div className="mt-3 flex items-center gap-2 rounded-xl bg-brand-50 px-3 py-2.5">
               <Tag className="h-3.5 w-3.5 text-brand-600" />
               <span className="text-sm font-medium text-brand-700">
-                {source.historicalLowCount} all-time low{source.historicalLowCount !== 1 ? "s" : ""} currently active
+                {t("allTimeLows", { count: source.historicalLowCount })}
               </span>
             </div>
           )}
@@ -291,7 +272,7 @@ export default async function SourceDetailPage({
 
         {/* Protection Details */}
         <div className="rounded-2xl border border-surface-200 bg-white p-5">
-          <h2 className="mb-4 text-sm font-semibold text-surface-900">Buyer Protections</h2>
+          <h2 className="mb-4 text-sm font-semibold text-surface-900">{t("buyerProtections")}</h2>
           <div className="space-y-3">
             <div
               className={`flex items-center gap-3 rounded-xl px-3 py-3 ${
@@ -309,12 +290,12 @@ export default async function SourceDetailPage({
                     source.hasBuyerProtection ? "text-deal-800" : "text-surface-500"
                   }`}
                 >
-                  Buyer Protection
+                  {t("buyerProtection")}
                 </div>
                 <div className="text-xs text-surface-400">
                   {source.hasBuyerProtection
-                    ? "Dispute resolution and purchase guarantees available"
-                    : "No platform-level buyer protection — check seller reputation"}
+                    ? t("buyerProtectionYes")
+                    : t("buyerProtectionNo")}
                 </div>
               </div>
             </div>
@@ -333,12 +314,12 @@ export default async function SourceDetailPage({
                     source.hasRefundPolicy ? "text-brand-800" : "text-surface-500"
                   }`}
                 >
-                  Refund Policy
+                  {t("refundPolicy")}
                 </div>
                 <div className="text-xs text-surface-400">
                   {source.hasRefundPolicy
-                    ? "Formal refund policy exists for eligible orders"
-                    : "No documented refund policy — all sales final"}
+                    ? t("refundPolicyYes")
+                    : t("refundPolicyNo")}
                 </div>
               </div>
             </div>
@@ -347,7 +328,7 @@ export default async function SourceDetailPage({
               <div className="flex items-center gap-3 rounded-xl bg-surface-50 px-3 py-3">
                 <TrendingUp className="h-4 w-4 shrink-0 text-surface-400" />
                 <div>
-                  <div className="text-sm font-medium text-surface-600">Affiliate Network</div>
+                  <div className="text-sm font-medium text-surface-600">{t("affiliateNetwork")}</div>
                   <div className="text-xs text-surface-400">{source.affiliateNetwork}</div>
                 </div>
               </div>
@@ -357,12 +338,12 @@ export default async function SourceDetailPage({
 
         {/* Data Freshness */}
         <div className="rounded-2xl border border-surface-200 bg-white p-5">
-          <h2 className="mb-4 text-sm font-semibold text-surface-900">Data Freshness</h2>
+          <h2 className="mb-4 text-sm font-semibold text-surface-900">{t("dataFreshness")}</h2>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm text-surface-600">
                 <Activity className="h-3.5 w-3.5 text-surface-400" />
-                Fetch Success Rate
+                {t("fetchSuccessRate")}
               </div>
               <span className="font-mono text-sm font-semibold text-surface-900">
                 {Math.round(source.fetchSuccessRate * 100)}%
@@ -371,7 +352,7 @@ export default async function SourceDetailPage({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm text-surface-600">
                 <Clock className="h-3.5 w-3.5 text-surface-400" />
-                Refresh SLA
+                {t("refreshSla")}
               </div>
               <span className="font-mono text-sm font-semibold text-surface-900">
                 {source.slaMinutes < 60
@@ -382,13 +363,13 @@ export default async function SourceDetailPage({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm text-surface-600">
                 <span className={`h-2 w-2 rounded-full ${health.dot}`} />
-                Health Status
+                {t("healthStatus")}
               </div>
-              <span className={`text-sm font-semibold ${health.color}`}>{health.label}</span>
+              <span className={`text-sm font-semibold ${health.color}`}>{t(HEALTH_LABEL_KEYS[source.healthStatus])}</span>
             </div>
             {source.minutesSinceLastSuccess !== null && (
               <div className="flex items-center justify-between">
-                <span className="text-sm text-surface-600">Last Successful Fetch</span>
+                <span className="text-sm text-surface-600">{t("lastSuccessfulFetch")}</span>
                 <span className="font-mono text-sm text-surface-500">
                   {source.minutesSinceLastSuccess < 60
                     ? `${source.minutesSinceLastSuccess}m ago`
@@ -400,7 +381,7 @@ export default async function SourceDetailPage({
             )}
             {source.isStale && (
               <div className="rounded-lg bg-alert-50 px-3 py-2 text-xs text-alert-700">
-                ⚠ Data may be stale — last fetch exceeded SLA by 50%
+                {t("staleWarning")}
               </div>
             )}
           </div>
@@ -411,12 +392,12 @@ export default async function SourceDetailPage({
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-brand-100 bg-brand-50 px-6 py-5">
         <div>
           <h3 className="text-sm font-semibold text-brand-900">
-            Browse Deals from {source.name}
+            {t("browseDeals", { source: source.name })}
           </h3>
           <p className="mt-0.5 text-xs text-brand-700">
             {source.activeOfferCount > 0
-              ? `${source.activeOfferCount} active offer${source.activeOfferCount !== 1 ? "s" : ""} currently tracked`
-              : "No active offers tracked yet"}
+              ? t("activeOffersTracked", { count: source.activeOfferCount })
+              : t("noActiveOffers")}
           </p>
         </div>
         <Link
@@ -424,7 +405,7 @@ export default async function SourceDetailPage({
           className="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700 transition-colors shrink-0"
         >
           <TrendingUp className="h-3.5 w-3.5" />
-          View Deals
+          {t("viewDeals")}
         </Link>
       </div>
     </div>

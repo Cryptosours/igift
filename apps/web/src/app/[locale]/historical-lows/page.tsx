@@ -4,6 +4,7 @@ import { TrendingDown, ArrowRight, ShieldCheck, Flame } from "lucide-react";
 import { BrandAvatar } from "@/components/ui/brand-avatar";
 import { getHistoricalLowBrands } from "@/lib/data";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
+import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Gift Card Historical Lows — All-Time Best Prices | iGift",
@@ -31,6 +32,7 @@ function formatPrice(cents: number, currency = "USD"): string {
 }
 
 export default async function HistoricalLowsPage() {
+  const t = await getTranslations("HistoricalLowsPage");
   const brands = await getHistoricalLowBrands();
 
   return (
@@ -42,24 +44,23 @@ export default async function HistoricalLowsPage() {
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-deal-200 bg-deal-50 px-3 py-1">
             <TrendingDown className="h-3.5 w-3.5 text-deal-600" />
             <span className="text-xs font-bold uppercase tracking-wider text-deal-700">
-              Verified Historical Lows
+              {t("badge")}
             </span>
           </div>
           <h1 className="heading-display text-3xl font-bold text-surface-900 sm:text-4xl">
-            All-Time Low Prices Right Now
+            {t("heading")}
           </h1>
           <p className="mt-3 mx-auto max-w-xl text-base text-surface-500">
-            These gift cards are confirmed at their best-ever recorded price.
-            We track pricing across authorized sellers — updated every 6 hours.
+            {t("description")}
           </p>
           <div className="mt-5 flex flex-wrap items-center justify-center gap-4 text-xs text-surface-400">
             <span className="flex items-center gap-1">
               <ShieldCheck className="h-3.5 w-3.5 text-deal-500" />
-              Authorized sellers only
+              {t("authorizedOnly")}
             </span>
             <span className="flex items-center gap-1">
               <Flame className="h-3.5 w-3.5 text-alert-500" />
-              {brands.length} brands at historical lows today
+              {t("brandsAtLows", { count: brands.length })}
             </span>
           </div>
         </div>
@@ -70,13 +71,13 @@ export default async function HistoricalLowsPage() {
           <div className="rounded-2xl border border-dashed border-surface-200 py-20 text-center">
             <TrendingDown className="mx-auto mb-3 h-8 w-8 text-surface-300" />
             <p className="text-sm text-surface-500">
-              No confirmed historical lows right now — check back soon.
+              {t("noLowsNow")}
             </p>
             <Link
               href="/deals"
               className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-700"
             >
-              Browse all deals <ArrowRight className="h-3.5 w-3.5" />
+              {t("browseAllDeals")} <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
         </FadeIn>
@@ -101,14 +102,14 @@ export default async function HistoricalLowsPage() {
                     </div>
                     {/* Historical Low Badge */}
                     <span className="shrink-0 rounded-full bg-deal-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-deal-700">
-                      All-time low
+                      {t("allTimeLow")}
                     </span>
                   </div>
 
                   {brand.bestDeal && (
                     <div className="mt-4 flex items-end justify-between">
                       <div>
-                        <p className="text-xs text-surface-400">Best current price</p>
+                        <p className="text-xs text-surface-400">{t("bestCurrentPrice")}</p>
                         <div className="flex items-baseline gap-2 mt-0.5">
                           <span className="price-display text-xl font-bold text-surface-900">
                             {formatPrice(brand.bestDeal.effectivePriceCents, brand.bestDeal.currency)}
@@ -130,7 +131,7 @@ export default async function HistoricalLowsPage() {
                   )}
 
                   <div className="mt-3 flex items-center justify-end gap-1 text-xs font-semibold text-brand-600 group-hover:text-brand-700">
-                    View price history
+                    {t("viewPriceHistory")}
                     <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                   </div>
                 </div>
@@ -144,16 +145,16 @@ export default async function HistoricalLowsPage() {
       <FadeIn delay={0.2}>
         <div className="mt-14 rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-50 to-white p-8 text-center">
           <h2 className="text-lg font-bold text-surface-900">
-            Never miss an all-time low
+            {t("neverMissLow")}
           </h2>
           <p className="mt-2 text-sm text-surface-500">
-            Set up a price alert for any brand and we&apos;ll notify you when it hits a new low.
+            {t("neverMissLowBody")}
           </p>
           <Link
             href="/alerts"
             className="mt-5 inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
           >
-            Set up alerts <ArrowRight className="h-4 w-4" />
+            {t("setUpAlerts")} <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </FadeIn>

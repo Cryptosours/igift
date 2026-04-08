@@ -58,13 +58,13 @@ describe("DealFilters", () => {
 
   it("renders all deals initially (All Regions selected)", () => {
     render(<DealFilters initialDeals={testDeals} />);
-    // All 4 deals should render
-    expect(screen.getAllByText("View Deal")).toHaveLength(4);
+    // All 4 deals should render (DealCard uses i18n key "viewDeal")
+    expect(screen.getAllByText("viewDeal")).toHaveLength(4);
   });
 
   it("renders region filter pills", () => {
     render(<DealFilters initialDeals={testDeals} />);
-    expect(screen.getByText("All Regions")).toBeInTheDocument();
+    expect(screen.getByText("allRegions")).toBeInTheDocument();
     expect(screen.getByText("US")).toBeInTheDocument();
     expect(screen.getByText("EU")).toBeInTheDocument();
   });
@@ -78,7 +78,7 @@ describe("DealFilters", () => {
 
     // Should show only EU deals + global deals
     // d2 (EU) + d4 (global) = 2
-    expect(screen.getAllByText("View Deal")).toHaveLength(2);
+    expect(screen.getAllByText("viewDeal")).toHaveLength(2);
   });
 
   it("includes global deals when any region is selected", async () => {
@@ -87,25 +87,25 @@ describe("DealFilters", () => {
 
     await user.click(screen.getByText("US"));
     // d1 (US) + d3 (US) + d4 (global) = 3
-    expect(screen.getAllByText("View Deal")).toHaveLength(3);
+    expect(screen.getAllByText("viewDeal")).toHaveLength(3);
   });
 
   it("filters green-only when toggle is clicked", async () => {
     const user = userEvent.setup();
     render(<DealFilters initialDeals={testDeals} />);
 
-    await user.click(screen.getByText("Green Sources Only"));
+    await user.click(screen.getByText("greenSourcesOnly"));
     // d1 (green) + d3 (green) = 2
-    expect(screen.getAllByText("View Deal")).toHaveLength(2);
+    expect(screen.getAllByText("viewDeal")).toHaveLength(2);
   });
 
   it("filters historical lows when toggle is clicked", async () => {
     const user = userEvent.setup();
     render(<DealFilters initialDeals={testDeals} />);
 
-    await user.click(screen.getByText("Historical Lows"));
+    await user.click(screen.getByText("historicalLows"));
     // d1 (historicalLow) + d4 (historicalLow) = 2
-    expect(screen.getAllByText("View Deal")).toHaveLength(2);
+    expect(screen.getAllByText("viewDeal")).toHaveLength(2);
   });
 
   it("combines region + green-only filters", async () => {
@@ -113,9 +113,9 @@ describe("DealFilters", () => {
     render(<DealFilters initialDeals={testDeals} />);
 
     await user.click(screen.getByText("US"));
-    await user.click(screen.getByText("Green Sources Only"));
+    await user.click(screen.getByText("greenSourcesOnly"));
     // US green: d1, d3. Global green: none (d4 is red) → 2
-    expect(screen.getAllByText("View Deal")).toHaveLength(2);
+    expect(screen.getAllByText("viewDeal")).toHaveLength(2);
   });
 
   it("shows empty state when no deals match filters", async () => {
@@ -123,28 +123,28 @@ describe("DealFilters", () => {
     render(<DealFilters initialDeals={testDeals} />);
 
     await user.click(screen.getByText("EU"));
-    await user.click(screen.getByText("Green Sources Only"));
+    await user.click(screen.getByText("greenSourcesOnly"));
     // EU green: none. Global green: none (d4 is red) → 0
-    expect(screen.getByText("No deals match your filters")).toBeInTheDocument();
+    expect(screen.getByText("noDealsFilter")).toBeInTheDocument();
   });
 
   it("shows result count when filters are active", async () => {
     const user = userEvent.setup();
     render(<DealFilters initialDeals={testDeals} />);
 
-    await user.click(screen.getByText("Historical Lows"));
-    expect(screen.getByText(/2 results/)).toBeInTheDocument();
+    await user.click(screen.getByText("historicalLows"));
+    expect(screen.getByText(/resultCount/)).toBeInTheDocument();
   });
 
   it("clears filters when Clear filters is clicked", async () => {
     const user = userEvent.setup();
     render(<DealFilters initialDeals={testDeals} />);
 
-    await user.click(screen.getByText("Green Sources Only"));
-    expect(screen.getAllByText("View Deal")).toHaveLength(2);
+    await user.click(screen.getByText("greenSourcesOnly"));
+    expect(screen.getAllByText("viewDeal")).toHaveLength(2);
 
-    await user.click(screen.getByText("Clear filters"));
-    expect(screen.getAllByText("View Deal")).toHaveLength(4);
+    await user.click(screen.getByText("clearFilters"));
+    expect(screen.getAllByText("viewDeal")).toHaveLength(4);
   });
 
   it("sets aria-pressed on active region pill", async () => {
@@ -162,7 +162,7 @@ describe("DealFilters", () => {
     const user = userEvent.setup();
     render(<DealFilters initialDeals={testDeals} />);
 
-    const greenToggle = screen.getByText("Green Sources Only");
+    const greenToggle = screen.getByText("greenSourcesOnly");
     expect(greenToggle).toHaveAttribute("aria-pressed", "false");
 
     await user.click(greenToggle);
@@ -172,6 +172,6 @@ describe("DealFilters", () => {
   it("respects defaultRegion prop", () => {
     render(<DealFilters initialDeals={testDeals} defaultRegion="EU" />);
     // EU + global = 2
-    expect(screen.getAllByText("View Deal")).toHaveLength(2);
+    expect(screen.getAllByText("viewDeal")).toHaveLength(2);
   });
 });

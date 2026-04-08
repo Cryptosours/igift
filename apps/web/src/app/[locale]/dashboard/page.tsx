@@ -17,6 +17,7 @@ import { getWatchlist, getDashboardStats } from "@/lib/data";
 import { DealCard } from "@/components/deals/deal-card";
 import { LazyAlertManager as AlertManager } from "@/components/alerts/lazy-alert-manager";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
+import { getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "My Dashboard | iGift",
@@ -27,6 +28,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
+  const t = await getTranslations("DashboardPage");
   const cookieStore = await cookies();
   const sessionId = cookieStore.get("igift_session")?.value;
 
@@ -55,6 +57,37 @@ export default async function DashboardPage() {
     return best;
   }, null);
 
+  const quickLinks = [
+    { label: t("qlBrowseDeals"), href: "/deals" },
+    { label: t("qlAllBrands"), href: "/brands" },
+    { label: t("qlMyWatchlist"), href: "/watchlist" },
+    { label: t("qlSetAlerts"), href: "/alerts" },
+    { label: t("qlHowScoresWork"), href: "/methodology" },
+  ];
+
+  const snapshotItems = [
+    {
+      label: t("brandsTrackedLabel"),
+      value: String(watchlist.length),
+      active: watchlist.length > 0,
+    },
+    {
+      label: t("liveDealsLabel"),
+      value: `${dealsAvailable} of ${watchlist.length}`,
+      active: dealsAvailable > 0,
+    },
+    {
+      label: t("savingsAvailable"),
+      value: `$${savingsTotal.toFixed(2)}`,
+      active: savingsTotal > 0,
+    },
+    {
+      label: t("atHistoricalLowLabel"),
+      value: String(historicalLowsInWatchlist),
+      active: historicalLowsInWatchlist > 0,
+    },
+  ];
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       {/* Page header */}
@@ -62,11 +95,11 @@ export default async function DashboardPage() {
         <div className="mb-8">
           <div className="flex items-center gap-2">
             <LayoutDashboard className="h-4 w-4 text-brand-500" />
-            <span className="data-label text-brand-600">Power User Hub</span>
+            <span className="data-label text-brand-600">{t("label")}</span>
           </div>
-          <h1 className="mt-1 heading-display text-3xl text-surface-900">My Dashboard</h1>
+          <h1 className="mt-1 heading-display text-3xl text-surface-900">{t("heading")}</h1>
           <p className="mt-2 text-sm text-surface-500">
-            Watchlist, alerts, and live market intelligence — all in one place.
+            {t("description")}
           </p>
         </div>
       </FadeIn>
@@ -76,27 +109,27 @@ export default async function DashboardPage() {
         <div className="mb-6 rounded-2xl border border-surface-200 bg-gradient-to-r from-surface-950 to-surface-900 px-5 py-4">
           <div className="flex items-center gap-2 mb-3">
             <div className="flex h-1.5 w-1.5 rounded-full bg-deal-400 animate-pulse" />
-            <span className="data-label text-surface-400">Market Pulse</span>
-            <span className="data-label text-surface-600 ml-auto">Updated continuously</span>
+            <span className="data-label text-surface-400">{t("marketPulse")}</span>
+            <span className="data-label text-surface-600 ml-auto">{t("updatedContinuously")}</span>
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div>
               <div className="price-display text-xl font-bold text-white">
                 +{marketStats.newIn24h}
               </div>
-              <div className="mt-0.5 text-xs text-surface-500">new deals today</div>
+              <div className="mt-0.5 text-xs text-surface-500">{t("newDealsToday")}</div>
             </div>
             <div>
               <div className="price-display text-xl font-bold text-deal-400">
                 {marketStats.historicalLowsTotal}
               </div>
-              <div className="mt-0.5 text-xs text-surface-500">at historical low</div>
+              <div className="mt-0.5 text-xs text-surface-500">{t("atHistoricalLow")}</div>
             </div>
             <div>
               <div className="text-sm font-semibold text-brand-300">
                 {marketStats.topCategory}
               </div>
-              <div className="mt-0.5 text-xs text-surface-500">top category now</div>
+              <div className="mt-0.5 text-xs text-surface-500">{t("topCategoryNow")}</div>
             </div>
           </div>
         </div>
@@ -112,12 +145,12 @@ export default async function DashboardPage() {
                 <Heart className="h-4 w-4 text-brand-500" />
               </div>
               <span className="text-xs font-medium uppercase tracking-wide text-surface-500">
-                Watching
+                {t("watching")}
               </span>
             </div>
             <p className="mt-3 text-2xl font-bold text-surface-900">{watchlist.length}</p>
             <p className="mt-0.5 text-xs text-surface-400">
-              brand{watchlist.length !== 1 ? "s" : ""} tracked
+              {t("brandsTracked")}
             </p>
           </div>
         </StaggerItem>
@@ -130,14 +163,14 @@ export default async function DashboardPage() {
                 <TrendingUp className="h-4 w-4 text-deal-500" />
               </div>
               <span className="text-xs font-medium uppercase tracking-wide text-surface-500">
-                Live Deals
+                {t("liveDeals")}
               </span>
             </div>
             <p className="mt-3 text-2xl font-bold text-surface-900">{dealsAvailable}</p>
             <p className="mt-0.5 text-xs text-surface-400">
               {watchlist.length === 0
-                ? "no brands watched"
-                : `of ${watchlist.length} watched`}
+                ? t("noBrandsWatched")
+                : t("ofWatched", { count: watchlist.length })}
             </p>
           </div>
         </StaggerItem>
@@ -150,14 +183,14 @@ export default async function DashboardPage() {
                 <Zap className="h-4 w-4 text-deal-600" />
               </div>
               <span className="text-xs font-medium uppercase tracking-wide text-deal-600">
-                Savings
+                {t("savings")}
               </span>
             </div>
             <p className="mt-3 price-display text-2xl font-bold text-deal-700">
               ${savingsTotal.toFixed(2)}
             </p>
             <p className="mt-0.5 text-xs text-deal-500">
-              {dealsAvailable > 0 ? "available right now" : "no live deals yet"}
+              {dealsAvailable > 0 ? t("availableRightNow") : t("noLiveDealsYet")}
             </p>
           </div>
         </StaggerItem>
@@ -170,11 +203,11 @@ export default async function DashboardPage() {
                 <Flame className="h-4 w-4 text-alert-500" />
               </div>
               <span className="text-xs font-medium uppercase tracking-wide text-surface-500">
-                Hist. Lows
+                {t("histLows")}
               </span>
             </div>
             <p className="mt-3 text-2xl font-bold text-surface-900">{historicalLowsInWatchlist}</p>
-            <p className="mt-0.5 text-xs text-surface-400">in your watchlist</p>
+            <p className="mt-0.5 text-xs text-surface-400">{t("inYourWatchlist")}</p>
           </div>
         </StaggerItem>
       </StaggerContainer>
@@ -186,12 +219,12 @@ export default async function DashboardPage() {
             <div className="mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Target className="h-4 w-4 text-brand-500" />
-                <span className="text-sm font-semibold text-brand-800">Top Opportunity</span>
+                <span className="text-sm font-semibold text-brand-800">{t("topOpportunity")}</span>
                 <span className="rounded-full bg-brand-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-700">
                   Score {topOpportunity.dealScore}
                 </span>
               </div>
-              <span className="text-xs text-brand-500">highest in your watchlist</span>
+              <span className="text-xs text-brand-500">{t("highestInWatchlist")}</span>
             </div>
             <DealCard deal={topOpportunity} />
           </div>
@@ -205,10 +238,10 @@ export default async function DashboardPage() {
           <div className="mb-4 flex items-center justify-between">
             <h2 className="flex items-center gap-2 text-base font-semibold text-surface-900">
               <Heart className="h-4 w-4 text-brand-500" />
-              All Watched Brands
+              {t("allWatchedBrands")}
             </h2>
             <Link href="/deals" className="text-xs text-brand-600 hover:underline">
-              Browse all deals →
+              {t("browseAllDeals")} →
             </Link>
           </div>
 
@@ -226,7 +259,7 @@ export default async function DashboardPage() {
                       </Link>
                       {bestDeal?.historicalLow && (
                         <span className="rounded-full bg-brand-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-brand-700">
-                          Hist. Low
+                          {t("histLowBadge")}
                         </span>
                       )}
                     </div>
@@ -235,7 +268,7 @@ export default async function DashboardPage() {
                         href={`/alerts?brand=${slug}`}
                         className="text-xs text-surface-400 transition-colors hover:text-brand-600"
                       >
-                        Set alert →
+                        {t("setAlert")} →
                       </Link>
                     </div>
                   </div>
@@ -244,12 +277,12 @@ export default async function DashboardPage() {
                     <DealCard deal={bestDeal} />
                   ) : (
                     <div className="rounded-2xl border border-dashed border-surface-200 bg-surface-50 p-5 text-center">
-                      <p className="text-sm text-surface-400">No active deals for {name} right now.</p>
+                      <p className="text-sm text-surface-400">{t("noActiveDealsFor", { name })}</p>
                       <Link
                         href={`/alerts?brand=${slug}`}
                         className="mt-1 text-xs text-brand-600 hover:underline"
                       >
-                        Get notified when a deal appears →
+                        {t("getNotified")} →
                       </Link>
                     </div>
                   )}
@@ -259,15 +292,15 @@ export default async function DashboardPage() {
           ) : (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-surface-200 py-16 text-center">
               <Heart className="mb-4 h-10 w-10 text-surface-300" />
-              <p className="text-sm font-medium text-surface-600">No brands watched yet</p>
+              <p className="text-sm font-medium text-surface-600">{t("noBrandsWatched2")}</p>
               <p className="mt-1 max-w-xs text-xs text-surface-400">
-                Hit the heart icon on any deal card or brand page to track it here.
+                {t("noBrandsWatchedBody")}
               </p>
               <Link
                 href="/deals"
                 className="mt-4 inline-flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-brand-700"
               >
-                Browse Deals
+                {t("browseAllDeals")}
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
@@ -280,18 +313,18 @@ export default async function DashboardPage() {
           <div>
             <div className="mb-4 flex items-center gap-2">
               <Bell className="h-4 w-4 text-alert-600" />
-              <h2 className="text-base font-semibold text-surface-900">Price Alerts</h2>
+              <h2 className="text-base font-semibold text-surface-900">{t("priceAlerts")}</h2>
             </div>
             <div className="rounded-2xl border border-surface-200 bg-white p-5">
               <AlertManager />
               <div className="mt-4 border-t border-surface-100 pt-4 text-center">
                 <Link href="/alerts" className="text-xs text-brand-600 hover:underline">
-                  Create a new alert →
+                  {t("createNewAlert")} →
                 </Link>
               </div>
             </div>
             <p className="mt-2 text-center text-xs text-surface-400">
-              Free tier: up to 5 active alerts · 24-hour delivery cooldown
+              {t("freeTierNote")}
             </p>
           </div>
 
@@ -299,31 +332,10 @@ export default async function DashboardPage() {
           <div className="rounded-2xl border border-surface-200 bg-white p-5">
             <div className="mb-3 flex items-center gap-2">
               <BarChart3 className="h-4 w-4 text-surface-400" />
-              <h3 className="text-sm font-semibold text-surface-900">Watchlist Snapshot</h3>
+              <h3 className="text-sm font-semibold text-surface-900">{t("watchlistSnapshot")}</h3>
             </div>
             <ul className="space-y-2.5">
-              {[
-                {
-                  label: "Brands tracked",
-                  value: String(watchlist.length),
-                  active: watchlist.length > 0,
-                },
-                {
-                  label: "Live deals",
-                  value: `${dealsAvailable} of ${watchlist.length}`,
-                  active: dealsAvailable > 0,
-                },
-                {
-                  label: "Savings available",
-                  value: `$${savingsTotal.toFixed(2)}`,
-                  active: savingsTotal > 0,
-                },
-                {
-                  label: "At historical low",
-                  value: String(historicalLowsInWatchlist),
-                  active: historicalLowsInWatchlist > 0,
-                },
-              ].map(({ label, value, active }) => (
+              {snapshotItems.map(({ label, value, active }) => (
                 <li key={label} className="flex items-center justify-between text-xs">
                   <span className="flex items-center gap-1.5 text-surface-500">
                     <CheckCircle2
@@ -342,16 +354,10 @@ export default async function DashboardPage() {
           {/* Quick links */}
           <div className="rounded-2xl border border-surface-100 bg-surface-50 p-4">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-surface-400">
-              Quick Links
+              {t("quickLinks")}
             </h3>
             <div className="space-y-1">
-              {[
-                { label: "Browse all deals", href: "/deals" },
-                { label: "All brands", href: "/brands" },
-                { label: "My watchlist", href: "/watchlist" },
-                { label: "Set price alerts", href: "/alerts" },
-                { label: "How scores work", href: "/methodology" },
-              ].map(({ label, href }) => (
+              {quickLinks.map(({ label, href }) => (
                 <Link
                   key={href}
                   href={href}
