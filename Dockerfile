@@ -9,17 +9,12 @@ RUN corepack disable
 # Install deps
 COPY package.json package-lock.json ./
 COPY apps/web/package.json ./apps/web/
-RUN npm ci
-# Force-install Alpine/musl native binaries not in the macOS lockfile.
-# @parcel/watcher: needed by next-intl for file watching
-# @next/swc: Next.js SWC compiler
-# @swc/core: next-intl bundles its own @swc/core that needs musl native binding
-RUN npm install --no-save --force \
-    @parcel/watcher-linux-x64-musl \
-    @next/swc-linux-x64-musl \
-    @next/swc-linux-x64-gnu \
-    @swc/core-linux-x64-musl \
-    @swc/core-linux-x64-gnu
+# npm has a known bug with optional deps in cross-platform lockfiles
+# (https://github.com/npm/cli/issues/4828). The workaround: delete the
+# macOS-generated lockfile and let npm install resolve platform-native
+# optional deps fresh on Alpine/musl.
+RUN rm -f package-lock.json
+RUN npm install
 
 # Copy source and build
 COPY . .
