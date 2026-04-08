@@ -419,7 +419,7 @@ describe("raiseAdapter", () => {
     const result = await raiseAdapter.fetchOffers({ dryRun: true });
 
     expect(mockFetch).not.toHaveBeenCalled();
-    expect(result.sourceSlug).toBe("gcx");
+    expect(result.sourceSlug).toBe("raise");
     expect(result.offers).toHaveLength(0);
     expect(result.failed).toBe(false);
   });
@@ -508,7 +508,7 @@ describe("raiseAdapter", () => {
   it("result always includes required AdapterResult fields", async () => {
     const result = await raiseAdapter.fetchOffers({ dryRun: true });
 
-    expect(result).toHaveProperty("sourceSlug", "gcx");
+    expect(result).toHaveProperty("sourceSlug", "raise");
     expect(result.fetchedAt).toBeInstanceOf(Date);
     expect(typeof result.durationMs).toBe("number");
     expect(Array.isArray(result.offers)).toBe(true);

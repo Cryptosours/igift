@@ -47,6 +47,7 @@ VALUES
   ('target',           'Target',             'retail',      'Target gift cards',                         '["US"]',                    true, NOW(), NOW()),
   ('ebay',             'eBay',               'retail',      'eBay gift cards',                           '["US","EU","GB","Global"]', true, NOW(), NOW()),
   -- Food & Dining
+  ('uber',             'Uber',               'food_dining', 'Uber gift cards (rides + Uber Eats)',       '["US","EU","GB","Global"]', true, NOW(), NOW()),
   ('uber-eats',        'Uber Eats',          'food_dining', 'Uber Eats delivery credits',               '["US","EU","GB","Global"]', true, NOW(), NOW()),
   ('doordash',         'DoorDash',           'food_dining', 'DoorDash delivery gift cards',              '["US"]',                   true, NOW(), NOW()),
   ('starbucks',        'Starbucks',          'food_dining', 'Starbucks gift cards',                     '["US","EU","GB"]',          true, NOW(), NOW())

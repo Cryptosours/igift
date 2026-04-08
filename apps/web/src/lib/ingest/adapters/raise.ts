@@ -1,8 +1,8 @@
 /**
- * Raise (GCX) Source Adapter
+ * Raise Source Adapter
  *
- * Fetches gift card data from Raise.com / GCX marketplace.
- * Raise is a secondary marketplace (yellow zone) with buyer protection.
+ * Fetches gift card data from Raise.com marketplace.
+ * Raise is a secondary marketplace (green zone) with buyer protection.
  * Data is extracted from public product listing pages.
  *
  * Compliance: public pages only, no login, no anti-bot bypass.
@@ -201,7 +201,7 @@ function delay(ms: number): Promise<void> {
 
 export const raiseAdapter: SourceAdapter = {
   name: "Raise",
-  sourceSlug: "gcx",
+  sourceSlug: "raise",
 
   async fetchOffers(config?: Partial<AdapterConfig>): Promise<AdapterResult> {
     const timeoutMs = config?.timeoutMs ?? 10000;
@@ -211,7 +211,7 @@ export const raiseAdapter: SourceAdapter = {
 
     if (config?.dryRun) {
       return {
-        sourceSlug: "gcx",
+        sourceSlug: "raise",
         offers: [],
         fetchedAt: new Date(),
         durationMs: 0,
@@ -229,7 +229,7 @@ export const raiseAdapter: SourceAdapter = {
     }
 
     return {
-      sourceSlug: "gcx",
+      sourceSlug: "raise",
       offers: allOffers,
       fetchedAt: new Date(),
       durationMs: Date.now() - startTime,
