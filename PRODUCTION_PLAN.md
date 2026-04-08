@@ -170,3 +170,24 @@
 | 7.10 | Google Analytics property creation + measurement ID setup | HUMAN | Operator | Critical |
 | 7.11 | Google AdSense application (after traffic data exists) | HUMAN | Operator | High |
 | 7.12 | Affiliate program signups (Eneba, CDKeys, Kinguin, G2A) | HUMAN | Operator | High |
+
+---
+
+## Phase 8: Data Pipeline Reliability & Automation (V1.4)
+> Goal: Maximize live deal data coverage. Fix failing adapters, automate ingestion via cron, add health monitoring. Target: 500+ offers from 7+ working sources.
+
+| # | Task | Status | Specialist | Priority |
+|---|------|--------|------------|----------|
+| 8.1 | Fix Raise adapter sourceSlug mismatch (gcx → raise) | DONE | Builder | Critical |
+| 8.2 | Add missing Uber brand to seed + production DB | DONE | Builder | High |
+| 8.3 | Add health check API endpoint (/api/health) | DONE | Builder | Critical |
+| 8.4 | Fix CDKeys adapter (anti-bot 403s, URL pattern changes) | TODO | Builder | High |
+| 8.5 | Fix Eneba adapter (fetch failures on all products) | TODO | Builder | High |
+| 8.6 | Fix G2A adapter (177s timeout, all fetches failing) | TODO | Builder | Medium |
+| 8.7 | Fix Kinguin adapter (all product fetches failing) | TODO | Builder | Medium |
+| 8.8 | Fix OffGamers adapter (all product fetches failing) | TODO | Builder | Medium |
+| 8.9 | Investigate GiftCardGranny 403s (all pages blocked) | TODO | Builder | Low |
+| 8.10 | Automated cron ingestion (every 60 min via scripts/ingest-cron.sh) | TODO | Operator | Critical |
+| 8.11 | Ingest health dashboard (last run time, success rate, offer counts) | TODO | Builder | High |
+| 8.12 | Add catalog source entries to DB (costco, egifter, cardcash, etc.) | TODO | Builder | Medium |
+| 8.13 | Trust-badge pre-existing test fix (React import in vitest JSX) | TODO | Builder | Low |
