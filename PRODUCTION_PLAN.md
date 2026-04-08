@@ -187,7 +187,7 @@
 | 8.7 | Fix Kinguin adapter (all product fetches failing) | TODO | Builder | Medium |
 | 8.8 | Fix OffGamers adapter (all product fetches failing) | TODO | Builder | Medium |
 | 8.9 | Investigate GiftCardGranny 403s (all pages blocked) | TODO | Builder | Low |
-| 8.10 | Automated cron ingestion (every 60 min via scripts/ingest-cron.sh) | TODO | Operator | Critical |
+| 8.10 | Automated cron ingestion (every 2h via scripts/ingest-cron.sh) | DONE | Operator | Critical |
 | 8.11 | Ingest health dashboard (last run time, success rate, offer counts) | TODO | Builder | High |
 | 8.12 | Add catalog source entries to DB (costco, egifter, cardcash, etc.) | TODO | Builder | Medium |
 | 8.13 | Trust-badge pre-existing test fix (React import in vitest JSX) | TODO | Builder | Low |
