@@ -211,7 +211,7 @@
 | 9.9 | Fix OG image fallback — PNG default for pages without opengraph-image.tsx | DONE | Builder | Critical |
 | 9.10 | Add PWA icons (192px, 512px PNG) + apple-touch-icon | DONE | Builder | High |
 | 9.11 | i18n: Components — DealCard, DealFilters, NewsletterForm, ShareButton | DONE | Builder | High |
-| 9.12 | Deploy latest code to VPS | TODO | Operator | High |
+| 9.12 | Deploy latest code to VPS | DONE | Operator | High |
 
 ---
 
@@ -227,4 +227,4 @@
 | 10.5 | Improve typography — body font-size 15px, line-height 1.6, heavier data labels | DONE | Designer | High |
 | 10.6 | Update global-error.tsx fallback colors for dark theme | DONE | Builder | Medium |
 | 10.7 | Update PRODUCT_VISION.md with new color system | DONE | Architect | Medium |
-| 10.8 | Deploy latest code to VPS | TODO | Operator | High |
+| 10.8 | Deploy latest code to VPS | DONE | Operator | High |
