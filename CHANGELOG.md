@@ -1,5 +1,19 @@
 # Changelog
 
+## [5.1.0] — 2026-04-08
+
+### Added
+- **Production seed data** (Task 8.1-8.2): 11 sources and 22 brands (added Uber) seeded to production DB with correct schema column names
+- **Health check endpoint** (Task 8.3): GET `/api/health` — lightweight DB ping + offer/source counts for uptime monitors. Admin-authenticated `?detail=true` returns full source-level health report
+- **Phase 8 defined**: Data pipeline reliability & automation — adapter fixes, cron ingestion, health monitoring
+- **First live ingest**: 202 offers upserted from 4 working sources (Bitrefill, Dundle, Gameflip, BuySellVouchers). 22 deal clusters detected
+
+### Fixed
+- **Raise adapter slug mismatch**: `sourceSlug "gcx"` → `"raise"` to match DB source entry. Adapter and tests updated
+- **Missing Uber brand**: Dundle and BuySellVouchers skipped 24 Uber gift cards — added `uber` brand to seed data and production DB
+- **Ingest cron paths**: `scripts/ingest-cron.sh` referenced `/opt/realdeal` instead of `/opt/igift`. Updated schedule from 6h → 2h to meet source SLAs
+- **VPS branch tracking**: Fixed `master` → `main` branch alignment on VPS
+
 ## [5.0.0] — 2026-04-08
 
 ### Added
