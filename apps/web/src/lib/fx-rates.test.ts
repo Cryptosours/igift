@@ -52,7 +52,7 @@ describe("getAllRates", () => {
       json: async () => ({ result: "error" }),
     } as Response);
 
-    const { rates, source } = await getAllRates();
+    const { source } = await getAllRates();
     expect(source).toBe("static");
   });
 

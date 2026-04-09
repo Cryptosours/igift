@@ -66,7 +66,7 @@ function DealFiltersInner({ initialDeals, defaultRegion }: DealFiltersProps) {
     }
 
     return result;
-  }, [baseDeals, activeRegion, toggles]);
+  }, [baseDeals, activeRegion, toggles, allRegionsLabel]);
 
   const toggleFilters = [
     { key: "greenOnly", label: t("greenSourcesOnly") },

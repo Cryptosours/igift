@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Share2, Copy, Check } from "lucide-react";
+import { Share2, Check } from "lucide-react";
 
 /**
  * Share button with native Web Share API fallback to copy-to-clipboard.

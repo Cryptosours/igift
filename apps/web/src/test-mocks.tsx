@@ -11,15 +11,15 @@ function createMotionComponent(tag: string) {
   ) {
     // Strip motion-specific props
     const {
-      whileHover: _wh,
-      whileTap: _wt,
-      whileInView: _wv,
-      initial: _i,
-      animate: _a,
-      exit: _e,
-      transition: _tr,
-      layoutId: _li,
-      variants: _v,
+      whileHover: _wh, // eslint-disable-line @typescript-eslint/no-unused-vars
+      whileTap: _wt, // eslint-disable-line @typescript-eslint/no-unused-vars
+      whileInView: _wv, // eslint-disable-line @typescript-eslint/no-unused-vars
+      initial: _i, // eslint-disable-line @typescript-eslint/no-unused-vars
+      animate: _a, // eslint-disable-line @typescript-eslint/no-unused-vars
+      exit: _e, // eslint-disable-line @typescript-eslint/no-unused-vars
+      transition: _tr, // eslint-disable-line @typescript-eslint/no-unused-vars
+      layoutId: _li, // eslint-disable-line @typescript-eslint/no-unused-vars
+      variants: _v, // eslint-disable-line @typescript-eslint/no-unused-vars
       ...htmlProps
     } = props;
     return React.createElement(tag, { ...htmlProps, ref });

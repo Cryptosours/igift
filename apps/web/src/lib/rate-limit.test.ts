@@ -72,7 +72,6 @@ describe("checkRateLimit", () => {
   });
 
   it("expires old requests after the window", async () => {
-    const originalNow = Date.now;
     let mockNow = 1000000;
 
     // Use a short window for testability

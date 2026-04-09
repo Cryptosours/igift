@@ -103,7 +103,7 @@ export function SearchBar({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
-          autoFocus={autoFocus}
+          autoFocus={autoFocus} // eslint-disable-line jsx-a11y/no-autofocus
           className={`w-full bg-transparent outline-none placeholder:text-surface-400 ${
             isCompact
               ? "ml-2 text-sm min-w-[180px]"

@@ -166,7 +166,7 @@ vi.mock("@/app/api/admin/auth", () => ({
 // ── Mock: next/headers (for watchlist which uses cookies()) ────────────
 vi.mock("next/headers", () => ({
   cookies: vi.fn(() => Promise.resolve({
-    get: (_name: string) => ({ value: "test-session-id" }),
+    get: (_name: string) => ({ value: "test-session-id" }), // eslint-disable-line @typescript-eslint/no-unused-vars
   })),
 }));
 

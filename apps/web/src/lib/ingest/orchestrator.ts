@@ -31,14 +31,15 @@ import { getAllRates } from "@/lib/fx-rates";
 import { bitrefillAdapter } from "./adapters/bitrefill";
 import { dundleAdapter } from "./adapters/dundle";
 import { raiseAdapter } from "./adapters/raise";
-import { giftCardGrannyAdapter } from "./adapters/giftcardgranny";
+// Blocked adapters — commented out until API/affiliate access obtained
+// See docs/research/blocked_adapters_api_research.md for status
+// import { giftCardGrannyAdapter } from "./adapters/giftcardgranny";
+// import { cdkeysAdapter } from "./adapters/cdkeys";
+// import { offgamersAdapter } from "./adapters/offgamers";
+// import { g2aAdapter } from "./adapters/g2a";
 import { gameflipAdapter } from "./adapters/gameflip";
 import { buySellVouchersAdapter } from "./adapters/buysellvouchers";
-// Phase 4.2 — new live source adapters
-import { cdkeysAdapter } from "./adapters/cdkeys";
 import { enebaAdapter } from "./adapters/eneba";
-import { offgamersAdapter } from "./adapters/offgamers";
-import { g2aAdapter } from "./adapters/g2a";
 import { kinguinAdapter } from "./adapters/kinguin";
 import { getAllCatalogAdapters } from "./adapters/catalog";
 
