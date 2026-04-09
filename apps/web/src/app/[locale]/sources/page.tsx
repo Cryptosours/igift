@@ -125,7 +125,7 @@ export default async function SourcesPage() {
           <p className="text-lg font-semibold text-surface-500">{t("noSources")}</p>
           <p className="mt-1 text-sm text-surface-400">
             {t("noSourcesHint")}{" "}
-            <code className="rounded bg-surface-100 px-1.5 py-0.5 text-xs font-mono">
+            <code className="rounded bg-surface-200 px-1.5 py-0.5 text-xs font-mono">
               npx tsx apps/web/src/db/seed.ts
             </code>{" "}
             to populate sources.

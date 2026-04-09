@@ -93,7 +93,7 @@ export function NewOffersFound() {
   if (!isLive && visibleOffers.length === 0) return null;
 
   return (
-    <section className="relative overflow-hidden border-t border-surface-200 bg-surface-50 py-16 dark:border-surface-800 dark:bg-surface-900/50">
+    <section className="relative overflow-hidden border-t border-surface-200 bg-surface-50 py-16 dark:border-surface-300 dark:bg-surface-50">
       {/* Subtle ambient glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[200px] w-[600px] rounded-full bg-deal-500/5 blur-[100px] dark:bg-deal-500/10" />
 
@@ -104,7 +104,7 @@ export function NewOffersFound() {
             <span className="flex h-1.5 w-1.5 rounded-full bg-deal-500 animate-pulse-soft" />
             Live Feed
           </div>
-          <h2 className="mt-3 heading-display text-2xl text-surface-900 dark:text-white sm:text-3xl">
+          <h2 className="mt-3 heading-display text-2xl text-surface-900 dark:text-surface-900 sm:text-3xl">
             New Offers Found
           </h2>
           <p className="mt-2 text-sm text-surface-500 dark:text-surface-400">
@@ -170,7 +170,7 @@ function OfferRow({ offer }: { offer: RecentOffer }) {
       href={offer.url}
       target="_blank"
       rel="noopener noreferrer nofollow"
-      className="group flex items-center gap-3 rounded-xl border border-surface-200 bg-white/80 px-4 py-3 backdrop-blur-sm transition-all hover:border-brand-200 hover:shadow-md dark:border-surface-700 dark:bg-surface-800/60 dark:hover:border-brand-500/30 sm:gap-4 sm:px-5"
+      className="group flex items-center gap-3 rounded-xl border border-surface-200 bg-surface-0/90 px-4 py-3 backdrop-blur-sm transition-all hover:border-brand-200 hover:shadow-md dark:border-surface-300 dark:bg-surface-100/80 dark:hover:border-brand-500/30 sm:gap-4 sm:px-5"
     >
       {/* Discount badge */}
       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-deal-50 dark:bg-deal-500/10">
@@ -182,7 +182,7 @@ function OfferRow({ offer }: { offer: RecentOffer }) {
       {/* Offer details */}
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="truncate text-sm font-semibold text-surface-900 dark:text-white">
+          <span className="truncate text-sm font-semibold text-surface-900 dark:text-surface-900">
             {offer.title}
           </span>
           <TrustIcon className={`h-3.5 w-3.5 flex-shrink-0 ${trustColor}`} />
@@ -196,7 +196,7 @@ function OfferRow({ offer }: { offer: RecentOffer }) {
 
       {/* Price info */}
       <div className="hidden flex-shrink-0 text-right sm:block">
-        <div className="price-display text-sm font-bold text-surface-900 dark:text-white">
+        <div className="price-display text-sm font-bold text-surface-900 dark:text-surface-900">
           {offer.currency}{offer.effectivePrice.toFixed(2)}
         </div>
         {offer.effectivePrice < offer.faceValue && (

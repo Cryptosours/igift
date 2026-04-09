@@ -227,7 +227,7 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════
           HOW IT WORKS — 3-step visual flow
           ══════════════════════════════════════ */}
-      <section className="relative border-b border-surface-200 bg-surface-100 py-20">
+      <section className="relative border-b border-surface-200 bg-surface-50 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center">
@@ -269,7 +269,7 @@ export default async function HomePage() {
               },
             ].map((feature) => (
               <StaggerItem key={feature.title}>
-                <div className="group relative rounded-2xl border border-surface-200 bg-surface-0/50 p-6 transition-colors hover:border-surface-300 hover:bg-surface-100 hover:shadow-lg hover:shadow-surface-200/50">
+                <div className="group relative rounded-2xl border border-surface-200 bg-surface-100 p-6 transition-colors hover:border-surface-300 hover:bg-surface-200 hover:shadow-lg hover:shadow-surface-300/30">
                   <div className={`inline-flex rounded-xl bg-gradient-to-br ${feature.accent} p-2.5 shadow-sm`}>
                     <feature.icon className="h-5 w-5 text-white" />
                   </div>
@@ -340,7 +340,7 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════
           CATEGORIES — Visual cards with gradients
           ══════════════════════════════════════ */}
-      <section className="border-t border-surface-200 bg-surface-100 py-20">
+      <section className="border-t border-surface-200 bg-surface-50 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div>
@@ -359,7 +359,7 @@ export default async function HomePage() {
               <StaggerItem key={cat.slug}>
                 <Link
                   href={`/categories/${cat.slug}`}
-                  className="group flex items-center gap-4 rounded-xl border border-surface-200 bg-surface-0/50 p-5 transition-colors hover:border-brand-200 hover:bg-surface-100 hover:shadow-lg hover:shadow-surface-200/50"
+                  className="group flex items-center gap-4 rounded-xl border border-surface-200 bg-surface-100 p-5 transition-colors hover:border-brand-200 hover:bg-surface-200 hover:shadow-lg hover:shadow-surface-300/30"
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-2xl transition-transform group-hover:scale-110">
                     {cat.icon}
@@ -433,7 +433,7 @@ export default async function HomePage() {
       {/* ══════════════════════════════════════
           NEWSLETTER — Deal Digest signup
           ══════════════════════════════════════ */}
-      <section className="border-t border-surface-100 bg-surface-50 py-14">
+      <section className="border-t border-surface-200 bg-surface-50 py-14">
         <div className="mx-auto max-w-lg px-4 sm:px-6">
           <FadeIn>
             <NewsletterForm />

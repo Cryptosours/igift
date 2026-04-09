@@ -206,7 +206,7 @@ Authorization: Bearer igift_live_<your_key>`}</pre>
                         {ep.params.map((p) => (
                           <tr key={p.name}>
                             <td className="py-2 pr-4">
-                              <code className="rounded bg-surface-100 px-1.5 py-0.5 font-mono text-surface-800">{p.name}</code>
+                              <code className="rounded bg-surface-200 px-1.5 py-0.5 font-mono text-surface-800">{p.name}</code>
                             </td>
                             <td className="py-2 pr-4 text-surface-400">{p.type}</td>
                             <td className="py-2 text-surface-500">{p.description}</td>

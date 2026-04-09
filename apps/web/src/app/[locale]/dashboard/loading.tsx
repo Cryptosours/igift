@@ -7,7 +7,7 @@ function StatSkeleton() {
         className="h-3 w-20 rounded-md bg-surface-200"
         style={{
           backgroundImage:
-            "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, var(--shimmer-highlight, rgba(255,255,255,0.4)) 50%, transparent 100%)",
           backgroundSize: "200% 100%",
           animation: "shimmer 1.8s ease-in-out infinite",
         }}
@@ -16,7 +16,7 @@ function StatSkeleton() {
         className="mt-3 h-8 w-16 rounded-md bg-surface-200"
         style={{
           backgroundImage:
-            "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, var(--shimmer-highlight, rgba(255,255,255,0.4)) 50%, transparent 100%)",
           backgroundSize: "200% 100%",
           animation: "shimmer 1.8s ease-in-out infinite",
         }}
@@ -25,7 +25,7 @@ function StatSkeleton() {
         className="mt-2 h-3 w-28 rounded-md bg-surface-200"
         style={{
           backgroundImage:
-            "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%)",
+            "linear-gradient(90deg, transparent 0%, var(--shimmer-highlight, rgba(255,255,255,0.4)) 50%, transparent 100%)",
           backgroundSize: "200% 100%",
           animation: "shimmer 1.8s ease-in-out infinite",
         }}

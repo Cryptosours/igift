@@ -47,7 +47,7 @@ export async function Footer() {
   };
 
   return (
-    <footer className="border-t border-surface-200 bg-surface-100">
+    <footer className="border-t border-surface-200 bg-surface-50">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {/* Brand */}
@@ -101,7 +101,7 @@ export async function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 border-t border-surface-100 pt-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
+        <div className="mt-12 border-t border-surface-200 pt-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
           <p className="text-xs text-surface-400 leading-relaxed text-center sm:text-left">
             &copy; {new Date().getFullYear()} iGift. {t("copyright")}{" "}
             <Link href="/disclosure" className="underline underline-offset-2 hover:text-brand-600">

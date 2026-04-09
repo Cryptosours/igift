@@ -140,7 +140,7 @@ export default async function SourceDetailPage({
             </div>
             <p className="mt-1 text-sm text-surface-500">{t(ZONE_DESC_KEYS[source.trustZone])}</p>
             <div className="mt-2 flex items-center gap-2 flex-wrap">
-              <span className="rounded-lg bg-surface-100 px-2.5 py-1 text-xs font-medium text-surface-600">
+              <span className="rounded-lg bg-surface-200 px-2.5 py-1 text-xs font-medium text-surface-600">
                 {TYPE_LABEL_KEYS[source.sourceType] ? t(TYPE_LABEL_KEYS[source.sourceType]) : source.sourceType}
               </span>
               <span className={`flex items-center gap-1 text-sm font-medium ${health.color}`}>
@@ -171,7 +171,7 @@ export default async function SourceDetailPage({
 
         {/* Trust bar */}
         <div className="mt-6">
-          <div className="h-2 rounded-full bg-surface-100 overflow-hidden">
+          <div className="h-2 rounded-full bg-surface-50 overflow-hidden">
             <div
               className={`h-full rounded-full ${zone.bar}`}
               style={{ width: `${trustBarWidth}%` }}
@@ -185,7 +185,7 @@ export default async function SourceDetailPage({
             href={source.url}
             target="_blank"
             rel="noopener noreferrer nofollow"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-surface-100 px-3 py-1.5 text-xs font-medium text-surface-600 hover:bg-surface-200 transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-surface-200 px-3 py-1.5 text-xs font-medium text-surface-600 hover:bg-surface-300 transition-colors"
           >
             {source.url.replace(/^https?:\/\/(www\.)?/, "")}
             <ExternalLink className="h-3 w-3" />

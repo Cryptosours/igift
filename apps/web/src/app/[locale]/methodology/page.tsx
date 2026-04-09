@@ -98,7 +98,7 @@ export default async function MethodologyPage() {
       <StaggerContainer className="mt-5 space-y-4" stagger={0.08}>
         <StaggerItem>
           <div className="flex gap-4 rounded-2xl border border-deal-200 bg-deal-50 p-5">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-100/70">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-0/70">
               <ShieldCheck className="h-5 w-5 text-deal-600" />
             </div>
             <div>
@@ -111,7 +111,7 @@ export default async function MethodologyPage() {
         </StaggerItem>
         <StaggerItem>
           <div className="flex gap-4 rounded-2xl border border-alert-200 bg-alert-50 p-5">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-100/70">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-0/70">
               <ShieldAlert className="h-5 w-5 text-alert-600" />
             </div>
             <div>
@@ -124,7 +124,7 @@ export default async function MethodologyPage() {
         </StaggerItem>
         <StaggerItem>
           <div className="flex gap-4 rounded-2xl border border-red-200 bg-red-50 p-5">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-100/70">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface-0/70">
               <ShieldX className="h-5 w-5 text-red-600" />
             </div>
             <div>

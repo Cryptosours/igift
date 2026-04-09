@@ -105,7 +105,7 @@ export default async function BrandDetailPage({ params }: Props) {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl font-bold text-surface-900">{brand.name}</h1>
-                <span className="rounded-md bg-surface-100 px-2 py-0.5 text-xs font-medium text-surface-600">
+                <span className="rounded-md bg-surface-200 px-2 py-0.5 text-xs font-medium text-surface-600">
                   {brand.category}
                 </span>
               </div>

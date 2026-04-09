@@ -37,7 +37,7 @@ export function DealCard({ deal }: { deal: DealCardProps }) {
   return (
     <motion.div
       className="group relative rounded-2xl border border-surface-200 bg-surface-100 p-5 hover:border-brand-200"
-      whileHover={{ y: -2, boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.08), 0 0 0 1px rgba(79,70,229,0.08)" }}
+      whileHover={{ y: -2, boxShadow: "0 4px 6px -1px rgba(0,0,0,0.08), 0 10px 15px -3px rgba(0,0,0,0.12), 0 0 0 1px rgba(193,95,60,0.1)" }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
       {/* Historical Low Badge */}

@@ -117,12 +117,12 @@ export function PriceHistoryChart({ data, currency = "USD", allTimeLowCents }: P
             </linearGradient>
           </defs>
 
-          <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--color-surface-200)" vertical={false} />
 
           <XAxis
             dataKey="date"
             tickFormatter={formatDateShort}
-            tick={{ fontSize: 11, fill: "#94a3b8" }}
+            tick={{ fontSize: 11, fill: "var(--color-surface-500)" }}
             tickLine={false}
             axisLine={false}
             interval="preserveStartEnd"
@@ -134,7 +134,7 @@ export function PriceHistoryChart({ data, currency = "USD", allTimeLowCents }: P
             orientation="left"
             domain={[yMin, yMax]}
             tickFormatter={(v: number) => `$${(v / 100).toFixed(0)}`}
-            tick={{ fontSize: 11, fill: "#94a3b8" }}
+            tick={{ fontSize: 11, fill: "var(--color-surface-500)" }}
             tickLine={false}
             axisLine={false}
             width={44}
@@ -153,7 +153,7 @@ export function PriceHistoryChart({ data, currency = "USD", allTimeLowCents }: P
 
           <Tooltip
             content={<ChartTooltip currency={currency} />}
-            cursor={{ stroke: "#e2e8f0", strokeWidth: 1 }}
+            cursor={{ stroke: "var(--color-surface-300)", strokeWidth: 1 }}
           />
 
           {/* All-time low reference line */}

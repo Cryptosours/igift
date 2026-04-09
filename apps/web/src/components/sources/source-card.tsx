@@ -62,7 +62,7 @@ export function SourceCard({ source, rank }: SourceCardProps) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: rank * 0.04, ease: "easeOut" }}
-      whileHover={{ y: -2, boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.08)" }}
+      whileHover={{ y: -2, boxShadow: "0 4px 6px -1px rgba(0,0,0,0.08), 0 10px 15px -3px rgba(0,0,0,0.12)" }}
     >
       <Link
         href={`/sources/${source.slug}`}
@@ -72,7 +72,7 @@ export function SourceCard({ source, rank }: SourceCardProps) {
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             {/* Rank */}
-            <span className="shrink-0 flex h-7 w-7 items-center justify-center rounded-full bg-surface-100 text-xs font-bold text-surface-500">
+            <span className="shrink-0 flex h-7 w-7 items-center justify-center rounded-full bg-surface-200 text-xs font-bold text-surface-500">
               {rank}
             </span>
 
@@ -109,7 +109,7 @@ export function SourceCard({ source, rank }: SourceCardProps) {
             </span>
             <span className="font-mono text-sm font-bold text-surface-900">{source.trustScore}</span>
           </div>
-          <div className="h-1.5 rounded-full bg-surface-100 overflow-hidden">
+          <div className="h-1.5 rounded-full bg-surface-50 overflow-hidden">
             <motion.div
               className={`h-full rounded-full ${zone.bar}`}
               initial={{ width: 0 }}
