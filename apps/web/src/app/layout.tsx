@@ -34,6 +34,8 @@ export default async function RootLayout({
       <head>
         {/* Impact Radius site verification */}
         <meta name="impact-site-verification" content="7be18233-231d-41c9-9c14-1feb1303c98d" />
+        {/* Admitad site verification */}
+        <meta name="verify-admitad" content="96863e5b96" />
         {/* Static inline script — hardcoded string, no user input, prevents theme FOUC.
             Dark-first: .dark is the default. Only remove if user explicitly chose "light"
             or explicitly chose "system" and OS prefers light. No stored value = dark. */}
