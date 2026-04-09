@@ -72,6 +72,10 @@ export async function generateMetadata({
       index: true,
       follow: true,
     },
+    other: {
+      "impact-site-verification": "7be18233-231d-41c9-9c14-1feb1303c98d",
+      "verify-admitad": "96863e5b96",
+    },
   };
 }
 
