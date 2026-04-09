@@ -46,10 +46,11 @@ export async function GET(
   }
 
   // Build the destination URL with affiliate tracking params
-  const destinationUrl = buildAffiliateUrl(
+  const destinationUrl = await buildAffiliateUrl(
     target.externalUrl,
     target.affiliateNetwork,
     target.affiliateProgramId,
+    target.offerId,
   );
 
   // Log click fire-and-forget (never blocks redirect)

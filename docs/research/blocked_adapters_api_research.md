@@ -119,7 +119,8 @@ All 4 blocked adapters (G2A, CDKeys/Loaded, OffGamers, GiftCardGranny) use aggre
 1. **Immediate (self-service):**
    - [x] Sign up for G2A Goldmine affiliate program -- DONE (reflink: reflink-23b7b39c5c)
    - [ ] Apply to Awin network for CDKeys/Loaded (#30147)
-   - [ ] Apply for Kinguin affiliate on Awin/Admitad
+   - [x] Admitad publisher account created + API connected (publisher ID: 2521679, ad space: 2931240)
+   - [ ] Join Kinguin WW (#24298) on Admitad dashboard
    - [ ] Apply for Eneba affiliate program
 
 2. **Short-term (manual applications):**

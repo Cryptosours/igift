@@ -7,6 +7,10 @@ import { eq, sql } from "drizzle-orm";
 // Maps affiliate network slugs to URL construction functions.
 // When we sign up for an affiliate program, add the network slug here
 // and set affiliateNetwork + affiliateProgramId on the source row.
+//
+// Two types of builders:
+// - Sync builders: simple URL param appending (most networks)
+// - Async builders: require server-side API calls (Admitad deeplink)
 
 type UrlBuilder = (baseUrl: string, programId: string) => string;
 
@@ -27,16 +31,102 @@ function appendParam(url: string, key: string, value: string): string {
   return `${url}${separator}${key}=${encodeURIComponent(value)}`;
 }
 
+// ── Admitad Deeplink (async) ──
+// Admitad requires a server-side OAuth + deeplink API call.
+// Ad space ID for igift.app: 2931240
+
+const ADMITAD_AD_SPACE_ID = "2931240";
+
+let admitadTokenCache: { token: string; expiresAt: number } | null = null;
+
+async function getAdmitadToken(): Promise<string> {
+  if (admitadTokenCache && Date.now() < admitadTokenCache.expiresAt) {
+    return admitadTokenCache.token;
+  }
+
+  const base64Header = process.env.ADMITAD_BASE64_HEADER;
+  const clientId = process.env.ADMITAD_CLIENT_ID;
+  if (!base64Header || !clientId) {
+    throw new Error("Admitad credentials not configured");
+  }
+
+  const resp = await fetch("https://api.admitad.com/token/", {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${base64Header}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `grant_type=client_credentials&client_id=${clientId}&scope=deeplink_generator advcampaigns_for_website statistics`,
+  });
+
+  if (!resp.ok) {
+    throw new Error(`Admitad token request failed: ${resp.status}`);
+  }
+
+  const data = await resp.json();
+  admitadTokenCache = {
+    token: data.access_token,
+    // Refresh 1 hour before actual expiry for safety
+    expiresAt: Date.now() + (data.expires_in - 3600) * 1000,
+  };
+  return data.access_token;
+}
+
+/** Generate an Admitad tracking link via their deeplink API.
+ *  programId = Admitad campaign ID (e.g. "24298" for Kinguin WW).
+ *  subId = our internal offer ID for conversion attribution. */
+async function buildAdmitadDeeplink(
+  productUrl: string,
+  programId: string,
+  subId?: string,
+): Promise<string> {
+  const token = await getAdmitadToken();
+  const params = new URLSearchParams({
+    ulp: productUrl,
+    ...(subId && { subid: subId }),
+  });
+
+  const resp = await fetch(
+    `https://api.admitad.com/deeplink/${ADMITAD_AD_SPACE_ID}/advcampaign/${programId}/?${params}`,
+    { headers: { Authorization: `Bearer ${token}` } },
+  );
+
+  if (!resp.ok) {
+    console.error(`[affiliate] Admitad deeplink failed: ${resp.status}`);
+    // Fallback: return raw URL with utm tracking
+    return appendParam(productUrl, "utm_source", "igift");
+  }
+
+  const data = await resp.json();
+  return data[0]?.raw_link ?? data.link ?? appendParam(productUrl, "utm_source", "igift");
+}
+
 /** Build the outbound affiliate URL for a source.
- *  Returns the raw externalUrl if no affiliate program is configured. */
-export function buildAffiliateUrl(
+ *  Returns the raw externalUrl if no affiliate program is configured.
+ *  Now async to support Admitad deeplink API calls. */
+export async function buildAffiliateUrl(
   externalUrl: string,
   affiliateNetwork: string | null,
   affiliateProgramId: string | null,
-): string {
+  offerId?: number,
+): Promise<string> {
   if (!affiliateNetwork || !affiliateProgramId) {
     // No affiliate config: add at minimum a utm_source for analytics
     return appendParam(externalUrl, "utm_source", "igift");
+  }
+
+  // Admitad requires a server-side API call for deeplinks
+  if (affiliateNetwork === "admitad") {
+    try {
+      return await buildAdmitadDeeplink(
+        externalUrl,
+        affiliateProgramId,
+        offerId?.toString(),
+      );
+    } catch (err) {
+      console.error("[affiliate] Admitad deeplink error:", err);
+      return appendParam(externalUrl, "utm_source", "igift");
+    }
   }
 
   const builder = AFFILIATE_BUILDERS[affiliateNetwork] ?? AFFILIATE_BUILDERS.generic;
