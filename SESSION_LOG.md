@@ -1,5 +1,23 @@
 # iGift — Session Log
 
+## Session 36 — 2026-04-09 — Cleanup: Lint Fixes + API Research Documentation
+
+### What Was Done
+- Documented API/affiliate research findings for all 4 blocked adapters (G2A, CDKeys/Loaded, OffGamers, GiftCardGranny)
+- Created `docs/research/blocked_adapters_api_research.md` with access paths, effort levels, and action items
+- Fixed all 19 lint warnings (zero remaining): removed unused imports in orchestrator, test mocks, share-button; fixed useMemo deps in deal-filters; suppressed intentional autoFocus in search-bar
+- Marked tasks 11.9 and 12.4 as DONE in production plan
+- Deployed to VPS
+- Updated Notion task database
+
+### Commits
+- `634422c` — chore: fix all lint warnings + document blocked adapter API research
+
+### Remaining TODOs
+- 12.5 — Apply for affiliate programs (Awin, Rakuten) — requires manual human action
+
+---
+
 ## Session 35 — 2026-04-09 — Phase 13: Core Engine Hardening + Dark-Orange Visual Identity
 
 ### What Was Done

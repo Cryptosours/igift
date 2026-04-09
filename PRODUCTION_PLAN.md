@@ -275,3 +275,51 @@
 | 13.4 | Apply FreeX dark palette (bg #1a1815, accent #c15f3c/#d97757) + force dark default | DONE | Designer | Critical |
 | 13.5 | Audit all components for remaining indigo / hardcoded color issues | DONE | Builder | High |
 | 13.6 | Build + verify all changes | DONE | Operator | Critical |
+
+---
+
+## Phase 14: Revenue Activation (V2.0)
+> Goal: Activate all revenue streams. Affiliate links live, Google Analytics tracking, email delivery working, first ad placements. Turn built infrastructure into money.
+
+| # | Task | Status | Specialist | Priority |
+|---|------|--------|------------|----------|
+| 14.1 | G2A Goldmine affiliate signup | DONE | Human | High |
+| 14.2 | Awin publisher signup (CDKeys #30147 + Kinguin) | IN PROGRESS | Human | Critical |
+| 14.3 | Eneba affiliate signup | TODO | Human | High |
+| 14.4 | OffGamers affiliate signup | TODO | Human | Medium |
+| 14.5 | Set up Google Analytics (add NEXT_PUBLIC_GA_MEASUREMENT_ID env var) | TODO | Human + Agent | Critical |
+| 14.6 | Apply for Google AdSense | TODO | Human | High |
+| 14.7 | Set up Google Search Console + submit sitemap | TODO | Human | Critical |
+| 14.8 | Set up Resend for email delivery (centralized mailing service) | TODO | Agent | High |
+| 14.9 | Build price alert email templates (React Email) | TODO | Agent | High |
+| 14.10 | Wire affiliate links into deal cards (once approved) | TODO | Agent | High |
+| 14.11 | Add GA4 custom events (deal_click, alert_signup, brand_view) | TODO | Agent | Medium |
+| 14.12 | Weekly deal digest newsletter template | TODO | Agent | Medium |
+
+---
+
+## Phase 15: User Acquisition & SEO (V2.1)
+> Goal: Drive organic traffic. Content marketing, SEO articles, Google Shopping CSS ads.
+
+| # | Task | Status | Specialist | Priority |
+|---|------|--------|------------|----------|
+| 15.1 | Content pages: "Best [Brand] Gift Card Deals" for top 10 brands | TODO | Agent | High |
+| 15.2 | Blog/guide system (MDX or CMS) | TODO | Agent | High |
+| 15.3 | Write 5 SEO articles (gift card buying guides, comparison posts) | TODO | Agent | High |
+| 15.4 | Internal linking strategy (brand pages cross-link to guides) | TODO | Agent | Medium |
+| 15.5 | Google Shopping CSS (Comparison Shopping Service) integration via Awin | TODO | Agent + Human | High |
+| 15.6 | Submit to Product Hunt / Hacker News | TODO | Human | Medium |
+| 15.7 | Social media accounts (X/Twitter, Reddit presence) | TODO | Human | Medium |
+
+---
+
+## Phase 16: Advanced Intelligence (V2.2)
+> Goal: Make iGift smarter than any competitor. Price predictions, buy recommendations, cross-vendor comparison.
+
+| # | Task | Status | Specialist | Priority |
+|---|------|--------|------------|----------|
+| 16.1 | Price trend predictions (moving average + anomaly detection) | TODO | Agent | High |
+| 16.2 | "Best time to buy" recommendations per brand | TODO | Agent | High |
+| 16.3 | Price drop notifications (email alerts on historical low) | TODO | Agent | High |
+| 16.4 | Cross-vendor price comparison view (same card, all sources side by side) | TODO | Agent | Critical |
+| 16.5 | Deal expiry tracking (estimate when deals typically disappear) | TODO | Agent | Medium |

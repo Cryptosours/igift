@@ -17,6 +17,7 @@ const AFFILIATE_BUILDERS: Record<string, UrlBuilder> = {
   giftcardgranny: (url, id) => appendParam(url, "aff", id),
   gameflip: (url, id) => appendParam(url, "referral", id),
   buysellvouchers: (url, id) => appendParam(url, "ref", id),
+  g2a_goldmine: (url, id) => appendParam(url, "ref", id),
   // Generic: appends utm_source=igift for any unknown network with an ID
   generic: (url, id) => appendParam(appendParam(url, "utm_source", "igift"), "aff_id", id),
 };
