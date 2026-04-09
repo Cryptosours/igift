@@ -245,8 +245,8 @@
 | 11.7 | Re-enable Eneba + Kinguin in orchestrator (fault-tolerant) | DONE | Builder | High |
 | 11.8 | Add 4 new brands to DB seed: Fortnite, PUBG, Free Fire, Riot Access | DONE | Builder | Medium |
 | 11.9 | Research API/affiliate access for blocked adapters (G2A, CDKeys, OffGamers) | TODO | Operator | Medium |
-| 11.10 | Deploy + run full ingestion pipeline | TODO | Operator | Critical |
-| 11.11 | Update VENDORS_LIST.md with expanded coverage | TODO | Architect | Medium |
+| 11.10 | Deploy + run full ingestion pipeline | DONE | Operator | Critical |
+| 11.11 | Update VENDORS_LIST.md with expanded coverage | DONE | Architect | Medium |
 
 ---
 
@@ -260,7 +260,7 @@
 | 12.3 | Integrate live feed section into homepage (between Top Deals and Categories) | DONE | Builder | High |
 | 12.4 | Research API access: Kinguin REST API, Eneba GraphQL, G2A Integration API | TODO | Operator | High |
 | 12.5 | Apply for affiliate programs: Awin (CDKeys/Loaded), Rakuten (GiftCardGranny) | TODO | Operator | Medium |
-| 12.6 | Deploy + verify live feed works in production | TODO | Operator | Critical |
+| 12.6 | Deploy + verify live feed works in production | DONE | Operator | Critical |
 
 ---
 
