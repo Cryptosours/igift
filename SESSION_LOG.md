@@ -1,5 +1,98 @@
 # iGift — Session Log
 
+## Session 35 — 2026-04-09 — Phase 13: Core Engine Hardening + Dark-Orange Visual Identity
+
+### What Was Done
+- Removed anti-scraping compliance restrictions from PROJECT_RULES.md + CLAUDE.md
+- Added public-page scraping policy: proxy rotation, UA rotation, CAPTCHA solving authorized
+- Implemented overpriced offer filter at ingestion pipeline (orchestrator.ts)
+- Added overpriced filter to all 5 API query routes (defense-in-depth)
+- Deepened dark mode surfaces: body #0f0e0c (was #1a1815), surface-0 #0a0908
+- Complete indigo→orange brand color transformation (21 files)
+- Updated OG images, PWA manifest, error pages, email templates, price charts
+- Dark-first default with FOUC prevention, WCAG AAA contrast ratios verified
+- Fixed PRODUCT_VISION.md (stale indigo references → orange)
+- Updated VENDORS_LIST.md with Phase 11 expansion data (Task 11.11)
+
+### Commits
+- `e6242cc` — feat: core engine hardening + dark-orange visual identity (Phase 13)
+
+### Phase 13 Status: COMPLETE (all 6 tasks DONE)
+
+---
+
+## Session 34 — 2026-04-09 — Phase 12: Live Discovery Feed
+
+### What Was Done
+- Created /api/offers/recent endpoint (30 most recent offers)
+- Built NewOffersFound client component with Framer Motion rolling animation
+- Integrated live feed section into homepage (between Top Deals and Categories)
+
+### Commits
+- `180dda1` — feat: add live "New Offers Found" rolling feed on homepage (Phase 12)
+
+### Phase 12 Status: 3/6 tasks DONE. Remaining: 12.4 (API research), 12.5 (affiliate apps), 12.6 (deploy)
+
+---
+
+## Session 33 — 2026-04-08 — Phase 11: Data Pipeline Scale-Up
+
+### What Was Done
+- BuySellVouchers V2: 48 products, 7 currencies, pagination, 1% fee fix
+- Eneba: expanded 15→37 products, re-enabled in orchestrator
+- Kinguin: expanded 17→41 products, re-enabled in orchestrator
+- Bitrefill: expanded 12→32 products (gaming + EU/UK)
+- Dundle: expanded 11→28 products (gaming + EU/UK)
+- Raise: expanded 12→19 products (gaming + retail)
+- Added 4 new brands: Fortnite, PUBG, Free Fire, Riot Access
+
+### Commits
+- `64c2a0a` — feat: data pipeline scale-up — expand all adapters, re-enable Eneba + Kinguin (Phase 11)
+
+### Phase 11 Status: 8/11 tasks DONE. Remaining: 11.9 (API research), 11.10 (deploy), 11.11 (vendors list — done in Session 35)
+
+---
+
+## Session 32 — 2026-04-08 — Phases 9 & 10: i18n + Dark-First Theme
+
+### What Was Done
+- **Phase 9**: Complete i18n for all pages (en + de), PWA icons (192px, 512px), OG image fix
+- **Phase 10**: Dark-first theme redesign — deep navy-indigo surfaces, warm cream light mode, ThemeProvider dark default, FOUC script, typography refinements
+- Deployed both phases to VPS
+
+### Commits
+- `e521857` — feat: complete i18n for all pages + add PWA icons (Phase 9)
+- `7a89b04` — feat: dark-first theme redesign — warm cream light mode, deep navy dark mode (Phase 10)
+- `ea9f939` — docs: mark deploy tasks 9.12 + 10.8 DONE — Phase 9 & 10 fully complete
+
+### Phase 9 Status: COMPLETE (all 12 tasks DONE)
+### Phase 10 Status: COMPLETE (all 8 tasks DONE)
+
+---
+
+## Session 31 — 2026-04-08 — Phase 8: Data Pipeline Reliability
+
+### What Was Done
+- Fixed Raise adapter sourceSlug mismatch (gcx → raise)
+- Added Uber brand to seed + production DB
+- Added /api/health endpoint
+- Disabled 6 broken adapters (CDKeys, Eneba, G2A, Kinguin, OffGamers, GiftCardGranny) with root cause documentation
+- Fixed vitest JSX transform for component tests
+- Added pipeline health dashboard (/api/admin/ingest-health)
+- Enabled catalog source entries in DB
+- Configured cron ingestion (every 2h)
+
+### Commits
+- `3f3bdfb` — feat: add production seed data for sources and brands
+- `1021408` — fix: align Raise adapter sourceSlug with DB + add Uber brand
+- `de64be0` — feat: add /api/health endpoint + define Phase 8 in production plan
+- `00f9c30` — fix: disable 5 broken adapters, update plan with root causes
+- `91c7c48` — feat: add pipeline health dashboard + enable catalog adapters (Tasks 8.11, 8.12)
+
+### Phase 8 Status: COMPLETE (10/14 tasks DONE, 4 BLOCKED on API access)
+
+---
+
 ## Session 30 — 2026-04-08 — Phase 7 Revenue & Growth: test fixes, AdSense, social sharing, perf, newsletter
 
 ### What Was Done

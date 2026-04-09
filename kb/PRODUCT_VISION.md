@@ -15,12 +15,12 @@ The closest analog in feel: a Bloomberg terminal crossed with Wirecutter — rig
 ## Visual Direction
 
 ### Colors
-- **Primary:** Deep indigo (brand-600 #4f46e5) — trust, intelligence, premium
+- **Primary:** Warm orange (brand-500 #c15f3c, hover #d97757, light #e8956e) — energy, warmth, action
 - **Deal/savings:** Emerald green (deal-500 #10b981) — money, value, go
 - **Alert/premium:** Amber (alert-500 #f59e0b) — attention, premium, urgency
 - **Trust zones:** Green (#22c55e), Yellow (#eab308), Red (#ef4444) — traffic-light UX
-- **Dark mode (default):** Deep navy-indigo surface scale (#0B0F1A → #F8F9FB)
-- **Light mode:** Warm cream paper — no harsh #ffffff (#F5F3EE → #0D0B08)
+- **Dark mode (default):** Deep warm black surface scale (#0a0908 → #e8e6e3) — WCAG AAA contrast
+- **Light mode:** Warm cream paper — no harsh #ffffff (#F5F3EE → #1A1814)
 - **Cards:** Surface-100 with subtle borders, elevated on hover — never harsh white
 
 ### Typography

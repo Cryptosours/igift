@@ -1,7 +1,7 @@
 # iGift — Vendors List (Data Sources)
 
 > Complete inventory of all sources iGift indexes, scrapes, or pulls deal data from.
-> Last updated: 2026-04-08
+> Last updated: 2026-04-09
 
 ---
 
@@ -9,15 +9,17 @@
 
 These sources have working adapters and are actively fetched during each ingestion cycle (every 2 hours via cron).
 
-| # | Vendor | URL | Trust Zone | Type | Method | Categories | Adapter File |
-|---|--------|-----|------------|------|--------|------------|--------------|
-| 1 | **Bitrefill** | bitrefill.com | Yellow | Crypto Store | API/Public Pages | Gaming, streaming, retail, telecom | `adapters/bitrefill.ts` |
-| 2 | **Dundle** | dundle.com | Green | Authorized Reseller | Public Pages | Gaming, streaming, apps, retail | `adapters/dundle.ts` |
-| 3 | **Raise (GCX)** | gcx.raise.com | Yellow | Marketplace | Public Pages | Retail, dining, entertainment | `adapters/raise.ts` |
-| 4 | **Gameflip** | gameflip.com | Yellow | Marketplace | Public Pages | Gaming (Steam, Xbox, PSN, Nintendo) | `adapters/gameflip.ts` |
-| 5 | **BuySellVouchers** | buysellvouchers.com | Yellow | P2P Marketplace | Public Pages | Gaming, streaming, retail, apps | `adapters/buysellvouchers.ts` |
+| # | Vendor | URL | Trust Zone | Type | Products Tracked | Method | Adapter File |
+|---|--------|-----|------------|------|-----------------|--------|--------------|
+| 1 | **Bitrefill** | bitrefill.com | Yellow | Crypto Store | 32 | API/Public Pages | `adapters/bitrefill.ts` |
+| 2 | **Dundle** | dundle.com | Green | Authorized Reseller | 28 | Public Pages | `adapters/dundle.ts` |
+| 3 | **Raise (GCX)** | gcx.raise.com | Yellow | Marketplace | 19 | Public Pages | `adapters/raise.ts` |
+| 4 | **Gameflip** | gameflip.com | Yellow | Marketplace | 11 | Public Pages | `adapters/gameflip.ts` |
+| 5 | **BuySellVouchers** | buysellvouchers.com | Yellow | P2P Marketplace | 48 | API/Public Pages | `adapters/buysellvouchers.ts` |
+| 6 | **Eneba** | eneba.com | Yellow | Marketplace | 37 | Public Pages | `adapters/eneba.ts` |
+| 7 | **Kinguin** | kinguin.net | Yellow | Marketplace | 41 | Public Pages | `adapters/kinguin.ts` |
 
-**Last live ingest**: 202 offers upserted from 4 working sources, 22 deal clusters detected.
+**Total active products tracked: 216**
 
 ---
 
@@ -25,14 +27,12 @@ These sources have working adapters and are actively fetched during each ingesti
 
 These adapters are built but disabled due to anti-bot protection or site changes. Each needs affiliate/API partnership to reactivate.
 
-| # | Vendor | URL | Trust Zone | Block Reason | Path to Fix |
-|---|--------|-----|------------|-------------|-------------|
-| 6 | **CDKeys** (now Loaded.com) | cdkeys.com / loaded.com | Green | Rebranded to Loaded.com. 403 behind Cloudflare | Affiliate API partnership |
-| 7 | **Eneba** | eneba.com | Yellow | SPA — prices loaded client-side only | Affiliate API (affiliate.eneba.com) |
-| 8 | **G2A** | g2a.com | Yellow | 177s timeout, all fetches fail (anti-bot) | G2A Goldmine affiliate API |
-| 9 | **Kinguin** | kinguin.net | Yellow | All product fetches failing (anti-bot) | Kinguin affiliate API |
-| 10 | **OffGamers** | offgamers.com | Yellow | All product fetches fail (anti-bot) | OffGamers affiliate program |
-| 11 | **Gift Card Granny** | giftcardgranny.com | Green | All pages 403 (aggressive anti-bot) | Partner/affiliate API |
+| # | Vendor | URL | Trust Zone | Products Built | Block Reason | Path to Fix |
+|---|--------|-----|------------|---------------|-------------|-------------|
+| 8 | **CDKeys** (now Loaded.com) | cdkeys.com / loaded.com | Green | 24 | Rebranded to Loaded.com. 403 behind Cloudflare | Affiliate API partnership |
+| 9 | **G2A** | g2a.com | Yellow | 15 | 177s timeout, all fetches fail (anti-bot) | G2A Goldmine affiliate API |
+| 10 | **OffGamers** | offgamers.com | Yellow | 17 | All product fetches fail (anti-bot) | OffGamers affiliate program |
+| 11 | **Gift Card Granny** | giftcardgranny.com | Green | 13 | All pages 403 (aggressive anti-bot) | Partner/affiliate API |
 
 ---
 
@@ -56,24 +56,39 @@ These sources have catalog adapters with manually curated deal data. They are bu
 
 ## Summary
 
-| Category | Count | Status |
-|----------|-------|--------|
-| Active (live pipeline) | 5 | Fetching every 2h |
-| Blocked (need API) | 6 | Adapters built, disabled |
-| Catalog (manual) | 9 | Data curated, awaiting DB wiring |
-| **Total vendors** | **20** | |
+| Category | Count | Products | Status |
+|----------|-------|----------|--------|
+| Active (live pipeline) | 7 | 216 | Fetching every 2h |
+| Blocked (need API) | 4 | 69 | Adapters built, disabled |
+| Catalog (manual) | 9 | — | Data curated, awaiting DB wiring |
+| **Total vendors** | **20** | **285+** | |
 
 ## Trust Zone Distribution
 
 | Zone | Count | Description |
 |------|-------|-------------|
-| Green (Verified) | 12 | Authorized retailers, official stores |
-| Yellow (Marketplace) | 8 | Reputable secondary markets with buyer protection |
+| Green (Verified) | 10 | Authorized retailers, official stores |
+| Yellow (Marketplace) | 10 | Reputable secondary markets with buyer protection |
 | Red (Excluded) | 0 | None indexed — per policy |
 
 ## Brands Covered
 
-22 brands seeded in production DB: Amazon, Apple, Disney+, eBay, Google Play, Netflix, Nintendo, PlayStation, Spotify, Steam, Uber, Xbox, and more across gaming, streaming, retail, food/delivery, and app store categories.
+26 brands seeded in production DB: Amazon, Apple, Disney+, eBay, Fortnite, Free Fire, Google Play, Netflix, Nintendo, PlayStation, PUBG, Riot Access, Spotify, Steam, Uber, Xbox, and more across gaming, streaming, retail, food/delivery, and app store categories.
+
+## Phase 11 Expansion (2026-04-08)
+
+Major adapter scale-up:
+- BuySellVouchers V2: 48 products, 7 currencies, pagination, 1% fee correction
+- Eneba: expanded from 15 → 37 products, re-enabled in orchestrator
+- Kinguin: expanded from 17 → 41 products, re-enabled in orchestrator
+- Bitrefill: expanded from 12 → 32 products (added gaming + EU/UK)
+- Dundle: expanded from 11 → 28 products (added gaming + EU/UK)
+- Raise: expanded from 12 → 19 products (added gaming + retail)
+- 4 new brands added: Fortnite, PUBG, Free Fire, Riot Access
+
+## Phase 13 Pricing Integrity (2026-04-09)
+
+All offers now pass through overpriced filtering at both ingestion and query time. Offers where effectivePrice > faceValue (after FX conversion) are never shown. "iGift, the real discount."
 
 ---
 
