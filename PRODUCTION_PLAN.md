@@ -285,6 +285,8 @@
 |---|------|--------|------------|----------|
 | 14.1 | G2A Goldmine affiliate signup | DONE | Human | High |
 | 14.2 | Awin publisher signup (CDKeys #30147 + Kinguin) | IN PROGRESS | Human | Critical |
+| 14.2b | Admitad publisher signup + API integration | DONE | Human + Agent | Critical |
+| 14.2c | Join Kinguin WW (#24298) on Admitad dashboard | TODO | Human | Critical |
 | 14.3 | Eneba affiliate signup | TODO | Human | High |
 | 14.4 | OffGamers affiliate signup | TODO | Human | Medium |
 | 14.5 | Set up Google Analytics (add NEXT_PUBLIC_GA_MEASUREMENT_ID env var) | TODO | Human + Agent | Critical |
