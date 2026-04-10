@@ -21,7 +21,7 @@ const ENDPOINTS = [
       { name: "region", type: "string", description: "ISO country code — e.g. US, GB, CA" },
       { name: "min_score", type: "number", description: "Minimum deal score 0–100" },
       { name: "limit", type: "number", description: "Max results: 1–100 (free) | 1–200 (pro). Default 50" },
-      { name: "cursor", type: "string", description: "Pagination cursor from previous response meta.nextCursor" },
+      { name: "cursor", type: "string", description: "Opaque pagination cursor from previous response meta.nextCursor" },
     ],
   },
   {
@@ -309,7 +309,7 @@ Authorization: Bearer igift_live_<your_key>`}</pre>
     "count": 1,
     "limit": 50,
     "hasMore": true,
-    "nextCursor": 42,
+    "nextCursor": "86:42",
     "tier": "free"
   }
 }`}</pre>

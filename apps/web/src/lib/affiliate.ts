@@ -194,6 +194,7 @@ export interface ClickTarget {
   sourceId: number;
   brandId: number;
   externalUrl: string;
+  sourceUrl: string;
   affiliateNetwork: string | null;
   affiliateProgramId: string | null;
 }
@@ -207,6 +208,7 @@ export async function getClickTarget(offerId: number): Promise<ClickTarget | nul
       sourceId: offers.sourceId,
       brandId: offers.brandId,
       externalUrl: offers.externalUrl,
+      sourceUrl: sources.url,
       status: offers.status,
       affiliateNetwork: sources.affiliateNetwork,
       affiliateProgramId: sources.affiliateProgramId,
@@ -225,6 +227,7 @@ export async function getClickTarget(offerId: number): Promise<ClickTarget | nul
     sourceId: row.sourceId,
     brandId: row.brandId,
     externalUrl: row.externalUrl,
+    sourceUrl: row.sourceUrl,
     affiliateNetwork: row.affiliateNetwork,
     affiliateProgramId: row.affiliateProgramId,
   };

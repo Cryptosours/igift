@@ -27,7 +27,6 @@ export async function GET() {
         brandName: brands.name,
         brandSlug: brands.slug,
         sourceName: sources.name,
-        externalUrl: offers.externalUrl,
       })
       .from(offers)
       .innerJoin(brands, eq(offers.brandId, brands.id))
@@ -53,7 +52,7 @@ export async function GET() {
       source: r.sourceName,
       region: (r.countryRedeemable as string[] | null)?.[0] ?? "Global",
       lastSeenAt: r.lastSeenAt?.toISOString() ?? null,
-      url: r.externalUrl,
+      url: `/api/click/${r.id}`,
     }));
 
     return NextResponse.json(recentOffers, {

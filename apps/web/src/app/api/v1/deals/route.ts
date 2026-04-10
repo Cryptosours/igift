@@ -9,14 +9,14 @@
  *   region     — ISO country code e.g. "US", "GB"  (filter by redeemable countries)
  *   min_score  — 0–100 minimum deal score
  *   limit      — 1–100, default 50 (free), up to 200 (pro)
- *   cursor     — opaque pagination cursor (last offer id from previous page)
+ *   cursor     — opaque pagination cursor (`finalScore:id` from previous page)
  */
 
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { offers, brands } from "@/db/schema";
 import type { Brand } from "@/db/schema";
-import { eq, desc, and, gte, gt, lte } from "drizzle-orm";
+import { eq, desc, and, gte, lte, sql } from "drizzle-orm";
 import { authenticateApiRequest } from "../auth";
 
 export const dynamic = "force-dynamic";
@@ -24,6 +24,25 @@ export const dynamic = "force-dynamic";
 const FREE_LIMIT_MAX = 100;
 const PRO_LIMIT_MAX = 200;
 const DEFAULT_LIMIT = 50;
+
+type DealsCursor = {
+  finalScore: number;
+  id: number;
+};
+
+function parseOpaqueCursor(cursor: string): DealsCursor | null {
+  const [scorePart, idPart] = cursor.split(":");
+  if (!scorePart || !idPart) return null;
+
+  const finalScore = Number.parseFloat(scorePart);
+  const id = Number.parseInt(idPart, 10);
+
+  if (!Number.isFinite(finalScore) || !Number.isInteger(id) || id <= 0) {
+    return null;
+  }
+
+  return { finalScore, id };
+}
 
 export async function GET(request: Request) {
   const auth = await authenticateApiRequest(request);
@@ -35,7 +54,7 @@ export async function GET(request: Request) {
   const trustZone = searchParams.get("trust_zone") ?? undefined;
   const region = searchParams.get("region") ?? undefined;
   const minScore = parseFloat(searchParams.get("min_score") ?? "0");
-  const cursorId = parseInt(searchParams.get("cursor") ?? "0") || 0;
+  const cursorParam = searchParams.get("cursor");
 
   const limitMax = auth.tier === "pro" ? PRO_LIMIT_MAX : FREE_LIMIT_MAX;
   const limit = Math.min(parseInt(searchParams.get("limit") ?? String(DEFAULT_LIMIT)), limitMax);
@@ -44,6 +63,46 @@ export async function GET(request: Request) {
   const effectiveTrustZone = auth.tier === "free" && !trustZone ? "green" : (trustZone ?? undefined);
 
   try {
+    let cursor: DealsCursor | null = null;
+
+    if (cursorParam) {
+      const parsedCursor = parseOpaqueCursor(cursorParam);
+
+      if (parsedCursor) {
+        cursor = parsedCursor;
+      } else {
+        const legacyCursorId = Number.parseInt(cursorParam, 10);
+
+        if (!Number.isInteger(legacyCursorId) || legacyCursorId <= 0) {
+          return NextResponse.json(
+            { error: "invalid_cursor", message: "Cursor must be an opaque value returned by meta.nextCursor." },
+            { status: 400 },
+          );
+        }
+
+        const [cursorRow] = await db
+          .select({
+            id: offers.id,
+            finalScore: offers.finalScore,
+          })
+          .from(offers)
+          .where(eq(offers.id, legacyCursorId))
+          .limit(1);
+
+        if (!cursorRow || cursorRow.finalScore === null) {
+          return NextResponse.json(
+            { error: "invalid_cursor", message: "Cursor does not reference an existing offer." },
+            { status: 400 },
+          );
+        }
+
+        cursor = {
+          id: cursorRow.id,
+          finalScore: cursorRow.finalScore,
+        };
+      }
+    }
+
     const conditions = [
       eq(offers.status, "active"),
       // Hard rule: never show overpriced offers
@@ -59,8 +118,17 @@ export async function GET(request: Request) {
     if (minScore > 0) {
       conditions.push(gte(offers.finalScore, minScore));
     }
-    if (cursorId > 0) {
-      conditions.push(gt(offers.id, cursorId));
+    if (region) {
+      const regionJson = JSON.stringify([region]);
+      const globalJson = JSON.stringify(["Global"]);
+      conditions.push(
+        sql`(${offers.countryRedeemable} @> ${regionJson}::jsonb OR ${offers.countryRedeemable} @> ${globalJson}::jsonb)`,
+      );
+    }
+    if (cursor) {
+      conditions.push(
+        sql`(${offers.finalScore} < ${cursor.finalScore} OR (${offers.finalScore} = ${cursor.finalScore} AND ${offers.id} < ${cursor.id}))`,
+      );
     }
 
     const rows = await db
@@ -91,16 +159,15 @@ export async function GET(request: Request) {
 
     const hasMore = rows.length > limit;
     const data = rows.slice(0, limit);
-
-    // Filter by region in app layer (JSONB)
     const filtered = region
       ? data.filter((r) => {
           const countries = r.regionsRedeemable as string[] | null;
           return countries?.includes(region) || countries?.includes("Global");
         })
       : data;
-
-    const nextCursor = hasMore && data.length > 0 ? data[data.length - 1].id : null;
+    const nextCursor = hasMore && data.length > 0
+      ? `${data[data.length - 1].finalScore}:${data[data.length - 1].id}`
+      : null;
 
     return NextResponse.json({
       data: filtered,

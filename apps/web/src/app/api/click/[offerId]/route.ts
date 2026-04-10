@@ -16,6 +16,20 @@ function isRateLimited(ip: string): boolean {
   return entry.count > 30;
 }
 
+function isAllowedExternalUrl(candidate: string, sourceUrl: string): boolean {
+  try {
+    const candidateUrl = new URL(candidate);
+    const source = new URL(sourceUrl);
+    if (!["http:", "https:"].includes(candidateUrl.protocol)) return false;
+    return (
+      candidateUrl.hostname === source.hostname ||
+      candidateUrl.hostname.endsWith(`.${source.hostname}`)
+    );
+  } catch {
+    return false;
+  }
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ offerId: string }> },
@@ -42,6 +56,16 @@ export async function GET(
 
   if (!target) {
     // Offer not found / suppressed — redirect to home rather than 404
+    return NextResponse.redirect(new URL("/deals", request.url), 302);
+  }
+
+  if (!isAllowedExternalUrl(target.externalUrl, target.sourceUrl)) {
+    console.error("[click] Rejected redirect with unexpected host", {
+      offerId: target.offerId,
+      sourceId: target.sourceId,
+      externalUrl: target.externalUrl,
+      sourceUrl: target.sourceUrl,
+    });
     return NextResponse.redirect(new URL("/deals", request.url), 302);
   }
 

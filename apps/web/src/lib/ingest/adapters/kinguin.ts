@@ -18,6 +18,19 @@ interface TrackedProduct {
   url: string;
 }
 
+function countriesForCurrency(currency: string): string[] {
+  switch (currency.toUpperCase()) {
+    case "EUR":
+      return ["EU"];
+    case "GBP":
+      return ["UK"];
+    case "AUD":
+      return ["AU"];
+    default:
+      return ["US"];
+  }
+}
+
 const TRACKED_PRODUCTS: TrackedProduct[] = [
   // Steam (USD)
   { slug: "steam-5", brandSlug: "steam", faceValueCents: 500, currency: "USD", url: "https://www.kinguin.net/category/164/steam-5-usd-gift-card" },
@@ -161,7 +174,7 @@ function buildOffer(
     feeTotalCents: 0,
     currency: product.currency,
     denomination: `${product.currency} ${(product.faceValueCents / 100).toFixed(0)}`,
-    countryRedeemable: ["US"],
+    countryRedeemable: countriesForCurrency(product.currency),
     sellerName: null,
     // Kinguin yellow zone — seller mix varies, platform has own protection program
     sellerRating: 0.74,

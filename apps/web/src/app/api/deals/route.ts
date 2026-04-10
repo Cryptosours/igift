@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { offers, brands, sources } from "@/db/schema";
-import { eq, desc, and, lte } from "drizzle-orm";
+import { eq, desc, and, lte, sql } from "drizzle-orm";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
@@ -23,6 +23,13 @@ export async function GET(request: NextRequest) {
     ];
     if (trustZone === "green") {
       conditions.push(eq(offers.trustZone, "green"));
+    }
+    if (region) {
+      const regionJson = JSON.stringify([region]);
+      const globalJson = JSON.stringify(["Global"]);
+      conditions.push(
+        sql`(${offers.countryRedeemable} @> ${regionJson}::jsonb OR ${offers.countryRedeemable} @> ${globalJson}::jsonb)`,
+      );
     }
 
     const results = await db
@@ -55,7 +62,6 @@ export async function GET(request: NextRequest) {
       .orderBy(desc(offers.finalScore))
       .limit(limit);
 
-    // Filter by region in application layer (JSONB contains)
     const filtered = region
       ? results.filter((r) => {
           const countries = r.countryRedeemable as string[] | null;

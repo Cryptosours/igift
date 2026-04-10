@@ -44,6 +44,7 @@ function renderEmailHtml(match: AlertMatch): string {
   const discountPct = (o.effectiveDiscountPct * 100).toFixed(1);
   const faceValue = formatCents(o.faceValueCents, o.currency);
   const effectivePrice = formatCents(o.effectivePriceCents, o.currency);
+  const clickUrl = `${SITE_URL}/api/click/${o.id}`;
   const trustColor = o.trustZone === "green" ? "#22c55e" : "#eab308";
   const trustLabel = o.trustZone === "green" ? "Verified Source" : "Marketplace";
 
@@ -83,7 +84,7 @@ function renderEmailHtml(match: AlertMatch): string {
         </div>
       </div>
 
-      <a href="${o.externalUrl}" rel="noopener noreferrer nofollow" style="display:block;text-align:center;background:#c15f3c;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">
+      <a href="${clickUrl}" rel="noopener noreferrer nofollow" style="display:block;text-align:center;background:#c15f3c;color:#fff;padding:12px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">
         View Deal &rarr;
       </a>
     </div>
@@ -103,6 +104,7 @@ function renderEmailText(match: AlertMatch): string {
   const discountPct = (o.effectiveDiscountPct * 100).toFixed(1);
   const faceValue = formatCents(o.faceValueCents, o.currency);
   const effectivePrice = formatCents(o.effectivePriceCents, o.currency);
+  const clickUrl = `${SITE_URL}/api/click/${o.id}`;
 
   return [
     `iGift Deal Alert`,
@@ -112,7 +114,7 @@ function renderEmailText(match: AlertMatch): string {
     `Your Price: ${effectivePrice} (${discountPct}% off)`,
     `Source: ${o.sourceName} (${o.trustZone} zone)`,
     ``,
-    `View deal: ${o.externalUrl}`,
+    `View deal: ${clickUrl}`,
     ``,
     `---`,
     `Manage alerts: ${SITE_URL}/alerts`,
