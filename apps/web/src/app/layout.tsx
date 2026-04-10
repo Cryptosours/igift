@@ -1,5 +1,6 @@
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { getLocale } from "next-intl/server";
+import Script from "next/script";
 import "./globals.css";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
@@ -40,14 +41,6 @@ export default async function RootLayout({
             __html: `(function(){try{var t=localStorage.getItem("igift-theme");if(t==="light"||(t==="system"&&!matchMedia("(prefers-color-scheme:dark)").matches)){return}document.documentElement.classList.add("dark")}catch(e){document.documentElement.classList.add("dark")}})()`,
           }}
         />
-        {/* Google Analytics — SSR script tags so Google's crawler can find and verify them.
-            Both async: gtag.js processes the dataLayer queue regardless of load order. */}
-        {GA_ID && (
-          <>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
-            <script async src="/ga-init.js" />
-          </>
-        )}
       </head>
       <body className="min-h-screen flex flex-col bg-surface-0 text-surface-900 font-sans">
         <a
@@ -57,6 +50,18 @@ export default async function RootLayout({
           Skip to main content
         </a>
         {children}
+        {/* Google Analytics — beforeInteractive injects into SSR HTML head.
+            External src-only scripts: no dangerouslySetInnerHTML needed.
+            ga-init.js contains: dataLayer init + gtag function + config call. */}
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="beforeInteractive"
+            />
+            <Script src="/ga-init.js" strategy="beforeInteractive" />
+          </>
+        )}
       </body>
     </html>
   );
