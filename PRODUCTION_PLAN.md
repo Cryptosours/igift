@@ -292,11 +292,11 @@
 | 14.5 | Set up Google Analytics (add NEXT_PUBLIC_GA_MEASUREMENT_ID env var) | TODO | Human + Agent | Critical |
 | 14.6 | Apply for Google AdSense | TODO | Human | High |
 | 14.7 | Set up Google Search Console + submit sitemap | TODO | Human | Critical |
-| 14.8 | Set up Resend for email delivery (centralized mailing service) | TODO | Agent | High |
-| 14.9 | Build price alert email templates (React Email) | TODO | Agent | High |
+| 14.8 | Set up Resend for email delivery (centralized mailing service) | DONE | Agent | High |
+| 14.9 | Build price alert email templates (React Email) | DONE | Agent | High |
 | 14.10 | Wire affiliate links into deal cards (once approved) | TODO | Agent | High |
-| 14.11 | Add GA4 custom events (deal_click, alert_signup, brand_view) | TODO | Agent | Medium |
-| 14.12 | Weekly deal digest newsletter template | TODO | Agent | Medium |
+| 14.11 | Add GA4 custom events (deal_click, alert_signup, brand_view) | DONE | Agent | Medium |
+| 14.12 | Weekly deal digest newsletter template | DONE | Agent | Medium |
 
 ---
 

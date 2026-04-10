@@ -1,6 +1,6 @@
 import { createHash } from "crypto";
 import { db } from "@/db";
-import { affiliateClicks, offers, sources } from "@/db/schema";
+import { affiliateClicks, brands, offers, sources } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
 
 // ── Affiliate URL Builder ──
@@ -193,6 +193,8 @@ export interface ClickTarget {
   offerId: number;
   sourceId: number;
   brandId: number;
+  brandSlug: string | null;
+  effectiveDiscountPct: number | null;
   externalUrl: string;
   sourceUrl: string;
   affiliateNetwork: string | null;
@@ -207,6 +209,8 @@ export async function getClickTarget(offerId: number): Promise<ClickTarget | nul
       offerId: offers.id,
       sourceId: offers.sourceId,
       brandId: offers.brandId,
+      brandSlug: brands.slug,
+      effectiveDiscountPct: offers.effectiveDiscountPct,
       externalUrl: offers.externalUrl,
       sourceUrl: sources.url,
       status: offers.status,
@@ -215,6 +219,7 @@ export async function getClickTarget(offerId: number): Promise<ClickTarget | nul
     })
     .from(offers)
     .innerJoin(sources, eq(offers.sourceId, sources.id))
+    .leftJoin(brands, eq(offers.brandId, brands.id))
     .where(eq(offers.id, offerId))
     .limit(1);
 
@@ -226,6 +231,8 @@ export async function getClickTarget(offerId: number): Promise<ClickTarget | nul
     offerId: row.offerId,
     sourceId: row.sourceId,
     brandId: row.brandId,
+    brandSlug: row.brandSlug ?? null,
+    effectiveDiscountPct: row.effectiveDiscountPct ?? null,
     externalUrl: row.externalUrl,
     sourceUrl: row.sourceUrl,
     affiliateNetwork: row.affiliateNetwork,

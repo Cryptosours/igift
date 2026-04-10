@@ -386,6 +386,13 @@ export async function runIngestion(options?: {
       try {
         const normalized = normalizeOffer(rawOffer, undefined, fxRates);
 
+        // normalizeOffer returns null when currency is unsupported — skip silently
+        if (!normalized) {
+          warnings.push(`Unsupported currency for '${rawOffer.originalTitle}' — skipping`);
+          skippedCount++;
+          continue;
+        }
+
         // Resolve brand
         if (!normalized.brandSlug) {
           warnings.push(`Unknown brand: '${rawOffer.rawBrandName}' — skipping`);

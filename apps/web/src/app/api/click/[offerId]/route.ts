@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildAffiliateUrl, getClickTarget, logClick } from "@/lib/affiliate";
+import { trackServerDealClick } from "@/lib/analytics";
 
 // Rate limiting: max 30 click-throughs per IP per minute (simple in-memory, resets on restart)
 // For production scale, use Redis or Upstash. This covers the MVP case.
@@ -76,6 +77,14 @@ export async function GET(
     target.affiliateProgramId,
     target.offerId,
   );
+
+  // Fire GA4 deal_click event server-side (fire-and-forget)
+  trackServerDealClick({
+    offerId: target.offerId,
+    brandSlug: target.brandSlug ?? "unknown",
+    discountPct: target.effectiveDiscountPct ?? 0,
+    clientId: request.headers.get("x-ga-client-id") ?? undefined,
+  });
 
   // Log click fire-and-forget (never blocks redirect)
   logClick({

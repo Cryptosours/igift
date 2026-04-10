@@ -11,6 +11,7 @@ import { LazyPriceChart } from "@/components/analytics/lazy-price-chart";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/fade-in";
+import { BrandViewTracker } from "@/components/analytics/brand-view-tracker";
 
 export const dynamic = "force-dynamic";
 
@@ -89,6 +90,7 @@ export default async function BrandDetailPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <BrandViewTracker brandSlug={slug} brandName={brand.name} />
       <Link
         href="/brands"
         className="inline-flex items-center gap-1 text-sm text-surface-500 hover:text-brand-600"

@@ -14,6 +14,7 @@ import { db } from "@/db";
 import { userAlerts, brands } from "@/db/schema";
 import { eq, and, sql } from "drizzle-orm";
 import { rateLimit } from "@/lib/rate-limit";
+import { trackServerEvent } from "@/lib/analytics";
 
 export const dynamic = "force-dynamic";
 
@@ -139,6 +140,17 @@ export async function POST(request: NextRequest) {
       deliveryChannel: channel,
     })
     .returning({ id: userAlerts.id, createdAt: userAlerts.createdAt });
+
+  // Track alert signup (fire-and-forget — never blocks response)
+  trackServerEvent({
+    name: "alert_signup",
+    params: {
+      brand_id: brandId ?? 0,
+      delivery_channel: channel,
+      target_discount: targetDiscountPct ?? 0,
+      region: region ?? "any",
+    },
+  });
 
   return NextResponse.json({
     success: true,
