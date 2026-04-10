@@ -2,6 +2,8 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import "./globals.css";
 
+const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -32,14 +34,20 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Static inline script — hardcoded string, no user input, prevents theme FOUC.
-            Dark-first: .dark is the default. Only remove if user explicitly chose "light"
-            or explicitly chose "system" and OS prefers light. No stored value = dark. */}
+        {/* Theme FOUC prevention — static inline, no user input */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem("igift-theme");if(t==="light"||(t==="system"&&!matchMedia("(prefers-color-scheme:dark)").matches)){return}document.documentElement.classList.add("dark")}catch(e){document.documentElement.classList.add("dark")}})()`,
           }}
         />
+        {/* Google Analytics — SSR script tags so Google's crawler can find and verify them.
+            Both async: gtag.js processes the dataLayer queue regardless of load order. */}
+        {GA_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+            <script async src="/ga-init.js" />
+          </>
+        )}
       </head>
       <body className="min-h-screen flex flex-col bg-surface-0 text-surface-900 font-sans">
         <a

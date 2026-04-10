@@ -7,7 +7,6 @@ import { Footer } from "@/components/layout/footer";
 import { MotionProvider } from "@/components/layout/motion-provider";
 import { PageTransition } from "@/components/layout/page-transition";
 import { ThemeProvider } from "@/components/layout/theme-provider";
-import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { AdSenseScript } from "@/components/ads/adsense";
 import dynamic from "next/dynamic";
 
@@ -96,7 +95,6 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           </main>
           <Footer />
           <CookieBanner />
-          <GoogleAnalytics />
           <AdSenseScript />
         </MotionProvider>
       </ThemeProvider>
