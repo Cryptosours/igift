@@ -10,6 +10,7 @@ import { MotionProvider } from "@/components/layout/motion-provider";
 import { PageTransition } from "@/components/layout/page-transition";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { AdSenseScript } from "@/components/ads/adsense";
+import { ConsentSync } from "@/components/analytics/consent-sync";
 
 /**
  * CookieBanner deferred via dynamic() - splits its JS into a separate chunk
@@ -94,6 +95,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
             <PageTransition>{children}</PageTransition>
           </main>
           <Footer />
+          <ConsentSync />
           <CookieBanner />
           <AdSenseScript />
         </MotionProvider>

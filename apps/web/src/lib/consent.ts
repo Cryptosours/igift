@@ -101,3 +101,21 @@ export function rejectAll(): void {
 export function hasConsentChoice(): boolean {
   return getConsent() !== null;
 }
+
+/**
+ * Update Google Consent Mode v2 to match current preferences.
+ * Safe to call server-side (no-ops if window/gtag not available).
+ * Call this after any consent change AND on page load for returning users.
+ */
+export function syncGAConsent(prefs: Pick<ConsentPreferences, "analytics" | "marketing">): void {
+  if (typeof window === "undefined") return;
+  const g = (window as Window & { gtag?: (...args: unknown[]) => void }).gtag;
+  if (typeof g !== "function") return;
+
+  g("consent", "update", {
+    analytics_storage: prefs.analytics ? "granted" : "denied",
+    ad_storage: prefs.marketing ? "granted" : "denied",
+    ad_user_data: prefs.marketing ? "granted" : "denied",
+    ad_personalization: prefs.marketing ? "granted" : "denied",
+  });
+}

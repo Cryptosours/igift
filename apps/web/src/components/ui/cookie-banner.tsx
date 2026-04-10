@@ -9,6 +9,7 @@ import {
   acceptAll,
   rejectAll,
   setConsent,
+  syncGAConsent,
 } from "@/lib/consent";
 
 export function CookieBanner() {
@@ -28,16 +29,19 @@ export function CookieBanner() {
 
   const handleAcceptAll = useCallback(() => {
     acceptAll();
+    syncGAConsent({ analytics: true, marketing: true });
     setVisible(false);
   }, []);
 
   const handleRejectAll = useCallback(() => {
     rejectAll();
+    syncGAConsent({ analytics: false, marketing: false });
     setVisible(false);
   }, []);
 
   const handleSavePrefs = useCallback(() => {
     setConsent({ analytics: prefs.analytics, marketing: prefs.marketing });
+    syncGAConsent({ analytics: prefs.analytics, marketing: prefs.marketing });
     setVisible(false);
   }, [prefs]);
 
