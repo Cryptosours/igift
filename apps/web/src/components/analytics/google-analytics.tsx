@@ -1,42 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Script from "next/script";
-import { hasConsent } from "@/lib/consent";
 
 /**
  * Google Analytics (gtag.js)
  *
- * Consent-aware: only loads if analytics consent has been granted.
- * Listens for consent-updated events to activate after the banner.
- *
+ * Loads the standard Google Tag on every page view.
  * Set NEXT_PUBLIC_GA_MEASUREMENT_ID in .env to enable.
  */
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 export function GoogleAnalytics() {
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    // Check consent on mount
-    if (GA_ID && hasConsent("analytics")) {
-      setEnabled(true);
-    }
-
-    // Listen for consent changes
-    const handler = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      if (GA_ID && detail?.analytics) {
-        setEnabled(true);
-      }
-    };
-
-    window.addEventListener("consent-updated", handler);
-    return () => window.removeEventListener("consent-updated", handler);
-  }, []);
-
-  if (!enabled || !GA_ID) return null;
+  if (!GA_ID) return null;
 
   return (
     <>
@@ -53,11 +29,7 @@ export function GoogleAnalytics() {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${GA_ID}', {
-              page_path: window.location.pathname,
-              anonymize_ip: true,
-              cookie_flags: 'SameSite=Lax;Secure',
-            });
+            gtag('config', '${GA_ID}');
           `,
         }}
       />
