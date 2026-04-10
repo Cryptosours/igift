@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import dynamic from "next/dynamic";
 import { routing } from "@/i18n/routing";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -8,17 +10,15 @@ import { MotionProvider } from "@/components/layout/motion-provider";
 import { PageTransition } from "@/components/layout/page-transition";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { AdSenseScript } from "@/components/ads/adsense";
-import dynamic from "next/dynamic";
 
 /**
- * CookieBanner deferred via dynamic() — splits its JS into a separate chunk
+ * CookieBanner deferred via dynamic() - splits its JS into a separate chunk
  * instead of bundling it into the shared layout JS. It still SSR-renders
  * (required in Server Components) but loads asynchronously.
  */
 const CookieBanner = dynamic(
   () => import("@/components/ui/cookie-banner").then((m) => m.CookieBanner),
 );
-import type { Metadata } from "next";
 
 interface LocaleLayoutProps {
   children: React.ReactNode;
