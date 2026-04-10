@@ -1,12 +1,15 @@
 /**
  * POST /api/alerts — Create a new price alert subscription
- * GET  /api/alerts — List alerts for an email (query param: ?email=)
- * DELETE /api/alerts?id=123 — Deactivate an alert
+ * GET  /api/alerts?token=<managementToken> — List alerts for the token owner
+ * DELETE /api/alerts?token=<managementToken>&id=<id> — Deactivate an alert
  *
- * No auth required (public, email-based). Rate limiting via Cloudflare.
+ * Management token is returned in the POST response and must be supplied for
+ * all read/delete operations. This prevents email enumeration and arbitrary
+ * alert deactivation by unrelated parties.
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import { randomBytes } from "crypto";
 import { db } from "@/db";
 import { userAlerts, brands } from "@/db/schema";
 import { eq, and, sql } from "drizzle-orm";
@@ -121,11 +124,15 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Generate a management token — the caller must store this to manage the alert later.
+  const managementToken = randomBytes(24).toString("hex");
+
   // Create alert
   const [alert] = await db
     .insert(userAlerts)
     .values({
       email,
+      managementToken,
       brandId,
       targetDiscountPct,
       region,
@@ -137,6 +144,7 @@ export async function POST(request: NextRequest) {
     success: true,
     alert: {
       id: alert.id,
+      managementToken,
       email,
       brandId,
       targetDiscountPct,
@@ -144,25 +152,38 @@ export async function POST(request: NextRequest) {
       channel,
       createdAt: alert.createdAt.toISOString(),
     },
+    _note: "Store managementToken — required to list or delete this alert.",
   }, { status: 201 });
 }
 
-/** GET — List alerts for an email */
+/** GET — List alerts for the management-token owner */
 export async function GET(request: NextRequest) {
   const limited = rateLimit(request, { limit: 30, windowMs: 60_000, route: "alerts" });
   if (limited) return limited;
 
   const { searchParams } = new URL(request.url);
-  const email = searchParams.get("email")?.trim().toLowerCase();
+  const token = searchParams.get("token")?.trim();
 
-  if (!email || !EMAIL_RE.test(email)) {
-    return NextResponse.json({ error: "Valid ?email= query parameter is required" }, { status: 400 });
+  if (!token) {
+    return NextResponse.json({ error: "?token= management token is required" }, { status: 400 });
+  }
+
+  // Look up alerts belonging to this token.
+  // A single token belongs to exactly one alert, but we return all alerts
+  // for the associated email so the user can see their full list.
+  const [ownerRow] = await db
+    .select({ email: userAlerts.email })
+    .from(userAlerts)
+    .where(eq(userAlerts.managementToken, token))
+    .limit(1);
+
+  if (!ownerRow) {
+    return NextResponse.json({ error: "Invalid token" }, { status: 404 });
   }
 
   const alerts = await db
     .select({
       id: userAlerts.id,
-      email: userAlerts.email,
       brandId: userAlerts.brandId,
       category: userAlerts.category,
       targetDiscountPct: userAlerts.targetDiscountPct,
@@ -173,19 +194,24 @@ export async function GET(request: NextRequest) {
       createdAt: userAlerts.createdAt,
     })
     .from(userAlerts)
-    .where(eq(userAlerts.email, email))
+    .where(eq(userAlerts.email, ownerRow.email))
     .orderBy(userAlerts.createdAt);
 
   return NextResponse.json({ alerts });
 }
 
-/** DELETE — Deactivate an alert */
+/** DELETE — Deactivate an alert (requires management token for ownership proof) */
 export async function DELETE(request: NextRequest) {
   const limited = rateLimit(request, { limit: 10, windowMs: 60_000, route: "alerts" });
   if (limited) return limited;
 
   const { searchParams } = new URL(request.url);
+  const token = searchParams.get("token")?.trim();
   const idStr = searchParams.get("id");
+
+  if (!token) {
+    return NextResponse.json({ error: "?token= management token is required" }, { status: 400 });
+  }
 
   if (!idStr || isNaN(Number(idStr))) {
     return NextResponse.json({ error: "Valid ?id= query parameter is required" }, { status: 400 });
@@ -193,14 +219,16 @@ export async function DELETE(request: NextRequest) {
 
   const id = Number(idStr);
 
+  // Verify the token owns this specific alert before deactivating.
   const result = await db
     .update(userAlerts)
     .set({ isActive: false })
-    .where(eq(userAlerts.id, id))
+    .where(and(eq(userAlerts.id, id), eq(userAlerts.managementToken, token)))
     .returning({ id: userAlerts.id });
 
   if (result.length === 0) {
-    return NextResponse.json({ error: "Alert not found" }, { status: 404 });
+    // Either alert doesn't exist or token doesn't match — return same message to avoid enumeration.
+    return NextResponse.json({ error: "Alert not found or token invalid" }, { status: 404 });
   }
 
   return NextResponse.json({ success: true, deactivated: id });

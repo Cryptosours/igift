@@ -78,7 +78,7 @@ export function computeDealQualityScore(input: ScoringInput): number {
   // RegionFit (0-100)
   let regionFit: number;
   if (input.regionCompatible === true) regionFit = 100;
-  else if (input.regionCompatible === null) regionFit = 40;
+  else if (input.regionCompatible === null) regionFit = 10;
   else regionFit = 0; // incompatible
 
   // SellerTrust (0-100)
@@ -195,8 +195,9 @@ export function scoreOffer(input: ScoringInput): ScoringOutput {
   // Fraud penalty
   if (input.abnormallyDeep) finalScore *= 0.5;
 
-  // Policy penalty for unknown region
-  if (input.regionCompatible === null) finalScore *= 0.85;
+  // Policy penalty for unknown region — strong cap so unverified-region
+  // offers never outrank confirmed-compatible deals.
+  if (input.regionCompatible === null) finalScore *= 0.55;
 
   finalScore = Math.round(clamp(finalScore, 0, 100) * 100) / 100;
 

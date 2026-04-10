@@ -20,15 +20,12 @@ import { db } from "@/db";
 import { offers, brands } from "@/db/schema";
 import { eq, or, sql } from "drizzle-orm";
 import { normalizeOfferTitle, mapCategory } from "@/lib/ingest/title-normalizer";
-
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY;
+import { checkAdminAuth } from "../auth";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-  // Auth check
-  const apiKey = request.headers.get("x-api-key");
-  if (!ADMIN_API_KEY || apiKey !== ADMIN_API_KEY) {
+  if (!checkAdminAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

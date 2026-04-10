@@ -17,7 +17,11 @@ export function safeCompare(a: string, b: string): boolean {
 export function checkAdminAuth(request: Request): boolean {
   if (!ADMIN_KEY) return false; // No key configured — deny all
   const authHeader = request.headers.get("authorization");
-  const token = authHeader?.replace("Bearer ", "");
+  const bearerToken = authHeader?.startsWith("Bearer ")
+    ? authHeader.slice("Bearer ".length).trim()
+    : null;
+  const headerToken = request.headers.get("x-api-key")?.trim() ?? null;
+  const token = bearerToken ?? headerToken;
   if (!token) return false;
   return safeCompare(token, ADMIN_KEY);
 }

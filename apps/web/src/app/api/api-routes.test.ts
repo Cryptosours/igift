@@ -819,6 +819,7 @@ describe("GET /api/click/[offerId]", () => {
       sourceId: 1,
       brandId: 1,
       externalUrl: "https://bitrefill.com/steam",
+      sourceUrl: "https://bitrefill.com",
       affiliateNetwork: "bitrefill",
       affiliateProgramId: "igift123",
     });

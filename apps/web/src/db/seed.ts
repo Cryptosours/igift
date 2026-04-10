@@ -4,7 +4,7 @@ import { sources, brands, offers, priceHistory } from "./schema";
 import { scoreOffer } from "../lib/scoring";
 
 const connectionString =
-  process.env.DATABASE_URL ?? "postgres://igift:igift@localhost:5432/igift";
+  process.env.DATABASE_URL ?? "postgres://igift:igift@localhost:5433/igift";
 
 async function seed() {
   const client = postgres(connectionString, { max: 1 });

@@ -18,6 +18,19 @@ interface TrackedProduct {
   url: string;
 }
 
+function countriesForCurrency(currency: string): string[] {
+  switch (currency.toUpperCase()) {
+    case "EUR":
+      return ["EU"];
+    case "GBP":
+      return ["UK"];
+    case "AUD":
+      return ["AU"];
+    default:
+      return ["US"];
+  }
+}
+
 const TRACKED_PRODUCTS: TrackedProduct[] = [
   // Steam (USD)
   { slug: "steam-5", brandSlug: "steam", faceValueCents: 500, currency: "USD", url: "https://www.eneba.com/us/steam-steam-5-usd-gift-card-united-states" },
@@ -170,7 +183,7 @@ function buildOffer(
     feeTotalCents: 0,
     currency: product.currency,
     denomination: `${product.currency} ${(product.faceValueCents / 100).toFixed(0)}`,
-    countryRedeemable: ["US"],
+    countryRedeemable: countriesForCurrency(product.currency),
     sellerName: null,
     sellerRating: 0.82,
     hasBuyerProtection: true,

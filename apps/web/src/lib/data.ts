@@ -1,7 +1,8 @@
 import { db } from "@/db";
 import { offers, brands, sources, watchlistItems, sponsoredPlacements, priceHistory } from "@/db/schema";
-import { eq, desc, and, or, ilike, count, avg, sql, lte, gte, min, max } from "drizzle-orm";
+import { eq, desc, and, or, ilike, count, avg, sql, lte, gte, min, max, inArray } from "drizzle-orm";
 import type { DealCardProps } from "@/components/deals/deal-card";
+import type { Brand } from "@/db/schema";
 
 // ── Helpers ──
 
@@ -19,6 +20,13 @@ function timeAgo(date: Date | null): string {
 
 function centsToDollars(cents: number): number {
   return cents / 100;
+}
+
+function buildRegionCondition(region: string) {
+  const regionJson = JSON.stringify([region]);
+  const globalJson = JSON.stringify(["Global"]);
+
+  return sql`(${offers.countryRedeemable} @> ${regionJson}::jsonb OR ${offers.countryRedeemable} @> ${globalJson}::jsonb)`;
 }
 
 // Category display metadata (icons/descriptions for the enum values)
@@ -50,9 +58,22 @@ export async function getDeals(options?: {
 }): Promise<DealCardProps[]> {
   const limit = options?.limit ?? 50;
 
-  const conditions = [eq(offers.status, "active")];
+  const conditions = [
+    eq(offers.status, "active"),
+    lte(offers.effectivePriceCents, offers.faceValueCents),
+  ];
   if (options?.trustZone) {
     conditions.push(eq(offers.trustZone, options.trustZone));
+  }
+  if (options?.region) {
+    conditions.push(buildRegionCondition(options.region));
+  }
+  if (options?.brandSlug) {
+    conditions.push(eq(brands.slug, options.brandSlug));
+  }
+  if (options?.category) {
+    const category = (slugToCategory[options.category] ?? options.category) as Brand["category"];
+    conditions.push(eq(brands.category, category));
   }
 
   const results = await db
@@ -84,26 +105,7 @@ export async function getDeals(options?: {
     .orderBy(desc(offers.finalScore))
     .limit(limit);
 
-  // Application-layer filters (JSONB fields + category)
-  let filtered = results;
-
-  if (options?.region) {
-    filtered = filtered.filter((r) => {
-      const countries = r.countryRedeemable as string[] | null;
-      return countries?.includes(options.region!) || countries?.includes("Global");
-    });
-  }
-
-  if (options?.brandSlug) {
-    filtered = filtered.filter((r) => r.brandSlug === options.brandSlug);
-  }
-
-  if (options?.category) {
-    const enumVal = slugToCategory[options.category] ?? options.category;
-    filtered = filtered.filter((r) => r.brandCategory === enumVal);
-  }
-
-  return filtered.map((r) => ({
+  return results.map((r) => ({
     id: String(r.id),
     brand: r.brandName,
     brandSlug: r.brandSlug,
@@ -137,6 +139,7 @@ export async function searchDeals(
 
   const conditions = [
     eq(offers.status, "active"),
+    lte(offers.effectivePriceCents, offers.faceValueCents),
     or(
       ilike(offers.normalizedTitle, q),
       ilike(offers.originalTitle, q),
@@ -149,6 +152,9 @@ export async function searchDeals(
 
   if (options?.trustZone) {
     conditions.push(eq(offers.trustZone, options.trustZone));
+  }
+  if (options?.region) {
+    conditions.push(buildRegionCondition(options.region));
   }
 
   const results = await db
@@ -180,15 +186,7 @@ export async function searchDeals(
     .orderBy(desc(offers.finalScore))
     .limit(limit);
 
-  let filtered = results;
-  if (options?.region) {
-    filtered = filtered.filter((r) => {
-      const countries = r.countryRedeemable as string[] | null;
-      return countries?.includes(options.region!) || countries?.includes("Global");
-    });
-  }
-
-  return filtered.map((r) => ({
+  return results.map((r) => ({
     id: String(r.id),
     brand: r.brandName,
     brandSlug: r.brandSlug,
@@ -371,8 +369,7 @@ export async function getWatchlist(sessionId: string | null | undefined): Promis
       .where(
         and(
           eq(offers.status, "active"),
-          // Filter to watched brands using SQL IN — drizzle inArray
-          sql`${offers.brandId} = ANY(ARRAY[${sql.raw(brandIds.join(","))}]::int[])`,
+          inArray(offers.brandId, brandIds),
         ),
       )
       .orderBy(desc(offers.finalScore));
@@ -483,7 +480,7 @@ export async function getFeaturedPlacements(
       .where(
         and(
           eq(offers.status, "active"),
-          sql`${offers.brandId} = ANY(ARRAY[${sql.raw(brandIds.join(","))}]::int[])`,
+          inArray(offers.brandId, brandIds),
         ),
       )
       .orderBy(desc(offers.finalScore));
