@@ -289,7 +289,7 @@
 | 14.2c | Join Kinguin WW (#24298) on Admitad dashboard | TODO | Human | Critical |
 | 14.3 | Eneba affiliate signup | TODO | Human | High |
 | 14.4 | OffGamers affiliate signup | TODO | Human | Medium |
-| 14.5 | Set up Google Analytics (add NEXT_PUBLIC_GA_MEASUREMENT_ID env var) | TODO | Human + Agent | Critical |
+| 14.5 | Set up Google Analytics (add NEXT_PUBLIC_GA_MEASUREMENT_ID env var) | DONE | Human + Agent | Critical |
 | 14.6 | Apply for Google AdSense | TODO | Human | High |
 | 14.7 | Set up Google Search Console + submit sitemap | TODO | Human | Critical |
 | 14.8 | Set up Resend for email delivery (centralized mailing service) | DONE | Agent | High |
