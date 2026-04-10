@@ -123,9 +123,9 @@ export function toUsdCents(
   amountCents: number,
   sourceCurrency: string,
   fxRates: Record<string, number> = STATIC_RATES,
-): number {
+): number | null {
   const rate = fxRates[sourceCurrency.toUpperCase()];
-  if (!rate) return amountCents; // default to passthrough if unknown
+  if (!rate) return null; // unsupported currency — caller must suppress this offer
   return Math.round(amountCents * rate);
 }
 
@@ -235,20 +235,30 @@ export interface NormalizedOffer {
   rawSnapshot: Record<string, unknown>;
 }
 
-/** Run the full normalization pipeline on a raw offer */
+/**
+ * Run the full normalization pipeline on a raw offer.
+ * Returns null if the offer's currency is unsupported — the caller must
+ * discard the offer rather than persisting it with wrong USD values.
+ */
 export function normalizeOffer(
   raw: RawOffer,
   brandNameOverride?: string,
   fxRates?: Record<string, number>,
-): NormalizedOffer {
+): NormalizedOffer | null {
   const brandSlug = resolveBrandSlug(raw.rawBrandName);
   const denomination = raw.denomination ?? extractDenomination(raw.originalTitle);
   const countries = normalizeCountries(raw.countryRedeemable);
 
-  // Convert to USD cents (uses live rates if provided, else static fallback)
+  // Convert to USD cents (uses live rates if provided, else static fallback).
+  // Unsupported currencies return null — suppress rather than silently mislabel.
   const faceUsd = toUsdCents(raw.faceValueCents, raw.currency, fxRates);
   const askingUsd = toUsdCents(raw.askingPriceCents, raw.currency, fxRates);
   const feeUsd = toUsdCents(raw.feeTotalCents, raw.currency, fxRates);
+
+  if (faceUsd === null || askingUsd === null || feeUsd === null) {
+    return null; // unsupported currency — caller should log and skip
+  }
+
   const effectiveUsd = askingUsd + feeUsd;
 
   const discountPct = faceUsd > 0

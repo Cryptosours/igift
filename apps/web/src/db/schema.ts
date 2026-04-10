@@ -185,6 +185,7 @@ export const priceHistory = pgTable(
 export const userAlerts = pgTable("user_alerts", {
   id: serial("id").primaryKey(),
   email: text("email").notNull(),
+  managementToken: text("management_token").notNull(),
   brandId: integer("brand_id").references(() => brands.id),
   category: categoryEnum("category"),
   targetDiscountPct: real("target_discount_pct"),

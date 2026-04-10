@@ -75,8 +75,8 @@ describe("toUsdCents", () => {
     expect(toUsdCents(1000, "Usd")).toBe(1000);
   });
 
-  it("passes through unknown currencies unchanged", () => {
-    expect(toUsdCents(5000, "XYZ")).toBe(5000);
+  it("returns null for unknown currencies", () => {
+    expect(toUsdCents(5000, "XYZ")).toBeNull();
   });
 
   it("rounds to whole cents", () => {

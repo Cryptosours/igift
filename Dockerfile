@@ -1,28 +1,26 @@
 # Stage 1: Build
-# Single build stage to avoid cross-stage native binary resolution issues.
-# Alpine uses musl libc; macOS-generated lockfile lacks musl optional deps.
-FROM node:20-alpine AS builder
+# Uses node:20-slim (Debian/glibc) so that macOS- or Linux-generated lockfiles
+# are compatible and we can use `npm ci` for reproducible, locked installs.
+# Alpine (musl) caused npm to fail with cross-platform optional-dep issues
+# (https://github.com/npm/cli/issues/4828), requiring lockfile deletion —
+# which defeated reproducibility and introduced supply-chain risk.
+FROM node:20-slim AS builder
 WORKDIR /app
 
 RUN corepack disable
 
-# Install deps
+# Install deps with the lockfile — reproducible, deterministic builds.
 COPY package.json package-lock.json ./
 COPY apps/web/package.json ./apps/web/
-# npm has a known bug with optional deps in cross-platform lockfiles
-# (https://github.com/npm/cli/issues/4828). The workaround: delete the
-# macOS-generated lockfile and let npm install resolve platform-native
-# optional deps fresh on Alpine/musl.
-RUN rm -f package-lock.json
-RUN npm install
+RUN npm ci
 
 # Copy source and build
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npx turbo build --filter=@igift/web
 
-# Stage 3: Production
-FROM node:20-alpine AS runner
+# Stage 2: Production
+FROM node:20-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
