@@ -34,10 +34,13 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Theme FOUC prevention — static inline, no user input */}
+        {/* Synchronous boot script — runs before ANY async resource loads.
+            1. Theme FOUC prevention (reads localStorage, applies dark class)
+            2. GA Consent Mode v2 defaults (denied until user accepts)
+               Must be synchronous so consent is set before gtag.js can fire events. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("igift-theme");if(t==="light"||(t==="system"&&!matchMedia("(prefers-color-scheme:dark)").matches)){return}document.documentElement.classList.add("dark")}catch(e){document.documentElement.classList.add("dark")}})()`,
+            __html: `(function(){try{var t=localStorage.getItem("igift-theme");if(t==="light"||(t==="system"&&!matchMedia("(prefers-color-scheme:dark)").matches)){return}document.documentElement.classList.add("dark")}catch(e){document.documentElement.classList.add("dark")}})();window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("consent","default",{analytics_storage:"denied",ad_storage:"denied",ad_user_data:"denied",ad_personalization:"denied",wait_for_update:500});`,
           }}
         />
         {/* Google Analytics — placed in <head> so SSR HTML contains real <script> tags.
